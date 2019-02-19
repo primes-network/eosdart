@@ -1,6 +1,6 @@
 # eosdart
 
-[![Build Status](https://api.travis-ci.org/primes-network/eosdart.svg?branch=master)](https://www.travis-ci.org/primes-network/eosdart)
+[![Build Status](https://travis-ci.com/primes-network/eosdart.svg?branch=master)](https://travis-ci.com/primes-network/eosdart)
 
 A library for EOS Node API
 
