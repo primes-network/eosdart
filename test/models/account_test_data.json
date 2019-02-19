@@ -1,0 +1,85 @@
+{
+  "account_name": "binancecold1",
+  "head_block_num": 43498422,
+  "head_block_time": "2019-02-18T22:54:16.500",
+  "privileged": false,
+  "last_code_update": "1970-01-01T00:00:00.000",
+  "created": "2018-11-14T06:58:00.000",
+  "core_liquid_balance": "49254569.1575 EOS",
+  "ram_quota": 20683,
+  "net_weight": 1000500,
+  "cpu_weight": 1001500,
+  "net_limit": {
+    "used": 129,
+    "available": 85042573,
+    "max": 85042702
+  },
+  "cpu_limit": {
+    "used": 291,
+    "available": 13431000,
+    "max": 13431291
+  },
+  "ram_usage": 3686,
+  "permissions": [
+    {
+      "perm_name": "active",
+      "parent": "owner",
+      "required_auth": {
+        "threshold": 1,
+        "keys": [
+          {
+            "key": "EOS5GZ7R4BsApfxKcSbHeBEeFavsu9b75ooXM6pf5fo5G4ZbSWBMX",
+            "weight": 1
+          }
+        ],
+        "accounts": [],
+        "waits": []
+      }
+    },
+    {
+      "perm_name": "owner",
+      "parent": "",
+      "required_auth": {
+        "threshold": 1,
+        "keys": [
+          {
+            "key": "EOS5GZ7R4BsApfxKcSbHeBEeFavsu9b75ooXM6pf5fo5G4ZbSWBMX",
+            "weight": 1
+          }
+        ],
+        "accounts": [],
+        "waits": []
+      }
+    }
+  ],
+  "total_resources": {
+    "owner": "binancecold1",
+    "net_weight": "100.0500 EOS",
+    "cpu_weight": "100.1500 EOS",
+    "ram_bytes": 19283
+  },
+  "self_delegated_bandwidth": {
+    "from": "binancecold1",
+    "to": "binancecold1",
+    "net_weight": "100.0000 EOS",
+    "cpu_weight": "100.0000 EOS"
+  },
+  "refund_request": {
+    "owner": "binancecold1",
+    "request_time": "2019-01-31T17:45:26",
+    "net_amount": "35.6000 EOS",
+    "cpu_amount": "104.9000 EOS"
+  },
+  "voter_info": {
+    "owner": "binancecold1",
+    "proxy": "",
+    "producers": [],
+    "staked": 2000000,
+    "last_vote_weight": "0.00000000000000000",
+    "proxied_vote_weight": "0.00000000000000000",
+    "is_proxy": 0,
+    "flags1": 0,
+    "reserved2": 0,
+    "reserved3": "0.0000 EOS"
+  }
+}
