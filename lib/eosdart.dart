@@ -5,4 +5,3 @@ library eosdart;
 
 export 'src/eosdart_base.dart';
 export 'src/models/account.dart';
-
