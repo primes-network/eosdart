@@ -9,7 +9,8 @@ void main() {
     String accountStr;
 
     setUp(() {
-      accountStr = File('./test/models/account_test_data.json').readAsStringSync();
+      accountStr =
+          File('./test/models/account_test_data.json').readAsStringSync();
     });
 
     test('Account to JSON', () {
