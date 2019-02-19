@@ -1,3 +1,6 @@
+# eosdart
+=======
+
 A library for EOS Node API
 
 It talks to the EOS nodes by the given endpoint and API method.
