@@ -1,0 +1,17 @@
+{
+  "timestamp": "2019-02-20T08:28:46.000",
+  "producer": "eosio",
+  "confirmed": 0,
+  "previous": "0000015e270eff26e660f944521adef48c75108f82a7449fd27494e096cf7974",
+  "transaction_mroot": "0000000000000000000000000000000000000000000000000000000000000000",
+  "action_mroot": "2e8012f10a60390dbc517991981976db845ba678a93a68d1dd7092b09a26557e",
+  "schedule_version": 0,
+  "new_producers": null,
+  "header_extensions": [],
+  "producer_signature": "SIG_K1_K8du1QbkfP5Y4hVxj9TH5XAEBtNR5tAuyvUXY68UevaaqkehMSAupEjzQHQdRmS71s6jsGbz6dgJ4XV4ukZJTybmBs5L3A",
+  "transactions": [],
+  "block_extensions": [],
+  "id": "0000015f46966e6d09165c5c52354e5860224522aab2c63a7c0b790b32f6f00b",
+  "block_num": 351,
+  "ref_block_prefix": 1549538825
+}

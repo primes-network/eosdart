@@ -13,7 +13,7 @@ void main() {
           File('./test/models/node_info_test_data.json').readAsStringSync();
     });
 
-    test('Account to JSON', () {
+    test('NodeInfo to JSON', () {
       Map<String, dynamic> nodeInfoJson = json.decode(nodeInfoStr);
       NodeInfo nodeInfo = NodeInfo.fromJson(nodeInfoJson);
 

@@ -1,0 +1,60 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'block.g.dart';
+
+@JsonSerializable()
+class Block {
+  @JsonKey(name: 'id')
+  final String id;
+
+  @JsonKey(name: 'block_num')
+  final int blockNum;
+
+  @JsonKey(name: 'timestamp')
+  DateTime timestamp;
+
+  @JsonKey(name: 'producer')
+  String producer;
+
+  @JsonKey(name: 'confirmed')
+  int confirmed;
+
+  @JsonKey(name: 'previous')
+  String previous;
+
+  @JsonKey(name: 'transaction_mroot')
+  String transactionMRoot;
+
+  @JsonKey(name: 'action_mroot')
+  String actionMRoot;
+
+  @JsonKey(name: 'schedule_version')
+  int scheduleVersion;
+
+  @JsonKey(name: 'new_producers')
+  Object newProducers;
+
+  @JsonKey(name: 'header_extensions')
+  List<Object> headerExtensions;
+
+  @JsonKey(name: 'producer_signature')
+  String producerSignature;
+
+  @JsonKey(name: 'transactions')
+  List<Object> transactions;
+
+  @JsonKey(name: 'block_extensions')
+  List<Object> blockExtensions;
+
+  @JsonKey(name: 'ref_block_prefix')
+  int refBlockPrefix;
+
+  Block(this.id, this.blockNum);
+
+  factory Block.fromJson(Map<String, dynamic> json) => _$BlockFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BlockToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
+}

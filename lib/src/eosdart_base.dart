@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import './models/account.dart';
 import './models/node_info.dart';
+import './models/block.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
@@ -28,6 +29,16 @@ class EOSClient {
     Completer<NodeInfo> completer = Completer();
     this._post('/v1/chain/get_info', {}).then((Map<String, dynamic> nodeInfo) {
       completer.complete(NodeInfo.fromJson(nodeInfo));
+    });
+    return completer.future;
+  }
+
+  /// Get EOS Block Info
+  Future<Block> getBlock(String blockNumOrId) async {
+    Completer<Block> completer = Completer();
+    this._post('/v1/chain/get_block', {'block_num_or_id': blockNumOrId}).then(
+        (Map<String, dynamic> block) {
+      completer.complete(Block.fromJson(block));
     });
     return completer.future;
   }
