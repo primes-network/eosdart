@@ -6,7 +6,7 @@ void main() {
     EOSClient client;
 
     setUp(() {
-      client = EOSClient.fromNode('https://node.eosflare.io');
+      client = EOSClient('https://node.eosflare.io');
     });
 
     test('Get Abi', () async {

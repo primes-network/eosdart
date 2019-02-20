@@ -1,0 +1,16 @@
+{
+  "server_version": "3fddb727",
+  "chain_id": "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+  "head_block_num": 43567300,
+  "last_irreversible_block_num": 43566965,
+  "last_irreversible_block_id": "0298c7753b38d7c16490698129e1c4cd752298c725a2936ec333e6df8cef3614",
+  "head_block_id": "0298c8c427cec934071f7d463cd0c5838d6a8b620f146269f0b0ec72070a5212",
+  "head_block_time": "2019-02-19T08:29:05.000",
+  "head_block_producer": "eoshuobipool",
+  "virtual_block_cpu_limit": 200000000,
+  "virtual_block_net_limit": 1048576000,
+  "block_cpu_limit": 200000,
+  "block_net_limit": 1048576,
+  "server_version_string": "v1.6.0",
+  "website": "https://eosflare.io"
+}
