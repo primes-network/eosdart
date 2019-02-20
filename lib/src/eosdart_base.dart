@@ -3,13 +3,14 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import './models/account.dart';
+import './models/node_info.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
   final String _nodeURL;
 
   /// Construct the EOS client from eos node URL
-  EOSClient.fromNode(this._nodeURL);
+  EOSClient(this._nodeURL);
 
   Future<Map<String, dynamic>> _post(String path, Object body) async {
     Completer<Map<String, dynamic>> completer = Completer();
@@ -18,6 +19,15 @@ class EOSClient {
         .then((http.Response response) {
       Map<String, dynamic> respJson = json.decode(response.body);
       completer.complete(respJson);
+    });
+    return completer.future;
+  }
+
+  /// Get EOS Node Info
+  Future<NodeInfo> getInfo() async {
+    Completer<NodeInfo> completer = Completer();
+    this._post('/v1/chain/get_info', {}).then((Map<String, dynamic> nodeInfo) {
+      completer.complete(NodeInfo.fromJson(nodeInfo));
     });
     return completer.future;
   }
