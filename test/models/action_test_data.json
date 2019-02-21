@@ -1,0 +1,49 @@
+{
+  "global_action_seq": "4587073327",
+  "account_action_seq": 165,
+  "block_num": 40066073,
+  "block_time": "2019-01-30T01:21:04.000",
+  "action_trace": {
+    "receipt": {
+      "receiver": "arkisawesome",
+      "act_digest": "70854861314c73c94501c6ef0124170e0d58e62991d560928aad1b9a5c09b328",
+      "global_sequence": "4587073327",
+      "recv_sequence": 159,
+      "auth_sequence": [
+        [
+          "airdropsdac3",
+          209916
+        ]
+      ],
+      "code_sequence": 1,
+      "abi_sequence": 1
+    },
+    "act": {
+      "account": "zosdiscounts",
+      "name": "transfer",
+      "authorization": [
+        {
+          "actor": "airdropsdac3",
+          "permission": "airdrop"
+        }
+      ],
+      "data": {
+        "from": "airdropsdac3",
+        "to": "arkisawesome",
+        "quantity": "140.0000 ZOS",
+        "memo": "Win 100,000 ZOS + 10 EOS!!! (1) Send 1 ZOS to zosresponses (2) Write a catchy slogan in the memo field (3) Checkout https://medium.com/@airdropsdac/zos-airdrop-claim-your-tokens-and-enter-to-win-100-000-zos-16e8713d55d7 for more info!"
+      },
+      "hex_data": "309049b8d29bae33a024c58a1bece035c05c150000000000045a4f5300000000ea0157696e203130302c303030205a4f53202b20313020454f53212121202831292053656e642031205a4f5320746f207a6f73726573706f6e7365732028322920577269746520612063617463687920736c6f67616e20696e20746865206d656d6f206669656c642028332920436865636b6f75742068747470733a2f2f6d656469756d2e636f6d2f4061697264726f70736461632f7a6f732d61697264726f702d636c61696d2d796f75722d746f6b656e732d616e642d656e7465722d746f2d77696e2d3130302d3030302d7a6f732d31366538373133643535643720666f72206d6f726520696e666f21"
+    },
+    "context_free": false,
+    "elapsed": 14,
+    "console": "",
+    "trx_id": "8add9a4b84e9a9512dc06c1ff5b72ad341e0fbd277813d8511a9d7fa9529204a",
+    "block_num": 40066073,
+    "block_time": "2019-01-30T01:21:04.000",
+    "producer_block_id": "02635c198d6d22a1668336542be1bc3a97b5554a01f009a6689a9ed369a1dd5a",
+    "account_ram_deltas": [],
+    "except": null,
+    "inline_traces": []
+  }
+}

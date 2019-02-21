@@ -6,7 +6,7 @@ void main() {
     EOSClient client;
 
     setUp(() {
-      client = EOSClient('https://node.eosflare.io');
+      client = EOSClient('https://node.eosflare.io', 'v1');
     });
 
     test('Get Info', () async {
