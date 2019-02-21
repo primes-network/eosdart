@@ -14,7 +14,7 @@ A simple usage example:
 import 'package:eosdart/eosdart.dart';
 
 main() async {
-  EOSClient client = EOSClient('https://node.eosflare.io');
+  EOSClient client = EOSClient('https://node.eosflare.io', 'v1');
 
   // Get EOS Node Info
   await client.getInfo().then((NodeInfo nodeInfo) {
@@ -25,7 +25,15 @@ main() async {
   await client.getAccount('eosio.stake').then((Account account) {
     print(account);
   });
+
+  // Get Account Actions
+  await client
+      .getActions('eosio.stake', pos: -1, offset: -1)
+      .then((Actions actions) {
+    print(actions);
+  });
 }
+
 ```
 
 ## Features and bugs

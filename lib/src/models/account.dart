@@ -109,6 +109,9 @@ class Holding {
   }
 
   String toJson() => '${amount} ${currency}';
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -128,6 +131,9 @@ class Permission {
       _$PermissionFromJson(json);
 
   Map<String, dynamic> toJson() => _$PermissionToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -150,6 +156,9 @@ class RequiredAuth {
       _$RequiredAuthFromJson(json);
 
   Map<String, dynamic> toJson() => _$RequiredAuthToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -165,6 +174,9 @@ class Key {
   factory Key.fromJson(Map<String, dynamic> json) => _$KeyFromJson(json);
 
   Map<String, dynamic> toJson() => _$KeyToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -187,6 +199,9 @@ class TotalResources {
       _$TotalResourcesFromJson(json);
 
   Map<String, dynamic> toJson() => _$TotalResourcesToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -209,6 +224,9 @@ class SelfDelegatedBandwidth {
       _$SelfDelegatedBandwidthFromJson(json);
 
   Map<String, dynamic> toJson() => _$SelfDelegatedBandwidthToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -231,6 +249,9 @@ class RefundRequest {
       _$RefundRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$RefundRequestToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
 
 @JsonSerializable()
@@ -262,4 +283,7 @@ class VoterInfo {
       _$VoterInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$VoterInfoToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
