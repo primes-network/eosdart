@@ -32,4 +32,11 @@ main() async {
       .then((Transaction transaction) {
     print(transaction);
   });
+
+  // Get Accounts from public key
+  await client
+      .getKeyAccounts('EOS8RWQpzzMi5uFXXXAChi4dHnyxMYKKdAQ3Y3pHQTrvhzGk95LbT')
+      .then((AccountNames accountNames) {
+    print(accountNames);
+  });
 }

@@ -7,6 +7,7 @@ import './models/node_info.dart';
 import './models/block.dart';
 import './models/action.dart';
 import './models/transaction.dart';
+import './models/account_names.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
@@ -92,6 +93,16 @@ class EOSClient {
       'block_num_hint': blockNumHint
     }).then((Map<String, dynamic> transaction) {
       completer.complete(Transaction.fromJson(transaction));
+    });
+    return completer.future;
+  }
+
+  /// Get Key Accounts
+  Future<AccountNames> getKeyAccounts(String pubKey) async {
+    Completer<AccountNames> completer = Completer();
+    this._post('/history/get_key_accounts', {'public_key': pubKey}).then(
+        (Map<String, dynamic> accountNames) {
+      completer.complete(AccountNames.fromJson(accountNames));
     });
     return completer.future;
   }
