@@ -6,6 +6,7 @@ import './models/account.dart';
 import './models/node_info.dart';
 import './models/block.dart';
 import './models/action.dart';
+import './models/transaction.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
@@ -79,6 +80,18 @@ class EOSClient {
       'offset': offset
     }).then((Map<String, dynamic> actions) {
       completer.complete(Actions.fromJson(actions));
+    });
+    return completer.future;
+  }
+
+  /// Get EOS transaction
+  Future<Transaction> getTransaction(String id, {int blockNumHint}) async {
+    Completer<Transaction> completer = Completer();
+    this._post('/history/get_transaction', {
+      'id': id,
+      'block_num_hint': blockNumHint
+    }).then((Map<String, dynamic> transaction) {
+      completer.complete(Transaction.fromJson(transaction));
     });
     return completer.future;
   }

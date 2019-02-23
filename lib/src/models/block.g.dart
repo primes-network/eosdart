@@ -20,7 +20,10 @@ Block _$BlockFromJson(Map<String, dynamic> json) {
     ..newProducers = json['new_producers']
     ..headerExtensions = json['header_extensions'] as List
     ..producerSignature = json['producer_signature'] as String
-    ..transactions = json['transactions'] as List
+    ..transactions = (json['transactions'] as List)
+        ?.map((e) =>
+            e == null ? null : TrxReceipt.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..blockExtensions = json['block_extensions'] as List
     ..refBlockPrefix = json['ref_block_prefix'] as int;
 }

@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import './trx_receipt.dart';
+
 part 'block.g.dart';
 
 @JsonSerializable()
@@ -41,7 +43,7 @@ class Block {
   String producerSignature;
 
   @JsonKey(name: 'transactions')
-  List<Object> transactions;
+  List<TrxReceipt> transactions;
 
   @JsonKey(name: 'block_extensions')
   List<Object> blockExtensions;
