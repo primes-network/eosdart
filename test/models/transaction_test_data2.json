@@ -1,0 +1,109 @@
+{
+  "id": "83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15",
+  "trx": {
+    "receipt": {
+      "status": "executed",
+      "cpu_usage_us": 444,
+      "net_usage_words": 0,
+      "trx": [
+        0,
+        "83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15"
+      ]
+    }
+  },
+  "block_time": "2019-02-22T06:45:07.000",
+  "block_num": 44072766,
+  "last_irreversible_block": 44075150,
+  "traces": [
+    {
+      "receipt": {
+        "receiver": "xuxxxxxxxxxx",
+        "act_digest": "dba1dca5b663b7ff9d3ddde05d48d8eadb2ea04809895b338ba53369a330f267",
+        "global_sequence": "5193818684",
+        "recv_sequence": 918,
+        "auth_sequence": [
+          [
+            "steamiobank1",
+            148685
+          ]
+        ],
+        "code_sequence": 2,
+        "abi_sequence": 2
+      },
+      "act": {
+        "account": "eosio.token",
+        "name": "transfer",
+        "authorization": [
+          {
+            "actor": "steamiobank1",
+            "permission": "active"
+          }
+        ],
+        "data": {
+          "from": "steamiobank1",
+          "to": "xuxxxxxxxxxx",
+          "quantity": "0.0005 EOS",
+          "memo": "Bet id: 10629. Referral reward! [https://betsteam.io]"
+        },
+        "hex_data": "10e034873a6954c6d07befbdf7debbee050000000000000004454f5300000000354265742069643a2031303632392e20526566657272616c2072657761726421205b68747470733a2f2f626574737465616d2e696f5d"
+      },
+      "context_free": false,
+      "elapsed": 5,
+      "console": "",
+      "trx_id": "83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15",
+      "block_num": 44072766,
+      "block_time": "2019-02-22T06:45:07.000",
+      "producer_block_id": "02a07f3e8e112558b58e7027ae614336cf77b45980df9693219f77e7a2d0349e",
+      "account_ram_deltas": [],
+      "except": null,
+      "inline_traces": []
+    },
+    {
+      "receipt": {
+        "receiver": "xellllllllll",
+        "act_digest": "504c6756e40c2563c845cd53cc9761e56e746a3e403c06a4e0b98fed492d7cdf",
+        "global_sequence": "5193818686",
+        "recv_sequence": 2028,
+        "auth_sequence": [
+          [
+            "steamiodice1",
+            82419
+          ]
+        ],
+        "code_sequence": 27,
+        "abi_sequence": 27
+      },
+      "act": {
+        "account": "steamiodice1",
+        "name": "receipt",
+        "authorization": [
+          {
+            "actor": "steamiodice1",
+            "permission": "active"
+          }
+        ],
+        "data": {
+          "bet_id": 10629,
+          "player": "xellllllllll",
+          "bet_amt": "0.5000 EOS",
+          "payout": "0.0000 EOS",
+          "seed": "0",
+          "user_seed": "0",
+          "roll_under": 50,
+          "random_roll": 63
+        },
+        "hex_data": "852900000000000010638c31c618a3ea881300000000000004454f5300000000000000000000000004454f53000000000130013032000000000000003f00000000000000"
+      },
+      "context_free": false,
+      "elapsed": 6,
+      "console": "",
+      "trx_id": "83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15",
+      "block_num": 44072766,
+      "block_time": "2019-02-22T06:45:07.000",
+      "producer_block_id": "02a07f3e8e112558b58e7027ae614336cf77b45980df9693219f77e7a2d0349e",
+      "account_ram_deltas": [],
+      "except": null,
+      "inline_traces": []
+    }
+  ]
+}
