@@ -25,7 +25,10 @@ ActionTrace _$ActionTraceFromJson(Map<String, dynamic> json) {
     ..producerBlockId = json['producer_block_id'] as String
     ..accountRamDeltas = json['account_ram_deltas'] as List
     ..except = json['except']
-    ..inlineTraces = json['inline_traces'] as List;
+    ..inlineTraces = (json['inline_traces'] as List)
+        ?.map((e) =>
+            e == null ? null : ActionTrace.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$ActionTraceToJson(ActionTrace instance) =>

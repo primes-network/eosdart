@@ -38,7 +38,7 @@ class ActionTrace {
   Object except;
 
   @JsonKey(name: 'inline_traces')
-  List<Object> inlineTraces;
+  List<ActionTrace> inlineTraces;
 
   ActionTrace();
 
