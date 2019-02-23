@@ -50,4 +50,3 @@ class Trx {
   @override
   String toString() => this.toJson().toString();
 }
-

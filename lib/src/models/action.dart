@@ -46,4 +46,3 @@ class Action {
   @override
   String toString() => this.toJson().toString();
 }
-
