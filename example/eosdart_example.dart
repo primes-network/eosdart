@@ -8,6 +8,21 @@ main() async {
     print(nodeInfo);
   });
 
+  // Get EOS Abi
+  await client.getAbi('eosio.token').then((Abi abi) {
+    print(abi);
+  });
+
+  // Get EOS Raw Abi
+  await client.getRawAbi('eosio.token').then((Abi abi) {
+    print(abi);
+  });
+
+  // Get EOS Raw code and Abi
+  await client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
+    print(abi);
+  });
+
   // Get EOS Block Info
   await client.getBlock('351').then((Block block) {
     print(block);
@@ -38,5 +53,12 @@ main() async {
       .getKeyAccounts('EOS8RWQpzzMi5uFXXXAChi4dHnyxMYKKdAQ3Y3pHQTrvhzGk95LbT')
       .then((AccountNames accountNames) {
     print(accountNames);
+  });
+
+  // Get currency balance
+  await client
+      .getCurrencyBalance('parslseed123', 'newdexpocket')
+      .then((List<Holding> balance) {
+    print(balance);
   });
 }
