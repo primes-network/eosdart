@@ -16,9 +16,27 @@ void main() {
     });
 
     test('Get Abi', () async {
-      await client.getAbi('eosio.stake').then((Account account) {
-        expect(account.accountName, equals('eosio.stake'));
-        expect(account.coreLiquidBalance, isNull);
+      await client.getAbi('eosio.token').then((Abi abi) {
+        expect(abi.accountName, equals('eosio.token'));
+      });
+    });
+
+    test('Get Raw Abi', () async {
+      await client.getRawAbi('eosio.token').then((Abi abi) {
+        expect(abi.accountName, equals('eosio.token'));
+        expect(abi.codeHash,
+            '01bd013c4f8be142b9cadf511f007c6ac201c068d529f01ed5661803c575befa');
+        expect(abi.abiHash,
+            'f8f677996a8ca68388bc41cf55e727949c161b624a47e497e3b2f71a0e635dad');
+        expect(abi.abi, isNotNull);
+      });
+    });
+
+    test('Get Raw code and Abi', () async {
+      await client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
+        expect(abi.accountName, equals('eosio.token'));
+        expect(abi.wasm.length > 0, isTrue);
+        expect(abi.abi, isNotNull);
       });
     });
 
@@ -37,6 +55,16 @@ void main() {
       await client.getAccount('eosio.stake').then((Account account) {
         expect(account.accountName, equals('eosio.stake'));
         expect(account.coreLiquidBalance.amount > 0, isTrue);
+      });
+    });
+
+    test('Get currency balance', () async {
+      await client
+          .getCurrencyBalance('parslseed123', 'newdexpocket', 'SEED')
+          .then((List<Holding> tokens) {
+        expect(tokens.length > 0, isTrue);
+        expect(tokens[0].amount > 0, isTrue);
+        expect(tokens[0].currency, 'SEED');
       });
     });
 
