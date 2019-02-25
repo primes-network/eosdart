@@ -10,3 +10,4 @@ export 'src/models/block.dart';
 export 'src/models/action.dart';
 export 'src/models/transaction.dart';
 export 'src/models/account_names.dart';
+export 'src/models/block_header_state.dart';

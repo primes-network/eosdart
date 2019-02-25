@@ -8,6 +8,7 @@ import './models/block.dart';
 import './models/action.dart';
 import './models/transaction.dart';
 import './models/account_names.dart';
+import './models/block_header_state.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
@@ -48,6 +49,16 @@ class EOSClient {
     this._post('/chain/get_block', {'block_num_or_id': blockNumOrId}).then(
         (Map<String, dynamic> block) {
       completer.complete(Block.fromJson(block));
+    });
+    return completer.future;
+  }
+
+  /// Get EOS Block Header State
+  Future<BlockHeaderState> getBlockHeaderState(String blockNumOrId) async {
+    Completer<BlockHeaderState> completer = Completer();
+    this._post('/chain/get_block_header_state',
+        {'block_num_or_id': blockNumOrId}).then((Map<String, dynamic> block) {
+      completer.complete(BlockHeaderState.fromJson(block));
     });
     return completer.future;
   }
