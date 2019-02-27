@@ -29,8 +29,8 @@ void main() {
       expect(account.netWeight, 1000500);
       expect(account.cpuWeight, 1001500);
       expect(account.netLimit.used, 129);
-      expect(account.netLimit.available, 85042573);
-      expect(account.netLimit.max, 85042702);
+      expect(account.netLimit.available, 8344411498);
+      expect(account.netLimit.max, 8344545345);
       expect(account.ramUsage, 3686);
       expect(account.permissions, isList);
       expect(account.permissions.length, 2);

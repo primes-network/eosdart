@@ -70,7 +70,6 @@ class Account {
   String toString() => this.toJson().toString();
 }
 
-@JsonSerializable()
 class Limit {
   @JsonKey(name: 'used')
   int used;
@@ -83,12 +82,32 @@ class Limit {
 
   Limit();
 
-  factory Limit.fromJson(Map<String, dynamic> json) => _$LimitFromJson(json);
+  Limit.fromJson(Map<String, dynamic> json) {
+    this.used = Limit.getIntFromJson(json['used']);
+    this.available = Limit.getIntFromJson(json['available']);
+    this.max = Limit.getIntFromJson(json['max']);
+  }
 
-  Map<String, dynamic> toJson() => _$LimitToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'used': this.used,
+        'available': this.available,
+        'max': this.max
+      };
 
   @override
   String toString() => this.toJson().toString();
+
+  // Due to the javascript have limit on the integer, some of the numbers
+  // are in String format
+  // https://github.com/EOSIO/eos/issues/6820
+  static int getIntFromJson(Object value) {
+    switch (value.runtimeType) {
+      case String:
+        return int.parse(value);
+      default:
+        return value as int;
+    }
+  }
 }
 
 // this is not using json serializer as it is customized serializer to
