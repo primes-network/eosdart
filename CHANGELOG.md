@@ -1,3 +1,19 @@
-## 1.0.0
+## 0.0.1
 
 - Initial version, created by Stagehand
+
+## 0.3.0
+
+Supports the following APIs:
+
+- /v1/chain/get_info
+- /v1/chain/get_block
+- /v1/chain/get_block_header_state
+- /v1/chain/get_account
+- /v1/chain/get_abi
+- /v1/chain/get_raw_abi
+- /v1/chain/get_raw_code_and_abi
+- /v1/chain/get_currency_balance
+- /v1/history/get_actions
+- /v1/history/get_transaction
+- /v1/history/get_key_accounts
