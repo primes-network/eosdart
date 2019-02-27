@@ -11,8 +11,8 @@
   "cpu_weight": 1001500,
   "net_limit": {
     "used": 129,
-    "available": 85042573,
-    "max": 85042702
+    "available": "8344411498",
+    "max": "8344545345"
   },
   "cpu_limit": {
     "used": 291,

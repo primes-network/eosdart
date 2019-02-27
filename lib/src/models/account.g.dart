@@ -72,19 +72,6 @@ Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'voter_info': instance.voterInfo
     };
 
-Limit _$LimitFromJson(Map<String, dynamic> json) {
-  return Limit()
-    ..used = json['used'] as int
-    ..available = json['available'] as int
-    ..max = json['max'] as int;
-}
-
-Map<String, dynamic> _$LimitToJson(Limit instance) => <String, dynamic>{
-      'used': instance.used,
-      'available': instance.available,
-      'max': instance.max
-    };
-
 Permission _$PermissionFromJson(Map<String, dynamic> json) {
   return Permission()
     ..permName = json['perm_name'] as String
