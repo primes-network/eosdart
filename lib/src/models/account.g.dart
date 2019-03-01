@@ -92,7 +92,8 @@ RequiredAuth _$RequiredAuthFromJson(Map<String, dynamic> json) {
   return RequiredAuth()
     ..threshold = json['threshold'] as int
     ..keys = (json['keys'] as List)
-        ?.map((e) => e == null ? null : Key.fromJson(e as Map<String, dynamic>))
+        ?.map((e) =>
+            e == null ? null : EOSKey.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..accounts = json['accounts'] as List
     ..waits = json['waits'] as List;
@@ -106,13 +107,13 @@ Map<String, dynamic> _$RequiredAuthToJson(RequiredAuth instance) =>
       'waits': instance.waits
     };
 
-Key _$KeyFromJson(Map<String, dynamic> json) {
-  return Key()
+EOSKey _$EOSKeyFromJson(Map<String, dynamic> json) {
+  return EOSKey()
     ..key = json['key'] as String
     ..weight = json['weight'] as int;
 }
 
-Map<String, dynamic> _$KeyToJson(Key instance) =>
+Map<String, dynamic> _$EOSKeyToJson(EOSKey instance) =>
     <String, dynamic>{'key': instance.key, 'weight': instance.weight};
 
 TotalResources _$TotalResourcesFromJson(Map<String, dynamic> json) {
