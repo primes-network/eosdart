@@ -9,20 +9,20 @@ void main() {
       client = EOSClient('https://eos.greymass.com', 'v1');
     });
 
-    test('Get Info', () async {
-      await client.getInfo().then((NodeInfo nodeInfo) {
+    test('Get Info', () {
+      client.getInfo().then((NodeInfo nodeInfo) {
         expect(nodeInfo.headBlockNum > 0, isTrue);
       });
     });
 
-    test('Get Abi', () async {
-      await client.getAbi('eosio.token').then((Abi abi) {
+    test('Get Abi', () {
+      client.getAbi('eosio.token').then((Abi abi) {
         expect(abi.accountName, equals('eosio.token'));
       });
     });
 
-    test('Get Raw Abi', () async {
-      await client.getRawAbi('eosio.token').then((Abi abi) {
+    test('Get Raw Abi', () {
+      client.getRawAbi('eosio.token').then((Abi abi) {
         expect(abi.accountName, equals('eosio.token'));
         expect(abi.codeHash,
             '01bd013c4f8be142b9cadf511f007c6ac201c068d529f01ed5661803c575befa');
@@ -32,16 +32,16 @@ void main() {
       });
     });
 
-    test('Get Raw code and Abi', () async {
-      await client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
+    test('Get Raw code and Abi', () {
+      client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
         expect(abi.accountName, equals('eosio.token'));
         expect(abi.wasm.length > 0, isTrue);
         expect(abi.abi, isNotNull);
       });
     });
 
-    test('Get Block', () async {
-      await client.getBlock('43743575').then((Block block) {
+    test('Get Block', () {
+      client.getBlock('43743575').then((Block block) {
         expect(block.blockNum > 0, isTrue);
         expect(block.producer, 'zbeosbp11111');
         expect(block.confirmed, 0);
@@ -51,15 +51,15 @@ void main() {
       });
     });
 
-    test('Get Account', () async {
-      await client.getAccount('eosio.stake').then((Account account) {
+    test('Get Account', () {
+      client.getAccount('eosio.stake').then((Account account) {
         expect(account.accountName, equals('eosio.stake'));
         expect(account.coreLiquidBalance.amount > 0, isTrue);
       });
     });
 
-    test('Get currency balance', () async {
-      await client
+    test('Get currency balance', () {
+      client
           .getCurrencyBalance('parslseed123', 'newdexpocket', 'SEED')
           .then((List<Holding> tokens) {
         expect(tokens.length > 0, isTrue);
@@ -68,8 +68,8 @@ void main() {
       });
     });
 
-    test('Get Transaction', () async {
-      await client
+    test('Get Transaction', () {
+      client
           .getTransaction(
               '8ca0fea82370a2dbbf2c4bd1026bf9fd98a57685bee3672c4ddbbc9be21de984')
           .then((Transaction transaction) {

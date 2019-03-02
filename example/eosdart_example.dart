@@ -1,6 +1,6 @@
 import 'package:eosdart/eosdart.dart';
 
-main() async {
+main() {
   EOSClient client = EOSClient('https://eos.greymass.com', 'v1');
 
   // Get EOS Node Info
