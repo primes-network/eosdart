@@ -1,3 +1,8 @@
+## 0.3.2
+
+- Correct the async operation
+- Better error handling
+
 ## 0.3.1
 
 Fix: Class name conflict with flutter - https://github.com/primes-network/eosdart/issues/12
