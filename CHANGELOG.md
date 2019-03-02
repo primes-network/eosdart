@@ -1,3 +1,7 @@
+## 0.3.3
+
+- Update README.md
+
 ## 0.3.2
 
 - Correct the async operation

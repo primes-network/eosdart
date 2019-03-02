@@ -82,6 +82,11 @@ main() async {
 }
 ```
 
+## Installing
+
+https://pub.dartlang.org/packages/eosdart#-installing-tab-
+
+
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
