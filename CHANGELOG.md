@@ -1,6 +1,6 @@
-## 0.0.1
+## 0.3.1
 
-- Initial version, created by Stagehand
+Fix: Class name conflict with flutter - https://github.com/primes-network/eosdart/issues/12
 
 ## 0.3.0
 
@@ -17,3 +17,8 @@ Supports the following APIs:
 - /v1/history/get_actions
 - /v1/history/get_transaction
 - /v1/history/get_key_accounts
+
+## 0.0.1
+
+- Initial version, created by Stagehand
+

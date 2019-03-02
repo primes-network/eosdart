@@ -4,44 +4,42 @@ main() async {
   EOSClient client = EOSClient('https://eos.greymass.com', 'v1');
 
   // Get EOS Node Info
-  await client.getInfo().then((NodeInfo nodeInfo) {
+  client.getInfo().then((NodeInfo nodeInfo) {
     print(nodeInfo);
   });
 
   // Get EOS Abi
-  await client.getAbi('eosio.token').then((Abi abi) {
+  client.getAbi('eosio.token').then((Abi abi) {
     print(abi);
   });
 
   // Get EOS Raw Abi
-  await client.getRawAbi('eosio.token').then((Abi abi) {
+  client.getRawAbi('eosio.token').then((Abi abi) {
     print(abi);
   });
 
   // Get EOS Raw code and Abi
-  await client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
+  client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
     print(abi);
   });
 
   // Get EOS Block Info
-  await client.getBlock('351').then((Block block) {
+  client.getBlock('351').then((Block block) {
     print(block);
   });
 
   // Get Account Info
-  await client.getAccount('eosio.stake').then((Account account) {
+  client.getAccount('eosio.stake').then((Account account) {
     print(account);
   });
 
   // Get Account Actions
-  await client
-      .getActions('eosio.stake', pos: -1, offset: -1)
-      .then((Actions actions) {
+  client.getActions('eosio.stake', pos: -1, offset: -1).then((Actions actions) {
     print(actions);
   });
 
   // Get Transaction
-  await client
+  client
       .getTransaction(
           '83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15')
       .then((Transaction transaction) {
@@ -49,14 +47,14 @@ main() async {
   });
 
   // Get Accounts from public key
-  await client
+  client
       .getKeyAccounts('EOS8RWQpzzMi5uFXXXAChi4dHnyxMYKKdAQ3Y3pHQTrvhzGk95LbT')
       .then((AccountNames accountNames) {
     print(accountNames);
   });
 
   // Get currency balance
-  await client
+  client
       .getCurrencyBalance('parslseed123', 'newdexpocket')
       .then((List<Holding> balance) {
     print(balance);
