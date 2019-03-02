@@ -6,6 +6,13 @@ A library for EOS Node API
 
 It talks to the EOS nodes by the given endpoint and API method.
 
+## Sample
+
+Sample Flutter application uses eosdart to fetch EOS account info:
+
+https://github.com/primes-network/sample_flutter_eosdart
+
+
 ## Usage
 
 A simple usage example:
