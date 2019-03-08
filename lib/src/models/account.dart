@@ -161,7 +161,7 @@ class RequiredAuth {
   int threshold;
 
   @JsonKey(name: 'keys')
-  List<EOSKey> keys;
+  List<AuthKey> keys;
 
   @JsonKey(name: 'accounts')
   List<Object> accounts;
@@ -181,18 +181,19 @@ class RequiredAuth {
 }
 
 @JsonSerializable()
-class EOSKey {
+class AuthKey {
   @JsonKey(name: 'key')
   String key;
 
   @JsonKey(name: 'weight')
   int weight;
 
-  EOSKey();
+  AuthKey();
 
-  factory EOSKey.fromJson(Map<String, dynamic> json) => _$EOSKeyFromJson(json);
+  factory AuthKey.fromJson(Map<String, dynamic> json) =>
+      _$AuthKeyFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EOSKeyToJson(this);
+  Map<String, dynamic> toJson() => _$AuthKeyToJson(this);
 
   @override
   String toString() => this.toJson().toString();
