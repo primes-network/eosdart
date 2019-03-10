@@ -9,8 +9,12 @@ part of 'trx_receipt.dart';
 TrxReceipt _$TrxReceiptFromJson(Map<String, dynamic> json) {
   return TrxReceipt()
     ..status = json['status'] as String
-    ..cpuUsageUs = json['cpu_usage_us'] as int
-    ..netUsageWords = json['net_usage_words'] as int
+    ..cpuUsageUs = json['cpu_usage_us'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['cpu_usage_us'])
+    ..netUsageWords = json['net_usage_words'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['net_usage_words'])
     ..trx = json['trx'];
 }
 

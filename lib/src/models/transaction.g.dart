@@ -15,8 +15,12 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) {
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)
-    ..blockNum = json['block_num'] as int
-    ..lastIrreversibleBlock = json['last_irreversible_block'] as int
+    ..blockNum = json['block_num'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['block_num'])
+    ..lastIrreversibleBlock = json['last_irreversible_block'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['last_irreversible_block'])
     ..traces = (json['traces'] as List)
         ?.map((e) =>
             e == null ? null : ActionTrace.fromJson(e as Map<String, dynamic>))

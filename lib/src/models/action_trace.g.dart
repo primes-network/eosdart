@@ -18,7 +18,9 @@ ActionTrace _$ActionTraceFromJson(Map<String, dynamic> json) {
     ..elapsed = json['elapsed'] as int
     ..console = json['console'] as String
     ..trxId = json['trx_id'] as String
-    ..blockNum = json['block_num'] as int
+    ..blockNum = json['block_num'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['block_num'])
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)
@@ -51,11 +53,19 @@ Receipt _$ReceiptFromJson(Map<String, dynamic> json) {
   return Receipt()
     ..receiver = json['receiver'] as String
     ..actDigest = json['act_digest'] as String
-    ..globalSequence = json['global_sequence'] as String
-    ..receiveSequence = json['recv_sequence'] as int
+    ..globalSequence = json['global_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['global_sequence'])
+    ..receiveSequence = json['recv_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['recv_sequence'])
     ..authSequence = json['auth_sequence'] as List
-    ..codeSequence = json['code_sequence'] as int
-    ..abiSequence = json['abi_sequence'] as int;
+    ..codeSequence = json['code_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['code_sequence'])
+    ..abiSequence = json['abi_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['abi_sequence']);
 }
 
 Map<String, dynamic> _$ReceiptToJson(Receipt instance) => <String, dynamic>{

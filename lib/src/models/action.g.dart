@@ -19,9 +19,15 @@ Map<String, dynamic> _$ActionsToJson(Actions instance) =>
 
 Action _$ActionFromJson(Map<String, dynamic> json) {
   return Action()
-    ..globalActionSeq = json['global_action_seq'] as String
-    ..accountActionSeq = json['account_action_seq'] as int
-    ..blockNum = json['block_num'] as int
+    ..globalActionSeq = json['global_action_seq'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['global_action_seq'])
+    ..accountActionSeq = json['account_action_seq'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['account_action_seq'])
+    ..blockNum = json['block_num'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['block_num'])
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)

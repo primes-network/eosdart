@@ -2,11 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 import './action_trace.dart';
 import './trx_receipt.dart';
+import './mix_int_string.dart';
 
 part 'transaction.g.dart';
 
 @JsonSerializable()
-class Transaction {
+class Transaction with MixIntString {
   @JsonKey(name: 'id')
   String id;
 
@@ -16,10 +17,11 @@ class Transaction {
   @JsonKey(name: 'block_time')
   DateTime blockTime;
 
-  @JsonKey(name: 'block_num')
+  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
   int blockNum;
 
-  @JsonKey(name: 'last_irreversible_block')
+  @JsonKey(
+      name: 'last_irreversible_block', fromJson: MixIntString.getIntFromJson)
   int lastIrreversibleBlock;
 
   @JsonKey(name: 'traces')

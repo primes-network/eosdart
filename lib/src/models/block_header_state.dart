@@ -1,28 +1,35 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import './mix_int_string.dart';
+
 part 'block_header_state.g.dart';
 
 @JsonSerializable()
-class BlockHeaderState {
+class BlockHeaderState with MixIntString {
   @JsonKey(name: 'id')
   String id;
 
-  @JsonKey(name: 'block_num')
+  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
   int blockNum;
 
   @JsonKey(name: 'header')
   Header header;
 
-  @JsonKey(name: 'dpos_proposed_irreversible_blocknum')
+  @JsonKey(
+      name: 'dpos_proposed_irreversible_blocknum',
+      fromJson: MixIntString.getIntFromJson)
   int dposProposedIrreversibleBlocknum;
 
-  @JsonKey(name: 'dpos_irreversible_blocknum')
+  @JsonKey(
+      name: 'dpos_irreversible_blocknum', fromJson: MixIntString.getIntFromJson)
   int dposIrreversibleBlocknum;
 
-  @JsonKey(name: 'bft_irreversible_blocknum')
+  @JsonKey(
+      name: 'bft_irreversible_blocknum', fromJson: MixIntString.getIntFromJson)
   int bftIrreversibleBlocknum;
 
-  @JsonKey(name: 'pending_schedule_lib_num')
+  @JsonKey(
+      name: 'pending_schedule_lib_num', fromJson: MixIntString.getIntFromJson)
   int pendingScheduleLibNum;
 
   @JsonKey(name: 'pending_schedule_hash')

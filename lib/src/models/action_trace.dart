@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import './mix_int_string.dart';
+
 part 'action_trace.g.dart';
 
 @JsonSerializable()
-class ActionTrace {
+class ActionTrace with MixIntString {
   @JsonKey(name: 'receipt')
   Receipt receipt;
 
@@ -22,7 +24,7 @@ class ActionTrace {
   @JsonKey(name: 'trx_id')
   String trxId;
 
-  @JsonKey(name: 'block_num')
+  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
   int blockNum;
 
   @JsonKey(name: 'block_time')
@@ -52,26 +54,26 @@ class ActionTrace {
 }
 
 @JsonSerializable()
-class Receipt {
+class Receipt with MixIntString {
   @JsonKey(name: 'receiver')
   String receiver;
 
   @JsonKey(name: 'act_digest')
   String actDigest;
 
-  @JsonKey(name: 'global_sequence')
-  String globalSequence;
+  @JsonKey(name: 'global_sequence', fromJson: MixIntString.getIntFromJson)
+  int globalSequence;
 
-  @JsonKey(name: 'recv_sequence')
+  @JsonKey(name: 'recv_sequence', fromJson: MixIntString.getIntFromJson)
   int receiveSequence;
 
   @JsonKey(name: 'auth_sequence')
   List<Object> authSequence;
 
-  @JsonKey(name: 'code_sequence')
+  @JsonKey(name: 'code_sequence', fromJson: MixIntString.getIntFromJson)
   int codeSequence;
 
-  @JsonKey(name: 'abi_sequence')
+  @JsonKey(name: 'abi_sequence', fromJson: MixIntString.getIntFromJson)
   int abiSequence;
 
   Receipt();

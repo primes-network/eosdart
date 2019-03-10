@@ -7,7 +7,11 @@ part of 'block.dart';
 // **************************************************************************
 
 Block _$BlockFromJson(Map<String, dynamic> json) {
-  return Block(json['id'] as String, json['block_num'] as int)
+  return Block(
+      json['id'] as String,
+      json['block_num'] == null
+          ? null
+          : MixIntString.getIntFromJson(json['block_num']))
     ..timestamp = json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String)
