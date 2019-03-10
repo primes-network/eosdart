@@ -6,15 +6,16 @@ import './models/abi.dart';
 import './models/node_info.dart';
 import './models/account.dart';
 import './models/block.dart';
-import './models/action.dart';
+import './models/action_block.dart';
 import './models/transaction.dart';
-import './models/account_names.dart';
+import './models/primary_wrapper.dart';
 import './models/block_header_state.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
   final String _nodeURL;
   final String _version;
+  String _chainId;
 
   /// Construct the EOS client from eos node URL
   EOSClient(this._nodeURL, this._version);
@@ -37,7 +38,9 @@ class EOSClient {
   /// Get EOS Node Info
   Future<NodeInfo> getInfo() async {
     return this._post('/chain/get_info', {}).then((nodeInfo) {
-      return NodeInfo.fromJson(nodeInfo);
+      NodeInfo info = NodeInfo.fromJson(nodeInfo);
+      this._chainId = info.chainId;
+      return info;
     });
   }
 
@@ -98,6 +101,17 @@ class EOSClient {
     });
   }
 
+  /// Get required key by transaction from EOS blockchain
+  Future<RequiredKeys> getRequiredKeys(
+      Transaction transaction, List<String> availableKeys) async {
+    return this._post('/chain/get_required_keys', {
+      'transaction': transaction,
+      'available_keys': availableKeys
+    }).then((requiredKeys) {
+      return RequiredKeys.fromJson(requiredKeys);
+    });
+  }
+
   /// Get EOS account actions
   Future<Actions> getActions(String accountName, {int pos, int offset}) async {
     return this._post('/history/get_actions', {
@@ -110,10 +124,10 @@ class EOSClient {
   }
 
   /// Get EOS transaction
-  Future<Transaction> getTransaction(String id, {int blockNumHint}) async {
+  Future<TransactionBlock> getTransaction(String id, {int blockNumHint}) async {
     return this._post('/history/get_transaction',
         {'id': id, 'block_num_hint': blockNumHint}).then((transaction) {
-      return Transaction.fromJson(transaction);
+      return TransactionBlock.fromJson(transaction);
     });
   }
 

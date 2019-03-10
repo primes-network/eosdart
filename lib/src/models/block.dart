@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './trx_receipt.dart';
+import './transaction.dart';
 import './mix_int_string.dart';
 
 part 'block.g.dart';
@@ -44,7 +44,7 @@ class Block with MixIntString {
   String producerSignature;
 
   @JsonKey(name: 'transactions')
-  List<TrxReceipt> transactions;
+  List<TransactionReceipt> transactions;
 
   @JsonKey(name: 'block_extensions')
   List<Object> blockExtensions;

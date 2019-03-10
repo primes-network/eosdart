@@ -72,7 +72,7 @@ void main() {
       client
           .getTransaction(
               '8ca0fea82370a2dbbf2c4bd1026bf9fd98a57685bee3672c4ddbbc9be21de984')
-          .then((Transaction transaction) {
+          .then((TransactionBlock transaction) {
         expect(transaction.blockNum, 43743575);
         expect(transaction.trx.receipt.cpuUsageUs, 132);
         expect(transaction.trx.receipt.netUsageWords, 0);

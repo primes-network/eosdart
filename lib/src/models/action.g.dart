@@ -6,40 +6,109 @@ part of 'action.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Actions _$ActionsFromJson(Map<String, dynamic> json) {
-  return Actions()
-    ..actions = (json['actions'] as List)
-        ?.map((e) =>
-            e == null ? null : Action.fromJson(e as Map<String, dynamic>))
-        ?.toList();
-}
-
-Map<String, dynamic> _$ActionsToJson(Actions instance) =>
-    <String, dynamic>{'actions': instance.actions};
-
-Action _$ActionFromJson(Map<String, dynamic> json) {
-  return Action()
-    ..globalActionSeq = json['global_action_seq'] == null
+ActionWithReceipt _$ActionWithReceiptFromJson(Map<String, dynamic> json) {
+  return ActionWithReceipt()
+    ..receipt = json['receipt'] == null
         ? null
-        : MixIntString.getIntFromJson(json['global_action_seq'])
-    ..accountActionSeq = json['account_action_seq'] == null
+        : ActionReceipt.fromJson(json['receipt'] as Map<String, dynamic>)
+    ..action = json['act'] == null
         ? null
-        : MixIntString.getIntFromJson(json['account_action_seq'])
+        : Action.fromJson(json['act'] as Map<String, dynamic>)
+    ..contextFree = json['context_free'] as bool
+    ..elapsed = json['elapsed'] as int
+    ..console = json['console'] as String
+    ..trxId = json['trx_id'] as String
     ..blockNum = json['block_num'] == null
         ? null
         : MixIntString.getIntFromJson(json['block_num'])
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)
-    ..actionTrace = json['action_trace'] == null
-        ? null
-        : ActionTrace.fromJson(json['action_trace'] as Map<String, dynamic>);
+    ..producerBlockId = json['producer_block_id'] as String
+    ..accountRamDeltas = json['account_ram_deltas'] as List
+    ..except = json['except']
+    ..inlineTraces = (json['inline_traces'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ActionWithReceipt.fromJson(e as Map<String, dynamic>))
+        ?.toList();
+}
+
+Map<String, dynamic> _$ActionWithReceiptToJson(ActionWithReceipt instance) =>
+    <String, dynamic>{
+      'receipt': instance.receipt,
+      'act': instance.action,
+      'context_free': instance.contextFree,
+      'elapsed': instance.elapsed,
+      'console': instance.console,
+      'trx_id': instance.trxId,
+      'block_num': instance.blockNum,
+      'block_time': instance.blockTime?.toIso8601String(),
+      'producer_block_id': instance.producerBlockId,
+      'account_ram_deltas': instance.accountRamDeltas,
+      'except': instance.except,
+      'inline_traces': instance.inlineTraces
+    };
+
+Action _$ActionFromJson(Map<String, dynamic> json) {
+  return Action()
+    ..account = json['account'] as String
+    ..name = json['name'] as String
+    ..authorization = (json['authorization'] as List)
+        ?.map((e) => e == null
+            ? null
+            : Authorization.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..data = json['data']
+    ..hexData = json['hex_data'] as String;
 }
 
 Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
-      'global_action_seq': instance.globalActionSeq,
-      'account_action_seq': instance.accountActionSeq,
-      'block_num': instance.blockNum,
-      'block_time': instance.blockTime?.toIso8601String(),
-      'action_trace': instance.actionTrace
+      'account': instance.account,
+      'name': instance.name,
+      'authorization': instance.authorization,
+      'data': instance.data,
+      'hex_data': instance.hexData
+    };
+
+ActionReceipt _$ActionReceiptFromJson(Map<String, dynamic> json) {
+  return ActionReceipt()
+    ..receiver = json['receiver'] as String
+    ..actDigest = json['act_digest'] as String
+    ..globalSequence = json['global_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['global_sequence'])
+    ..receiveSequence = json['recv_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['recv_sequence'])
+    ..authSequence = json['auth_sequence'] as List
+    ..codeSequence = json['code_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['code_sequence'])
+    ..abiSequence = json['abi_sequence'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['abi_sequence']);
+}
+
+Map<String, dynamic> _$ActionReceiptToJson(ActionReceipt instance) =>
+    <String, dynamic>{
+      'receiver': instance.receiver,
+      'act_digest': instance.actDigest,
+      'global_sequence': instance.globalSequence,
+      'recv_sequence': instance.receiveSequence,
+      'auth_sequence': instance.authSequence,
+      'code_sequence': instance.codeSequence,
+      'abi_sequence': instance.abiSequence
+    };
+
+Authorization _$AuthorizationFromJson(Map<String, dynamic> json) {
+  return Authorization()
+    ..actor = json['actor'] as String
+    ..permission = json['permission'] as String;
+}
+
+Map<String, dynamic> _$AuthorizationToJson(Authorization instance) =>
+    <String, dynamic>{
+      'actor': instance.actor,
+      'permission': instance.permission
     };

@@ -6,12 +6,12 @@ part of 'transaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Transaction _$TransactionFromJson(Map<String, dynamic> json) {
-  return Transaction()
+TransactionBlock _$TransactionBlockFromJson(Map<String, dynamic> json) {
+  return TransactionBlock()
     ..id = json['id'] as String
     ..trx = json['trx'] == null
         ? null
-        : Trx.fromJson(json['trx'] as Map<String, dynamic>)
+        : TransactionWithReceipt.fromJson(json['trx'] as Map<String, dynamic>)
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)
@@ -22,12 +22,13 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) {
         ? null
         : MixIntString.getIntFromJson(json['last_irreversible_block'])
     ..traces = (json['traces'] as List)
-        ?.map((e) =>
-            e == null ? null : ActionTrace.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => e == null
+            ? null
+            : ActionWithReceipt.fromJson(e as Map<String, dynamic>))
         ?.toList();
 }
 
-Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
+Map<String, dynamic> _$TransactionBlockToJson(TransactionBlock instance) =>
     <String, dynamic>{
       'id': instance.id,
       'trx': instance.trx,
@@ -37,12 +38,73 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'traces': instance.traces
     };
 
-Trx _$TrxFromJson(Map<String, dynamic> json) {
-  return Trx()
+TransactionWithReceipt _$TransactionWithReceiptFromJson(
+    Map<String, dynamic> json) {
+  return TransactionWithReceipt()
     ..receipt = json['receipt'] == null
         ? null
-        : TrxReceipt.fromJson(json['receipt'] as Map<String, dynamic>);
+        : TransactionReceipt.fromJson(json['receipt'] as Map<String, dynamic>)
+    ..transaction = json['trx'] == null
+        ? null
+        : Transaction.fromJson(json['trx'] as Map<String, dynamic>);
 }
 
-Map<String, dynamic> _$TrxToJson(Trx instance) =>
-    <String, dynamic>{'receipt': instance.receipt};
+Map<String, dynamic> _$TransactionWithReceiptToJson(
+        TransactionWithReceipt instance) =>
+    <String, dynamic>{'receipt': instance.receipt, 'trx': instance.transaction};
+
+TransactionReceipt _$TransactionReceiptFromJson(Map<String, dynamic> json) {
+  return TransactionReceipt()
+    ..status = json['status'] as String
+    ..cpuUsageUs = json['cpu_usage_us'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['cpu_usage_us'])
+    ..netUsageWords = json['net_usage_words'] == null
+        ? null
+        : MixIntString.getIntFromJson(json['net_usage_words'])
+    ..trx = json['trx'];
+}
+
+Map<String, dynamic> _$TransactionReceiptToJson(TransactionReceipt instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'cpu_usage_us': instance.cpuUsageUs,
+      'net_usage_words': instance.netUsageWords,
+      'trx': instance.trx
+    };
+
+Transaction _$TransactionFromJson(Map<String, dynamic> json) {
+  return Transaction()
+    ..expiration = json['expiration'] == null
+        ? null
+        : DateTime.parse(json['expiration'] as String)
+    ..refBlockNum = json['ref_block_num'] as int
+    ..refBlockPrefix = json['ref_block_prefix'] as int
+    ..maxNetUsageWords = json['max_net_usage_words'] as int
+    ..maxCpuUsageMs = json['max_cpu_usage_ms'] as int
+    ..delaySec = json['delay_sec'] as int
+    ..contextFreeActions = json['context_free_actions'] as List
+    ..actions = (json['actions'] as List)
+        ?.map((e) =>
+            e == null ? null : Action.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..transactionExtensions = json['transaction_extensions'] as List
+    ..signatures =
+        (json['signatures'] as List)?.map((e) => e as String)?.toList()
+    ..contextFreeData = json['context_free_data'] as List;
+}
+
+Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
+    <String, dynamic>{
+      'expiration': instance.expiration?.toIso8601String(),
+      'ref_block_num': instance.refBlockNum,
+      'ref_block_prefix': instance.refBlockPrefix,
+      'max_net_usage_words': instance.maxNetUsageWords,
+      'max_cpu_usage_ms': instance.maxCpuUsageMs,
+      'delay_sec': instance.delaySec,
+      'context_free_actions': instance.contextFreeActions,
+      'actions': instance.actions,
+      'transaction_extensions': instance.transactionExtensions,
+      'signatures': instance.signatures,
+      'context_free_data': instance.contextFreeData
+    };

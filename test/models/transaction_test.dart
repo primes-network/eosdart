@@ -10,7 +10,7 @@ void main() {
       String transactionStr =
           File('./test/models/transaction_test_data1.json').readAsStringSync();
       Map<String, dynamic> transactionJson = json.decode(transactionStr);
-      Transaction transaction = Transaction.fromJson(transactionJson);
+      TransactionBlock transaction = TransactionBlock.fromJson(transactionJson);
 
       expect(transaction.id,
           '58d0e48048a03cff57af924ab606726793c31607a501112b088896fc0a0f70ec');
@@ -22,8 +22,8 @@ void main() {
       expect(transaction.lastIrreversibleBlock, 44075018);
       expect(transaction.traces.length, 1);
       expect(transaction.traces[0].receipt.receiver, 'pretonarts11');
-      expect(transaction.traces[0].act.account, 'pretonarts11');
-      expect(transaction.traces[0].act.name, 'chooseserver');
+      expect(transaction.traces[0].action.account, 'pretonarts11');
+      expect(transaction.traces[0].action.name, 'chooseserver');
       expect(transaction.traces[0].producerBlockId,
           '02a07f3e8e112558b58e7027ae614336cf77b45980df9693219f77e7a2d0349e');
     });
@@ -32,7 +32,7 @@ void main() {
       String transactionStr =
           File('./test/models/transaction_test_data2.json').readAsStringSync();
       Map<String, dynamic> transactionJson = json.decode(transactionStr);
-      Transaction transaction = Transaction.fromJson(transactionJson);
+      TransactionBlock transaction = TransactionBlock.fromJson(transactionJson);
 
       expect(transaction.id,
           '83875faeb054ba20b20f392418e3a0002c4bb1c36cc4e3fde15cbd0963da8a15');
@@ -44,8 +44,8 @@ void main() {
       expect(transaction.lastIrreversibleBlock, 44075150);
       expect(transaction.traces.length, 2);
       expect(transaction.traces[0].receipt.receiver, 'xuxxxxxxxxxx');
-      expect(transaction.traces[0].act.account, 'eosio.token');
-      expect(transaction.traces[0].act.name, 'transfer');
+      expect(transaction.traces[0].action.account, 'eosio.token');
+      expect(transaction.traces[0].action.name, 'transfer');
       expect(transaction.traces[0].producerBlockId,
           '02a07f3e8e112558b58e7027ae614336cf77b45980df9693219f77e7a2d0349e');
     });
