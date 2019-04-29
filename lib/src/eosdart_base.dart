@@ -1,127 +1,66 @@
-import 'dart:convert';
-import 'dart:async';
-import 'package:http/http.dart' as http;
+/// A field in an abi */
+class Field {
+  /// Field name */
+  String name;
 
-import './models/abi.dart';
-import './models/node_info.dart';
-import './models/account.dart';
-import './models/block.dart';
-import './models/action.dart';
-import './models/transaction.dart';
-import './models/account_names.dart';
-import './models/block_header_state.dart';
+  /// Type name in string form */
+  String typeName;
 
-/// EOSClient calls APIs against given EOS nodes
-class EOSClient {
-  final String _nodeURL;
-  final String _version;
+  /// Type of the field */
+  Type type;
 
-  /// Construct the EOS client from eos node URL
-  EOSClient(this._nodeURL, this._version);
+  Field({this.name, this.type, this.typeName});
+}
 
-  Future _post(String path, Object body) async {
-    Completer completer = Completer();
-    http
-        .post('${this._nodeURL}/${this._version}${path}',
-            body: json.encode(body))
-        .then((http.Response response) {
-      if (response.statusCode != 200) {
-        completer.completeError(response.body);
-      } else {
-        completer.complete(json.decode(response.body));
-      }
-    });
-    return completer.future;
-  }
+class Type {
+  String name;
 
-  /// Get EOS Node Info
-  Future<NodeInfo> getInfo() async {
-    return this._post('/chain/get_info', {}).then((nodeInfo) {
-      return NodeInfo.fromJson(nodeInfo);
-    });
-  }
+  String aliasOfName;
 
-  /// Get EOS Block Info
-  Future<Block> getBlock(String blockNumOrId) async {
-    return this._post(
-        '/chain/get_block', {'block_num_or_id': blockNumOrId}).then((block) {
-      return Block.fromJson(block);
-    });
-  }
+  Type arrayOf;
 
-  /// Get EOS Block Header State
-  Future<BlockHeaderState> getBlockHeaderState(String blockNumOrId) async {
-    return this._post('/chain/get_block_header_state',
-        {'block_num_or_id': blockNumOrId}).then((block) {
-      return BlockHeaderState.fromJson(block);
-    });
-  }
+  Type optionalOf;
 
-  /// Get EOS abi from account name
-  Future<Abi> getAbi(String accountName) async {
-    return this
-        ._post('/chain/get_abi', {'account_name': accountName}).then((abi) {
-      return Abi.fromJson(abi);
-    });
-  }
+  Type extensionOf;
 
-  /// Get EOS raw abi from account name
-  Future<Abi> getRawAbi(String accountName) async {
-    return this
-        ._post('/chain/get_raw_abi', {'account_name': accountName}).then((abi) {
-      return Abi.fromJson(abi);
-    });
-  }
+  String baseName;
 
-  /// Get EOS raw code and abi from account name
-  Future<Abi> getRawCodeAndAbi(String accountName) async {
-    return this._post('/chain/get_raw_code_and_abi',
-        {'account_name': accountName}).then((abi) {
-      return Abi.fromJson(abi);
-    });
-  }
+  Type base;
 
-  /// Get EOS account info form the given account name
-  Future<Account> getAccount(String accountName) async {
-    return this._post('/chain/get_account', {'account_name': accountName}).then(
-        (account) {
-      return Account.fromJson(account);
-    });
-  }
+  List<Field> fields;
 
-  /// Get EOS account info form the given account name
-  Future<List<Holding>> getCurrencyBalance(String code, String account,
-      [String symbol]) async {
-    return this._post('/chain/get_currency_balance',
-        {'code': code, 'account': account, 'symbol': symbol}).then((balance) {
-      return (balance as List).map((e) => new Holding.fromJson(e)).toList();
-    });
-  }
+  Function serialize;
 
-  /// Get EOS account actions
-  Future<Actions> getActions(String accountName, {int pos, int offset}) async {
-    return this._post('/history/get_actions', {
-      'account_name': accountName,
-      'pot': pos,
-      'offset': offset
-    }).then((actions) {
-      return Actions.fromJson(actions);
-    });
-  }
+  Function deserialize;
 
-  /// Get EOS transaction
-  Future<Transaction> getTransaction(String id, {int blockNumHint}) async {
-    return this._post('/history/get_transaction',
-        {'id': id, 'block_num_hint': blockNumHint}).then((transaction) {
-      return Transaction.fromJson(transaction);
-    });
-  }
+  Type(
+      {this.name,
+      this.aliasOfName,
+      this.arrayOf,
+      this.optionalOf,
+      this.extensionOf,
+      this.baseName,
+      this.base,
+      this.fields,
+      this.serialize,
+      this.deserialize});
+}
 
-  /// Get Key Accounts
-  Future<AccountNames> getKeyAccounts(String pubKey) async {
-    return this._post('/history/get_key_accounts', {'public_key': pubKey}).then(
-        (accountNames) {
-      return AccountNames.fromJson(accountNames);
-    });
-  }
+class Contract {
+  Map<String, Type> actions;
+
+  Map<String, Type> types;
+
+  Contract(this.types, this.actions);
+}
+
+/// Structural representation of a symbol */
+class Symbol {
+  /// Name of the symbol, not including precision */
+  final String name;
+
+  /// Number of digits after the decimal point */
+  final int precision;
+
+  Symbol({this.name, this.precision});
 }

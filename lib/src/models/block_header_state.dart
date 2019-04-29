@@ -1,28 +1,38 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import './conversion_helper.dart';
+
 part 'block_header_state.g.dart';
 
 @JsonSerializable()
-class BlockHeaderState {
+class BlockHeaderState with ConversionHelper {
   @JsonKey(name: 'id')
   String id;
 
-  @JsonKey(name: 'block_num')
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   int blockNum;
 
   @JsonKey(name: 'header')
   Header header;
 
-  @JsonKey(name: 'dpos_proposed_irreversible_blocknum')
+  @JsonKey(
+      name: 'dpos_proposed_irreversible_blocknum',
+      fromJson: ConversionHelper.getIntFromJson)
   int dposProposedIrreversibleBlocknum;
 
-  @JsonKey(name: 'dpos_irreversible_blocknum')
+  @JsonKey(
+      name: 'dpos_irreversible_blocknum',
+      fromJson: ConversionHelper.getIntFromJson)
   int dposIrreversibleBlocknum;
 
-  @JsonKey(name: 'bft_irreversible_blocknum')
+  @JsonKey(
+      name: 'bft_irreversible_blocknum',
+      fromJson: ConversionHelper.getIntFromJson)
   int bftIrreversibleBlocknum;
 
-  @JsonKey(name: 'pending_schedule_lib_num')
+  @JsonKey(
+      name: 'pending_schedule_lib_num',
+      fromJson: ConversionHelper.getIntFromJson)
   int pendingScheduleLibNum;
 
   @JsonKey(name: 'pending_schedule_hash')

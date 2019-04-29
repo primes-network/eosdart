@@ -7,7 +7,11 @@ part of 'block.dart';
 // **************************************************************************
 
 Block _$BlockFromJson(Map<String, dynamic> json) {
-  return Block(json['id'] as String, json['block_num'] as int)
+  return Block(
+      json['id'] as String,
+      json['block_num'] == null
+          ? null
+          : ConversionHelper.getIntFromJson(json['block_num']))
     ..timestamp = json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String)
@@ -21,8 +25,9 @@ Block _$BlockFromJson(Map<String, dynamic> json) {
     ..headerExtensions = json['header_extensions'] as List
     ..producerSignature = json['producer_signature'] as String
     ..transactions = (json['transactions'] as List)
-        ?.map((e) =>
-            e == null ? null : TrxReceipt.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => e == null
+            ? null
+            : TransactionReceipt.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..blockExtensions = json['block_extensions'] as List
     ..refBlockPrefix = json['ref_block_prefix'] as int;

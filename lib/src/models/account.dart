@@ -1,10 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import './conversion_helper.dart';
+
 part 'account.g.dart';
 
 /// Represents EOS account information
 @JsonSerializable()
-class Account {
+class Account with ConversionHelper {
   @JsonKey(name: 'account_name')
   final String accountName;
 
@@ -26,13 +28,13 @@ class Account {
   @JsonKey(name: 'core_liquid_balance')
   Holding coreLiquidBalance;
 
-  @JsonKey(name: 'ram_quota')
+  @JsonKey(name: 'ram_quota', fromJson: ConversionHelper.getIntFromJson)
   int ramQuota;
 
-  @JsonKey(name: 'net_weight')
+  @JsonKey(name: 'net_weight', fromJson: ConversionHelper.getIntFromJson)
   int netWeight;
 
-  @JsonKey(name: 'cpu_weight')
+  @JsonKey(name: 'cpu_weight', fromJson: ConversionHelper.getIntFromJson)
   int cpuWeight;
 
   @JsonKey(name: 'net_limit')
@@ -41,7 +43,7 @@ class Account {
   @JsonKey(name: 'cpu_limit')
   Limit cpuLimit;
 
-  @JsonKey(name: 'ram_usage')
+  @JsonKey(name: 'ram_usage', fromJson: ConversionHelper.getIntFromJson)
   int ramUsage;
 
   @JsonKey(name: 'total_resources')
@@ -70,44 +72,25 @@ class Account {
   String toString() => this.toJson().toString();
 }
 
-class Limit {
-  @JsonKey(name: 'used')
+@JsonSerializable()
+class Limit with ConversionHelper {
+  @JsonKey(name: 'used', fromJson: ConversionHelper.getIntFromJson)
   int used;
 
-  @JsonKey(name: 'available')
+  @JsonKey(name: 'available', fromJson: ConversionHelper.getIntFromJson)
   int available;
 
-  @JsonKey(name: 'max')
+  @JsonKey(name: 'max', fromJson: ConversionHelper.getIntFromJson)
   int max;
 
   Limit();
 
-  Limit.fromJson(Map<String, dynamic> json) {
-    this.used = Limit.getIntFromJson(json['used']);
-    this.available = Limit.getIntFromJson(json['available']);
-    this.max = Limit.getIntFromJson(json['max']);
-  }
+  factory Limit.fromJson(Map<String, dynamic> json) => _$LimitFromJson(json);
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'used': this.used,
-        'available': this.available,
-        'max': this.max
-      };
+  Map<String, dynamic> toJson() => _$LimitToJson(this);
 
   @override
   String toString() => this.toJson().toString();
-
-  // Due to the javascript have limit on the integer, some of the numbers
-  // are in String format
-  // https://github.com/EOSIO/eos/issues/6820
-  static int getIntFromJson(Object value) {
-    switch (value.runtimeType) {
-      case String:
-        return int.parse(value);
-      default:
-        return value as int;
-    }
-  }
 }
 
 // this is not using json serializer as it is customized serializer to
@@ -200,7 +183,7 @@ class AuthKey {
 }
 
 @JsonSerializable()
-class TotalResources {
+class TotalResources with ConversionHelper {
   @JsonKey(name: 'owner')
   String owner;
 
@@ -210,7 +193,7 @@ class TotalResources {
   @JsonKey(name: 'cpu_weight')
   Holding cpuWeight;
 
-  @JsonKey(name: 'ram_bytes')
+  @JsonKey(name: 'ram_bytes', fromJson: ConversionHelper.getIntFromJson)
   int ramBytes;
 
   TotalResources();
@@ -275,7 +258,7 @@ class RefundRequest {
 }
 
 @JsonSerializable()
-class VoterInfo {
+class VoterInfo with ConversionHelper {
   @JsonKey(name: 'owner')
   String owner;
 
@@ -285,7 +268,7 @@ class VoterInfo {
   @JsonKey(name: 'producers')
   Object producers;
 
-  @JsonKey(name: 'staked')
+  @JsonKey(name: 'staked', fromJson: ConversionHelper.getIntFromJson)
   int staked;
 
   @JsonKey(name: 'last_vote_weight')

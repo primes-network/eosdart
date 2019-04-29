@@ -9,15 +9,26 @@ part of 'block_header_state.dart';
 BlockHeaderState _$BlockHeaderStateFromJson(Map<String, dynamic> json) {
   return BlockHeaderState()
     ..id = json['id'] as String
-    ..blockNum = json['block_num'] as int
+    ..blockNum = json['block_num'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['block_num'])
     ..header = json['header'] == null
         ? null
         : Header.fromJson(json['header'] as Map<String, dynamic>)
     ..dposProposedIrreversibleBlocknum =
-        json['dpos_proposed_irreversible_blocknum'] as int
-    ..dposIrreversibleBlocknum = json['dpos_irreversible_blocknum'] as int
-    ..bftIrreversibleBlocknum = json['bft_irreversible_blocknum'] as int
-    ..pendingScheduleLibNum = json['pending_schedule_lib_num'] as int
+        json['dpos_proposed_irreversible_blocknum'] == null
+            ? null
+            : ConversionHelper.getIntFromJson(
+                json['dpos_proposed_irreversible_blocknum'])
+    ..dposIrreversibleBlocknum = json['dpos_irreversible_blocknum'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['dpos_irreversible_blocknum'])
+    ..bftIrreversibleBlocknum = json['bft_irreversible_blocknum'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['bft_irreversible_blocknum'])
+    ..pendingScheduleLibNum = json['pending_schedule_lib_num'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['pending_schedule_lib_num'])
     ..pendingScheduleHash = json['pending_schedule_hash'] as String
     ..pendingSchedule = json['pending_schedule'] == null
         ? null

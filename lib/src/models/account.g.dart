@@ -21,16 +21,24 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
     ..coreLiquidBalance = json['core_liquid_balance'] == null
         ? null
         : Holding.fromJson(json['core_liquid_balance'] as String)
-    ..ramQuota = json['ram_quota'] as int
-    ..netWeight = json['net_weight'] as int
-    ..cpuWeight = json['cpu_weight'] as int
+    ..ramQuota = json['ram_quota'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['ram_quota'])
+    ..netWeight = json['net_weight'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['net_weight'])
+    ..cpuWeight = json['cpu_weight'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['cpu_weight'])
     ..netLimit = json['net_limit'] == null
         ? null
         : Limit.fromJson(json['net_limit'] as Map<String, dynamic>)
     ..cpuLimit = json['cpu_limit'] == null
         ? null
         : Limit.fromJson(json['cpu_limit'] as Map<String, dynamic>)
-    ..ramUsage = json['ram_usage'] as int
+    ..ramUsage = json['ram_usage'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['ram_usage'])
     ..totalResources = json['total_resources'] == null
         ? null
         : TotalResources.fromJson(
@@ -70,6 +78,25 @@ Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'self_delegated_bandwidth': instance.selfDelegatedBandwidth,
       'refund_request': instance.refundRequest,
       'voter_info': instance.voterInfo
+    };
+
+Limit _$LimitFromJson(Map<String, dynamic> json) {
+  return Limit()
+    ..used = json['used'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['used'])
+    ..available = json['available'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['available'])
+    ..max = json['max'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['max']);
+}
+
+Map<String, dynamic> _$LimitToJson(Limit instance) => <String, dynamic>{
+      'used': instance.used,
+      'available': instance.available,
+      'max': instance.max
     };
 
 Permission _$PermissionFromJson(Map<String, dynamic> json) {
@@ -125,7 +152,9 @@ TotalResources _$TotalResourcesFromJson(Map<String, dynamic> json) {
     ..cpuWeight = json['cpu_weight'] == null
         ? null
         : Holding.fromJson(json['cpu_weight'] as String)
-    ..ramBytes = json['ram_bytes'] as int;
+    ..ramBytes = json['ram_bytes'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['ram_bytes']);
 }
 
 Map<String, dynamic> _$TotalResourcesToJson(TotalResources instance) =>
@@ -185,7 +214,9 @@ VoterInfo _$VoterInfoFromJson(Map<String, dynamic> json) {
     ..owner = json['owner'] as String
     ..proxy = json['proxy'] as String
     ..producers = json['producers']
-    ..staked = json['staked'] as int
+    ..staked = json['staked'] == null
+        ? null
+        : ConversionHelper.getIntFromJson(json['staked'])
     ..lastVoteWeight = json['last_vote_weight'] as String
     ..proxiedVoteWeight = json['proxied_vote_weight'] as String
     ..isProxy = json['is_proxy'] as int;

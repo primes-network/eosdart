@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'account_names.g.dart';
+part 'primary_wrapper.g.dart';
 
 @JsonSerializable()
 class AccountNames {
@@ -13,6 +13,22 @@ class AccountNames {
       _$AccountNamesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccountNamesToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
+}
+
+@JsonSerializable()
+class RequiredKeys {
+  @JsonKey(name: 'required_keys')
+  List<String> requiredKeys;
+
+  RequiredKeys();
+
+  factory RequiredKeys.fromJson(Map<String, dynamic> json) =>
+      _$RequiredKeysFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RequiredKeysToJson(this);
 
   @override
   String toString() => this.toJson().toString();

@@ -1,15 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './trx_receipt.dart';
+import './transaction.dart';
+import './conversion_helper.dart';
 
 part 'block.g.dart';
 
 @JsonSerializable()
-class Block {
+class Block with ConversionHelper {
   @JsonKey(name: 'id')
   final String id;
 
-  @JsonKey(name: 'block_num')
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   final int blockNum;
 
   @JsonKey(name: 'timestamp')
@@ -43,7 +44,7 @@ class Block {
   String producerSignature;
 
   @JsonKey(name: 'transactions')
-  List<TrxReceipt> transactions;
+  List<TransactionReceipt> transactions;
 
   @JsonKey(name: 'block_extensions')
   List<Object> blockExtensions;
