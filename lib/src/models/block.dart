@@ -1,16 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import './transaction.dart';
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'block.g.dart';
 
 @JsonSerializable()
-class Block with MixIntString {
+class Block with ConversionHelper {
   @JsonKey(name: 'id')
   final String id;
 
-  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   final int blockNum;
 
   @JsonKey(name: 'timestamp')

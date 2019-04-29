@@ -1,12 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'account.g.dart';
 
 /// Represents EOS account information
 @JsonSerializable()
-class Account with MixIntString {
+class Account with ConversionHelper {
   @JsonKey(name: 'account_name')
   final String accountName;
 
@@ -28,13 +28,13 @@ class Account with MixIntString {
   @JsonKey(name: 'core_liquid_balance')
   Holding coreLiquidBalance;
 
-  @JsonKey(name: 'ram_quota', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'ram_quota', fromJson: ConversionHelper.getIntFromJson)
   int ramQuota;
 
-  @JsonKey(name: 'net_weight', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'net_weight', fromJson: ConversionHelper.getIntFromJson)
   int netWeight;
 
-  @JsonKey(name: 'cpu_weight', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'cpu_weight', fromJson: ConversionHelper.getIntFromJson)
   int cpuWeight;
 
   @JsonKey(name: 'net_limit')
@@ -43,7 +43,7 @@ class Account with MixIntString {
   @JsonKey(name: 'cpu_limit')
   Limit cpuLimit;
 
-  @JsonKey(name: 'ram_usage', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'ram_usage', fromJson: ConversionHelper.getIntFromJson)
   int ramUsage;
 
   @JsonKey(name: 'total_resources')
@@ -73,14 +73,14 @@ class Account with MixIntString {
 }
 
 @JsonSerializable()
-class Limit with MixIntString {
-  @JsonKey(name: 'used', fromJson: MixIntString.getIntFromJson)
+class Limit with ConversionHelper {
+  @JsonKey(name: 'used', fromJson: ConversionHelper.getIntFromJson)
   int used;
 
-  @JsonKey(name: 'available', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'available', fromJson: ConversionHelper.getIntFromJson)
   int available;
 
-  @JsonKey(name: 'max', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'max', fromJson: ConversionHelper.getIntFromJson)
   int max;
 
   Limit();
@@ -183,7 +183,7 @@ class AuthKey {
 }
 
 @JsonSerializable()
-class TotalResources with MixIntString {
+class TotalResources with ConversionHelper {
   @JsonKey(name: 'owner')
   String owner;
 
@@ -193,7 +193,7 @@ class TotalResources with MixIntString {
   @JsonKey(name: 'cpu_weight')
   Holding cpuWeight;
 
-  @JsonKey(name: 'ram_bytes', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'ram_bytes', fromJson: ConversionHelper.getIntFromJson)
   int ramBytes;
 
   TotalResources();
@@ -258,7 +258,7 @@ class RefundRequest {
 }
 
 @JsonSerializable()
-class VoterInfo with MixIntString {
+class VoterInfo with ConversionHelper {
   @JsonKey(name: 'owner')
   String owner;
 
@@ -268,7 +268,7 @@ class VoterInfo with MixIntString {
   @JsonKey(name: 'producers')
   Object producers;
 
-  @JsonKey(name: 'staked', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'staked', fromJson: ConversionHelper.getIntFromJson)
   int staked;
 
   @JsonKey(name: 'last_vote_weight')

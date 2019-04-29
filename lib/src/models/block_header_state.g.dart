@@ -11,24 +11,24 @@ BlockHeaderState _$BlockHeaderStateFromJson(Map<String, dynamic> json) {
     ..id = json['id'] as String
     ..blockNum = json['block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_num'])
+        : ConversionHelper.getIntFromJson(json['block_num'])
     ..header = json['header'] == null
         ? null
         : Header.fromJson(json['header'] as Map<String, dynamic>)
     ..dposProposedIrreversibleBlocknum =
         json['dpos_proposed_irreversible_blocknum'] == null
             ? null
-            : MixIntString.getIntFromJson(
+            : ConversionHelper.getIntFromJson(
                 json['dpos_proposed_irreversible_blocknum'])
     ..dposIrreversibleBlocknum = json['dpos_irreversible_blocknum'] == null
         ? null
-        : MixIntString.getIntFromJson(json['dpos_irreversible_blocknum'])
+        : ConversionHelper.getIntFromJson(json['dpos_irreversible_blocknum'])
     ..bftIrreversibleBlocknum = json['bft_irreversible_blocknum'] == null
         ? null
-        : MixIntString.getIntFromJson(json['bft_irreversible_blocknum'])
+        : ConversionHelper.getIntFromJson(json['bft_irreversible_blocknum'])
     ..pendingScheduleLibNum = json['pending_schedule_lib_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['pending_schedule_lib_num'])
+        : ConversionHelper.getIntFromJson(json['pending_schedule_lib_num'])
     ..pendingScheduleHash = json['pending_schedule_hash'] as String
     ..pendingSchedule = json['pending_schedule'] == null
         ? null

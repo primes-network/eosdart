@@ -20,7 +20,7 @@ ActionWithReceipt _$ActionWithReceiptFromJson(Map<String, dynamic> json) {
     ..trxId = json['trx_id'] as String
     ..blockNum = json['block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_num'])
+        : ConversionHelper.getIntFromJson(json['block_num'])
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)
@@ -59,16 +59,14 @@ Action _$ActionFromJson(Map<String, dynamic> json) {
             ? null
             : Authorization.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..data = json['data']
-    ..hexData = json['hex_data'] as String;
+    ..data = json['data'];
 }
 
 Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'account': instance.account,
       'name': instance.name,
       'authorization': instance.authorization,
-      'data': instance.data,
-      'hex_data': instance.hexData
+      'data': instance.data
     };
 
 ActionReceipt _$ActionReceiptFromJson(Map<String, dynamic> json) {
@@ -77,17 +75,17 @@ ActionReceipt _$ActionReceiptFromJson(Map<String, dynamic> json) {
     ..actDigest = json['act_digest'] as String
     ..globalSequence = json['global_sequence'] == null
         ? null
-        : MixIntString.getIntFromJson(json['global_sequence'])
+        : ConversionHelper.getIntFromJson(json['global_sequence'])
     ..receiveSequence = json['recv_sequence'] == null
         ? null
-        : MixIntString.getIntFromJson(json['recv_sequence'])
+        : ConversionHelper.getIntFromJson(json['recv_sequence'])
     ..authSequence = json['auth_sequence'] as List
     ..codeSequence = json['code_sequence'] == null
         ? null
-        : MixIntString.getIntFromJson(json['code_sequence'])
+        : ConversionHelper.getIntFromJson(json['code_sequence'])
     ..abiSequence = json['abi_sequence'] == null
         ? null
-        : MixIntString.getIntFromJson(json['abi_sequence']);
+        : ConversionHelper.getIntFromJson(json['abi_sequence']);
 }
 
 Map<String, dynamic> _$ActionReceiptToJson(ActionReceipt instance) =>

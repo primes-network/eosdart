@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'action.g.dart';
 
 @JsonSerializable()
-class ActionWithReceipt with MixIntString {
+class ActionWithReceipt with ConversionHelper {
   @JsonKey(name: 'receipt')
   ActionReceipt receipt;
 
@@ -24,7 +24,7 @@ class ActionWithReceipt with MixIntString {
   @JsonKey(name: 'trx_id')
   String trxId;
 
-  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   int blockNum;
 
   @JsonKey(name: 'block_time')
@@ -67,8 +67,8 @@ class Action {
   @JsonKey(name: 'data')
   Object data;
 
-  @JsonKey(name: 'hex_data')
-  String hexData;
+//  @JsonKey(name: 'hex_data')
+//  String hexData;
 
   Action();
 
@@ -81,26 +81,26 @@ class Action {
 }
 
 @JsonSerializable()
-class ActionReceipt with MixIntString {
+class ActionReceipt with ConversionHelper {
   @JsonKey(name: 'receiver')
   String receiver;
 
   @JsonKey(name: 'act_digest')
   String actDigest;
 
-  @JsonKey(name: 'global_sequence', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'global_sequence', fromJson: ConversionHelper.getIntFromJson)
   int globalSequence;
 
-  @JsonKey(name: 'recv_sequence', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'recv_sequence', fromJson: ConversionHelper.getIntFromJson)
   int receiveSequence;
 
   @JsonKey(name: 'auth_sequence')
   List<Object> authSequence;
 
-  @JsonKey(name: 'code_sequence', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'code_sequence', fromJson: ConversionHelper.getIntFromJson)
   int codeSequence;
 
-  @JsonKey(name: 'abi_sequence', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'abi_sequence', fromJson: ConversionHelper.getIntFromJson)
   int abiSequence;
 
   ActionReceipt();

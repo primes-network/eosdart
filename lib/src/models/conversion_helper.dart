@@ -1,4 +1,7 @@
-mixin MixIntString {
+import 'dart:typed_data';
+import 'dart:convert';
+
+mixin ConversionHelper {
   // Due to the javascript have limit on the integer, some of the numbers
   // are in String format
   // https://github.com/EOSIO/eos/issues/6820
@@ -9,5 +12,13 @@ mixin MixIntString {
       default:
         return value as int;
     }
+  }
+
+  static Uint8List base64ToBuffer(String base64String) {
+    return utf8.encode(base64String);
+  }
+
+  static String bufferToBase64(Uint8List buffer) {
+    return utf8.decode(buffer);
   }
 }

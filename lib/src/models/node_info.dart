@@ -1,23 +1,23 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'node_info.g.dart';
 
 @JsonSerializable()
-class NodeInfo with MixIntString {
+class NodeInfo with ConversionHelper {
   @JsonKey(name: 'server_version')
   String serverVersion;
 
   @JsonKey(name: 'chain_id')
   String chainId;
 
-  @JsonKey(name: 'head_block_num', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'head_block_num', fromJson: ConversionHelper.getIntFromJson)
   int headBlockNum;
 
   @JsonKey(
       name: 'last_irreversible_block_num',
-      fromJson: MixIntString.getIntFromJson)
+      fromJson: ConversionHelper.getIntFromJson)
   int lastIrreversibleBlockNum;
 
   @JsonKey(name: 'last_irreversible_block_id')
@@ -30,17 +30,19 @@ class NodeInfo with MixIntString {
   String headBlockProducer;
 
   @JsonKey(
-      name: 'virtual_block_cpu_limit', fromJson: MixIntString.getIntFromJson)
+      name: 'virtual_block_cpu_limit',
+      fromJson: ConversionHelper.getIntFromJson)
   int virtualBlockCpuLimit;
 
   @JsonKey(
-      name: 'virtual_block_net_limit', fromJson: MixIntString.getIntFromJson)
+      name: 'virtual_block_net_limit',
+      fromJson: ConversionHelper.getIntFromJson)
   int virtualBlockNetLimit;
 
-  @JsonKey(name: 'block_cpu_limit', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_cpu_limit', fromJson: ConversionHelper.getIntFromJson)
   int blockCpuLimit;
 
-  @JsonKey(name: 'block_net_limit', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_net_limit', fromJson: ConversionHelper.getIntFromJson)
   int blockNetLimit;
 
   @JsonKey(name: 'server_version_string')

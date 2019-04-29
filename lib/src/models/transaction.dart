@@ -1,12 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import './action.dart';
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'transaction.g.dart';
 
 @JsonSerializable()
-class TransactionBlock with MixIntString {
+class TransactionBlock with ConversionHelper {
   @JsonKey(name: 'id')
   String id;
 
@@ -16,11 +16,12 @@ class TransactionBlock with MixIntString {
   @JsonKey(name: 'block_time')
   DateTime blockTime;
 
-  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   int blockNum;
 
   @JsonKey(
-      name: 'last_irreversible_block', fromJson: MixIntString.getIntFromJson)
+      name: 'last_irreversible_block',
+      fromJson: ConversionHelper.getIntFromJson)
   int lastIrreversibleBlock;
 
   @JsonKey(name: 'traces')
@@ -57,14 +58,14 @@ class TransactionWithReceipt {
 }
 
 @JsonSerializable()
-class TransactionReceipt with MixIntString {
+class TransactionReceipt with ConversionHelper {
   @JsonKey(name: 'status')
   String status;
 
-  @JsonKey(name: 'cpu_usage_us', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'cpu_usage_us', fromJson: ConversionHelper.getIntFromJson)
   int cpuUsageUs;
 
-  @JsonKey(name: 'net_usage_words', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'net_usage_words', fromJson: ConversionHelper.getIntFromJson)
   int netUsageWords;
 
   @JsonKey(name: 'trx')
@@ -102,19 +103,19 @@ class Transaction {
   int delaySec;
 
   @JsonKey(name: 'context_free_actions')
-  List<Object> contextFreeActions;
+  List<Object> contextFreeActions = [];
 
   @JsonKey(name: 'actions')
-  List<Action> actions;
+  List<Action> actions = [];
 
   @JsonKey(name: 'transaction_extensions')
-  List<Object> transactionExtensions;
+  List<Object> transactionExtensions = [];
 
   @JsonKey(name: 'signatures')
-  List<String> signatures;
+  List<String> signatures = [];
 
   @JsonKey(name: 'context_free_data')
-  List<Object> contextFreeData;
+  List<Object> contextFreeData = [];
 
   Transaction();
 

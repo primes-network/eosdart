@@ -17,10 +17,10 @@ TransactionBlock _$TransactionBlockFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['block_time'] as String)
     ..blockNum = json['block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_num'])
+        : ConversionHelper.getIntFromJson(json['block_num'])
     ..lastIrreversibleBlock = json['last_irreversible_block'] == null
         ? null
-        : MixIntString.getIntFromJson(json['last_irreversible_block'])
+        : ConversionHelper.getIntFromJson(json['last_irreversible_block'])
     ..traces = (json['traces'] as List)
         ?.map((e) => e == null
             ? null
@@ -58,10 +58,10 @@ TransactionReceipt _$TransactionReceiptFromJson(Map<String, dynamic> json) {
     ..status = json['status'] as String
     ..cpuUsageUs = json['cpu_usage_us'] == null
         ? null
-        : MixIntString.getIntFromJson(json['cpu_usage_us'])
+        : ConversionHelper.getIntFromJson(json['cpu_usage_us'])
     ..netUsageWords = json['net_usage_words'] == null
         ? null
-        : MixIntString.getIntFromJson(json['net_usage_words'])
+        : ConversionHelper.getIntFromJson(json['net_usage_words'])
     ..trx = json['trx'];
 }
 

@@ -21,13 +21,13 @@ ActionBlock _$ActionBlockFromJson(Map<String, dynamic> json) {
   return ActionBlock()
     ..globalActionSeq = json['global_action_seq'] == null
         ? null
-        : MixIntString.getIntFromJson(json['global_action_seq'])
+        : ConversionHelper.getIntFromJson(json['global_action_seq'])
     ..accountActionSeq = json['account_action_seq'] == null
         ? null
-        : MixIntString.getIntFromJson(json['account_action_seq'])
+        : ConversionHelper.getIntFromJson(json['account_action_seq'])
     ..blockNum = json['block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_num'])
+        : ConversionHelper.getIntFromJson(json['block_num'])
     ..blockTime = json['block_time'] == null
         ? null
         : DateTime.parse(json['block_time'] as String)

@@ -16,13 +16,13 @@ void main() {
     });
 
     test('Get Abi', () {
-      client.getAbi('eosio.token').then((Abi abi) {
+      client.getAbi('eosio.token').then((AbiResp abi) {
         expect(abi.accountName, equals('eosio.token'));
       });
     });
 
     test('Get Raw Abi', () {
-      client.getRawAbi('eosio.token').then((Abi abi) {
+      client.getRawAbi('eosio.token').then((AbiResp abi) {
         expect(abi.accountName, equals('eosio.token'));
         expect(abi.codeHash,
             '01bd013c4f8be142b9cadf511f007c6ac201c068d529f01ed5661803c575befa');
@@ -33,7 +33,7 @@ void main() {
     });
 
     test('Get Raw code and Abi', () {
-      client.getRawCodeAndAbi('eosio.token').then((Abi abi) {
+      client.getRawCodeAndAbi('eosio.token').then((AbiResp abi) {
         expect(abi.accountName, equals('eosio.token'));
         expect(abi.wasm.length > 0, isTrue);
         expect(abi.abi, isNotNull);

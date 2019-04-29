@@ -12,10 +12,10 @@ NodeInfo _$NodeInfoFromJson(Map<String, dynamic> json) {
     ..chainId = json['chain_id'] as String
     ..headBlockNum = json['head_block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['head_block_num'])
+        : ConversionHelper.getIntFromJson(json['head_block_num'])
     ..lastIrreversibleBlockNum = json['last_irreversible_block_num'] == null
         ? null
-        : MixIntString.getIntFromJson(json['last_irreversible_block_num'])
+        : ConversionHelper.getIntFromJson(json['last_irreversible_block_num'])
     ..lastIrreversibleBlockId = json['last_irreversible_block_id'] as String
     ..headBlockTime = json['head_block_time'] == null
         ? null
@@ -23,16 +23,16 @@ NodeInfo _$NodeInfoFromJson(Map<String, dynamic> json) {
     ..headBlockProducer = json['head_block_producer'] as String
     ..virtualBlockCpuLimit = json['virtual_block_cpu_limit'] == null
         ? null
-        : MixIntString.getIntFromJson(json['virtual_block_cpu_limit'])
+        : ConversionHelper.getIntFromJson(json['virtual_block_cpu_limit'])
     ..virtualBlockNetLimit = json['virtual_block_net_limit'] == null
         ? null
-        : MixIntString.getIntFromJson(json['virtual_block_net_limit'])
+        : ConversionHelper.getIntFromJson(json['virtual_block_net_limit'])
     ..blockCpuLimit = json['block_cpu_limit'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_cpu_limit'])
+        : ConversionHelper.getIntFromJson(json['block_cpu_limit'])
     ..blockNetLimit = json['block_net_limit'] == null
         ? null
-        : MixIntString.getIntFromJson(json['block_net_limit'])
+        : ConversionHelper.getIntFromJson(json['block_net_limit'])
     ..serverVersionString = json['server_version_string'] as String
     ..website = json['website'] as String;
 }

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import './action.dart';
-import './mix_int_string.dart';
+import './conversion_helper.dart';
 
 part 'action_block.g.dart';
 
@@ -22,14 +22,15 @@ class Actions {
 }
 
 @JsonSerializable()
-class ActionBlock with MixIntString {
-  @JsonKey(name: 'global_action_seq', fromJson: MixIntString.getIntFromJson)
+class ActionBlock with ConversionHelper {
+  @JsonKey(name: 'global_action_seq', fromJson: ConversionHelper.getIntFromJson)
   int globalActionSeq;
 
-  @JsonKey(name: 'account_action_seq', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(
+      name: 'account_action_seq', fromJson: ConversionHelper.getIntFromJson)
   int accountActionSeq;
 
-  @JsonKey(name: 'block_num', fromJson: MixIntString.getIntFromJson)
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
   int blockNum;
 
   @JsonKey(name: 'block_time')
