@@ -194,7 +194,7 @@ String abiJson = '''
 }
 ''';
 
-String transactionJson='''
+String transactionJson = '''
 {
     "version": "eosio::abi/1.0",
     "types": [
