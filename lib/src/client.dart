@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 import './models/abi.dart';
@@ -54,6 +56,69 @@ class EOSClient {
       this._chainId = info.chainId;
       return info;
     });
+  }
+
+  /// Get table rows (eosio get table ...)
+  Future<List<dynamic>> getTableRows({
+    bool json = true,
+    @required String code,
+    @required String scope,
+    @required String table,
+    String tableKey = '',
+    String lower = '',
+    String upper = '',
+    int indexPosition = 1,
+    String keyType = '',
+    int limit = 10,
+    bool reverse = false,
+  }) async {
+    dynamic result = await this._post('/chain/get_table_rows', {
+      'json': json,
+      'code': code,
+      'scope': scope,
+      'table': table,
+      'table_key': tableKey,
+      'lower_bound': lower,
+      'upper_bound': upper,
+      'index_position': indexPosition,
+      'key_type': keyType,
+      'limit': limit,
+      'reverse': reverse,
+    });
+    if (result is Map) {
+      return result['rows'];
+    }
+    return [];
+  }
+
+  /// Get table row (eosio get table ...)
+  Future<dynamic> getTableRow({
+    bool json = true,
+    @required String code,
+    @required String scope,
+    @required String table,
+    String tableKey = '',
+    String lower = '',
+    String upper = '',
+    int indexPosition = 1,
+    String keyType = '',
+    bool reverse = false,
+  }) async {
+    var rows = await getTableRows(
+      json: json,
+      code: code,
+      scope: scope,
+      table: table,
+      tableKey: tableKey,
+      lower: lower,
+      upper: upper,
+      indexPosition: indexPosition,
+      keyType: keyType,
+      limit: 1,
+      reverse: reverse,
+    );
+
+    return rows.length > 0 ? rows[0] : null;
   }
 
   /// Get EOS Block Info
