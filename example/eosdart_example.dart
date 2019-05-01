@@ -62,10 +62,6 @@ main() {
   });
 
   // Get Tables
-  client
-      .getTableRows(code: 'eosio', scope: 'eosio', table: 'abihash')
-      .then((rows) => print(rows));
-  client
-      .getTableRow(code: 'eosio', scope: 'eosio', table: 'abihash')
-      .then((row) => print(row));
+  client.getTableRows('eosio', 'eosio', 'abihash').then((rows) => print(rows));
+  client.getTableRow('eosio', 'eosio', 'abihash').then((row) => print(row));
 }

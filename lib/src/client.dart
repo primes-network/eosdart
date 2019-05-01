@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 import './models/abi.dart';
@@ -59,11 +58,11 @@ class EOSClient {
   }
 
   /// Get table rows (eosio get table ...)
-  Future<List<dynamic>> getTableRows({
+  Future<List<dynamic>> getTableRows(
+    String code,
+    String scope,
+    String table, {
     bool json = true,
-    @required String code,
-    @required String scope,
-    @required String table,
     String tableKey = '',
     String lower = '',
     String upper = '',
@@ -92,11 +91,11 @@ class EOSClient {
   }
 
   /// Get table row (eosio get table ...)
-  Future<dynamic> getTableRow({
+  Future<dynamic> getTableRow(
+    String code,
+    String scope,
+    String table, {
     bool json = true,
-    @required String code,
-    @required String scope,
-    @required String table,
     String tableKey = '',
     String lower = '',
     String upper = '',
@@ -105,10 +104,10 @@ class EOSClient {
     bool reverse = false,
   }) async {
     var rows = await getTableRows(
+      code,
+      scope,
+      table,
       json: json,
-      code: code,
-      scope: scope,
-      table: table,
       tableKey: tableKey,
       lower: lower,
       upper: upper,

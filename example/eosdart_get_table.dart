@@ -4,11 +4,6 @@ main() async {
   EOSClient client = EOSClient('https://eos.greymass.com', 'v1');
 
   // Get Tables
-  var rows = await client.getTableRows(
-      code: 'eosio', scope: 'eosio', table: 'abihash');
-  print(rows);
-
-  var row =
-      await client.getTableRow(code: 'eosio', scope: 'eosio', table: 'abihash');
-  print(row);
+  client.getTableRows('eosio', 'eosio', 'abihash').then((rows) => print(rows));
+  client.getTableRow('eosio', 'eosio', 'abihash').then((row) => print(row));
 }
