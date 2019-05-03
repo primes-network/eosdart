@@ -53,7 +53,7 @@ class ActionWithReceipt with ConversionHelper {
   String toString() => this.toJson().toString();
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Action {
   @JsonKey(name: 'account')
   String account;

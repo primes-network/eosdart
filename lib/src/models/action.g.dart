@@ -65,7 +65,8 @@ Action _$ActionFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'account': instance.account,
       'name': instance.name,
-      'authorization': instance.authorization,
+      'authorization':
+          instance.authorization?.map((e) => e?.toJson())?.toList(),
       'data': instance.data
     };
 

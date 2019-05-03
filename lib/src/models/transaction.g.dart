@@ -103,7 +103,7 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'max_cpu_usage_ms': instance.maxCpuUsageMs,
       'delay_sec': instance.delaySec,
       'context_free_actions': instance.contextFreeActions,
-      'actions': instance.actions,
+      'actions': instance.actions?.map((e) => e?.toJson())?.toList(),
       'transaction_extensions': instance.transactionExtensions,
       'signatures': instance.signatures,
       'context_free_data': instance.contextFreeData
