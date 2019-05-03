@@ -1,7 +1,10 @@
+import 'dart:typed_data';
 import 'package:json_annotation/json_annotation.dart';
 
 import './action.dart';
 import './conversion_helper.dart';
+import '../eosdart_base.dart';
+import '../serialize.dart' as ser;
 
 part 'transaction.g.dart';
 
@@ -82,7 +85,7 @@ class TransactionReceipt with ConversionHelper {
   String toString() => this.toJson().toString();
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Transaction {
   @JsonKey(name: 'expiration')
   DateTime expiration;
@@ -94,13 +97,13 @@ class Transaction {
   int refBlockPrefix;
 
   @JsonKey(name: 'max_net_usage_words')
-  int maxNetUsageWords;
+  int maxNetUsageWords = 0;
 
   @JsonKey(name: 'max_cpu_usage_ms')
-  int maxCpuUsageMs;
+  int maxCpuUsageMs = 0;
 
   @JsonKey(name: 'delay_sec')
-  int delaySec;
+  int delaySec = 0;
 
   @JsonKey(name: 'context_free_actions')
   List<Object> contextFreeActions = [];
@@ -126,4 +129,11 @@ class Transaction {
 
   @override
   String toString() => this.toJson().toString();
+
+  Uint8List toBinary(Type transactionType) {
+    var buffer = ser.SerialBuffer(Uint8List(0));
+    Map<String, dynamic> aa = this.toJson();
+    transactionType.serialize(transactionType, buffer, this.toJson());
+    return buffer.asUint8List();
+  }
 }

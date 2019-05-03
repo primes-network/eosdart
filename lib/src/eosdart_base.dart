@@ -31,6 +31,8 @@ class Type {
 
   Function serialize;
 
+//  void Function(Type self,SerialBuffer buffer, Object data, {SerializerState state,bool allowExtensions}) serialize;
+
   Function deserialize;
 
   Type(

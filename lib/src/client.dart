@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:eosdart_ecc/eosdart_ecc.dart' as ecc;
 
 import './models/abi.dart';
 import './models/action.dart';
@@ -20,16 +21,25 @@ import 'eosdart_base.dart';
 class EOSClient {
   final String _nodeURL;
   final String _version;
-  String _chainId;
   int expirationInSec;
+  Map<String, ecc.EOSPrivateKey> keys = Map();
 
   /// Converts abi files between binary and structured form (`abi.abi.json`) */
   Map<String, Type> abiTypes;
+  Map<String, Type> transactionTypes;
 
   /// Construct the EOS client from eos node URL
-  EOSClient(this._nodeURL, this._version, {this.expirationInSec = 10}) {
+  EOSClient(this._nodeURL, this._version,
+      {this.expirationInSec = 180, List<String> privateKeys = const []}) {
+    for (String privateKey in privateKeys) {
+      ecc.EOSPrivateKey pKey = ecc.EOSPrivateKey.fromString(privateKey);
+      String publieKey = pKey.toEOSPublicKey().toString();
+      keys[publieKey] = pKey;
+    }
     abiTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
+    transactionTypes = ser.getTypesFromAbi(
+        ser.createInitialTypes(), Abi.fromJson(json.decode(transactionJson)));
   }
 
   Future _post(String path, Object body) async {
@@ -38,7 +48,7 @@ class EOSClient {
         .post('${this._nodeURL}/${this._version}${path}',
             body: json.encode(body))
         .then((http.Response response) {
-      if (response.statusCode != 200) {
+      if (response.statusCode >= 300) {
         completer.completeError(response.body);
       } else {
         completer.complete(json.decode(response.body));
@@ -51,7 +61,6 @@ class EOSClient {
   Future<NodeInfo> getInfo() async {
     return this._post('/chain/get_info', {}).then((nodeInfo) {
       NodeInfo info = NodeInfo.fromJson(nodeInfo);
-      this._chainId = info.chainId;
       return info;
     });
   }
@@ -119,6 +128,7 @@ class EOSClient {
     NodeInfo info = await getInfo();
     Block refBlock = await getBlock((info.headBlockNum).toString());
     Transaction trx = await _fullFill(transaction, refBlock);
+    trx = await _serializeActions(trx);
 
     // raw abi to json
 //      AbiResp abiResp = await getRawAbi(account);
@@ -158,6 +168,33 @@ class EOSClient {
     });
   }
 
+  Future<dynamic> pushTransaction(Transaction transaction,
+      {bool broadcast = true,
+      bool sign = true,
+      int blocksBehind = 3,
+      int expireSecond = 180}) async {
+    NodeInfo info = await this.getInfo();
+    Block refBlock =
+        await getBlock((info.headBlockNum - blocksBehind).toString());
+
+    Transaction trx = await _fullFill(transaction, refBlock);
+    PushTransactionArgs pushTransactionArgs = await _pushTransactionArgs(
+        info.chainId, transactionTypes['transaction'], trx, sign);
+
+    if (broadcast) {
+      return this._post('/chain/push_transaction', {
+        'signatures': pushTransactionArgs.signatures,
+        'compression': 0,
+        'packed_context_free_data': '',
+        'packed_trx': ser.arrayToHex(pushTransactionArgs.serializedTransaction),
+      }).then((processedTrx) {
+        return processedTrx;
+      });
+    }
+
+    return pushTransactionArgs;
+  }
+
   /// Get data needed to serialize actions in a contract */
   Future<Contract> _getContract(String accountName,
       {bool reload = false}) async {
@@ -177,6 +214,10 @@ class EOSClient {
     transaction.refBlockNum = refBlock.blockNum & 0xffff;
     transaction.refBlockPrefix = refBlock.refBlockPrefix;
 
+    return transaction;
+  }
+
+  Future<Transaction> _serializeActions(Transaction transaction) async {
     for (Action action in transaction.actions) {
       String account = action.account;
 
@@ -199,4 +240,47 @@ class EOSClient {
     action.serialize(action, buffer, data);
     return ser.arrayToHex(buffer.asUint8List());
   }
+
+//  Future<List<AbiResp>> _getTransactionAbis(Transaction transaction) async {
+//    Set<String> accounts = Set();
+//    List<AbiResp> result = [];
+//
+//    for (Action action in transaction.actions) {
+//      accounts.add(action.account);
+//    }
+//
+//    for (String accountName in accounts) {
+//      result.add(await this.getRawAbi(accountName));
+//    }
+//  }
+
+  Future<PushTransactionArgs> _pushTransactionArgs(String chainId,
+      Type transactionType, Transaction transaction, bool sign) async {
+    List<String> signatures = [];
+
+    RequiredKeys requiredKeys =
+        await getRequiredKeys(transaction, this.keys.keys.toList());
+
+    Uint8List serializedTrx = transaction.toBinary(transactionType);
+
+    if (sign) {
+      Uint8List signBuf = Uint8List.fromList(List.from(ser.stringToHex(chainId))
+        ..addAll(serializedTrx)
+        ..addAll(Uint8List(32)));
+
+      for (String publicKey in requiredKeys.requiredKeys) {
+        ecc.EOSPrivateKey pKey = this.keys[publicKey];
+        signatures.add(pKey.sign(signBuf).toString());
+      }
+    }
+
+    return PushTransactionArgs(signatures, serializedTrx);
+  }
+}
+
+class PushTransactionArgs {
+  List<String> signatures;
+  Uint8List serializedTransaction;
+
+  PushTransactionArgs(this.signatures, this.serializedTransaction);
 }

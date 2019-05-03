@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Initial version to support push transaction
+
 ## 0.3.3
 
 - Update README.md

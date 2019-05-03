@@ -140,9 +140,6 @@ class SerialBuffer {
       (v >> 16) & 0xff,
       (v >> 24) & 0xff
     ];
-    print("uin32 as array");
-    print(v);
-    print(t);
     push(t);
   }
 
@@ -491,20 +488,14 @@ int checkRange(int orig, int converted) {
 }
 
 DateTime checkDateParse(String date) {
-  var result = DateTime.parse(date);
-  // if (Number.isNaN(result)) {
-  //     throw new Error('Invalid time format');
-  // }
+  var result = DateTime.parse(date + 'Z');
   return result;
 }
 
 /// Convert date in ISO format to `time_point_sec` (seconds since epoch) */
 int dateToTimePointSec(String date) {
   var v = checkDateParse(date);
-  // v = v.toUtc();
-  print("time1 : ");
-  print(v.toString());
-  var t = (v.millisecondsSinceEpoch / 1000).round();
+  int t = (v.millisecondsSinceEpoch / 1000).round();
   return t;
 }
 
@@ -536,6 +527,15 @@ String arrayToHex(Uint8List data) {
     result += str.substring(str.length - 2, str.length);
   }
   return result.toUpperCase();
+}
+
+List<int> stringToHex(String str) {
+  List<int> a = [];
+  for (var i = 0; i < str.length; i += 2) {
+    var t = int.parse(str.substring(i, i + 2), radix: 16);
+    a.add(t);
+  }
+  return a;
 }
 
 /// Convert date in ISO format to `time_point` (miliseconds since epoch) */
@@ -1153,7 +1153,7 @@ Type getType(Map<String, Type> types, String name) {
 /// @param initialTypes Set of types to build on.
 ///     In most cases, it's best to fill this from a fresh call to `getTypesFromAbi()`.
 
-dynamic getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
+Map<String, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
   var types = Map.from(initialTypes).cast<String, Type>();
   if (abi.types != null) {
     for (var item in abi.types) {
