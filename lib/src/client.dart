@@ -30,7 +30,7 @@ class EOSClient {
 
   /// Construct the EOS client from eos node URL
   EOSClient(this._nodeURL, this._version,
-      {this.expirationInSec = 10, List<String> privateKeys}) {
+      {this.expirationInSec = 180, List<String> privateKeys = const []}) {
     for (String privateKey in privateKeys) {
       ecc.EOSPrivateKey pKey = ecc.EOSPrivateKey.fromString(privateKey);
       String publieKey = pKey.toEOSPublicKey().toString();
@@ -48,7 +48,7 @@ class EOSClient {
         .post('${this._nodeURL}/${this._version}${path}',
             body: json.encode(body))
         .then((http.Response response) {
-      if (response.statusCode != 200) {
+      if (response.statusCode >= 300) {
         completer.completeError(response.body);
       } else {
         completer.complete(json.decode(response.body));
@@ -168,7 +168,7 @@ class EOSClient {
     });
   }
 
-  Future<PushTransactionArgs> pushTransaction(Transaction transaction,
+  Future<dynamic> pushTransaction(Transaction transaction,
       {bool broadcast = true,
       bool sign = true,
       int blocksBehind = 3,
@@ -187,8 +187,8 @@ class EOSClient {
         'compression': 0,
         'packed_context_free_data': '',
         'packed_trx': ser.arrayToHex(pushTransactionArgs.serializedTransaction),
-      }).then((value) {
-        return pushTransactionArgs;
+      }).then((processedTrx) {
+        return processedTrx;
       });
     }
 
