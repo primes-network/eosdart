@@ -58,7 +58,7 @@ class EOSClient {
   }
 
   /// Get table rows (eosio get table ...)
-  Future<List<dynamic>> getTableRows(
+  Future<List<Map<String, dynamic>>> getTableRows(
     String code,
     String scope,
     String table, {
@@ -85,13 +85,13 @@ class EOSClient {
       'reverse': reverse,
     });
     if (result is Map) {
-      return result['rows'];
+      return result['rows'].cast<Map<String, dynamic>>();
     }
     return [];
   }
 
   /// Get table row (eosio get table ...)
-  Future<dynamic> getTableRow(
+  Future<Map<String, dynamic>> getTableRow(
     String code,
     String scope,
     String table, {
