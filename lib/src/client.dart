@@ -34,8 +34,8 @@ class EOSClient {
       {this.expirationInSec = 180, List<String> privateKeys = const []}) {
     for (String privateKey in privateKeys) {
       ecc.EOSPrivateKey pKey = ecc.EOSPrivateKey.fromString(privateKey);
-      String publieKey = pKey.toEOSPublicKey().toString();
-      keys[publieKey] = pKey;
+      String publicKey = pKey.toEOSPublicKey().toString();
+      keys[publicKey] = pKey;
     }
     abiTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
@@ -232,6 +232,7 @@ class EOSClient {
     });
   }
 
+  /// Push transaction to EOS chain
   Future<dynamic> pushTransaction(Transaction transaction,
       {bool broadcast = true,
       bool sign = true,
@@ -272,6 +273,7 @@ class EOSClient {
     return result;
   }
 
+  /// Fill the transaction withe reference block data
   Future<Transaction> _fullFill(Transaction transaction, Block refBlock) async {
     transaction.expiration =
         refBlock.timestamp.add(Duration(seconds: expirationInSec));
@@ -281,6 +283,7 @@ class EOSClient {
     return transaction;
   }
 
+  /// serialize actions in a transaction
   Future<Transaction> _serializeActions(Transaction transaction) async {
     for (Action action in transaction.actions) {
       String account = action.account;

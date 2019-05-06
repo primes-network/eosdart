@@ -1,3 +1,10 @@
+## 0.4.1
+
+support:
+
+- /v1/chain/get_table_rows
+
+
 ## 0.4.0
 
 - Initial version to support push transaction
