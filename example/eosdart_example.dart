@@ -60,4 +60,8 @@ main() {
       .then((List<Holding> balance) {
     print(balance);
   });
+
+  // Get Tables
+  client.getTableRows('eosio', 'eosio', 'abihash').then((rows) => print(rows));
+  client.getTableRow('eosio', 'eosio', 'abihash').then((row) => print(row));
 }
