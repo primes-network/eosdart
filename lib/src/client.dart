@@ -1,22 +1,22 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:http/http.dart' as http;
 import 'package:eosdart_ecc/eosdart_ecc.dart' as ecc;
+import 'package:http/http.dart' as http;
 
 import './models/abi.dart';
-import './models/action.dart';
-import './models/node_info.dart';
 import './models/account.dart';
-import './models/block.dart';
+import './models/action.dart';
 import './models/action_block.dart';
-import './models/transaction.dart';
-import './models/primary_wrapper.dart';
+import './models/block.dart';
 import './models/block_header_state.dart';
+import './models/node_info.dart';
+import './models/primary_wrapper.dart';
+import './models/transaction.dart';
+import 'eosdart_base.dart';
 import 'jsons.dart';
 import 'serialize.dart' as ser;
-import 'eosdart_base.dart';
 
 /// EOSClient calls APIs against given EOS nodes
 class EOSClient {
@@ -32,16 +32,24 @@ class EOSClient {
   /// Construct the EOS client from eos node URL
   EOSClient(this._nodeURL, this._version,
       {this.expirationInSec = 180, List<String> privateKeys = const []}) {
-    for (String privateKey in privateKeys) {
-      ecc.EOSPrivateKey pKey = ecc.EOSPrivateKey.fromString(privateKey);
-      String publicKey = pKey.toEOSPublicKey().toString();
-      keys[publicKey] = pKey;
-    }
+    _mapKeys(privateKeys);
+
     abiTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
     transactionTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(transactionJson)));
   }
+
+  /// Sets private keys. Required to sign transactions.
+  void _mapKeys(List<String> privateKeys) {
+    for (String privateKey in privateKeys) {
+      ecc.EOSPrivateKey pKey = ecc.EOSPrivateKey.fromString(privateKey);
+      String publicKey = pKey.toEOSPublicKey().toString();
+      keys[publicKey] = pKey;
+    }
+  }
+
+  set privateKeys(List<String> privateKeys) => _mapKeys(privateKeys);
 
   Future _post(String path, Object body) async {
     Completer completer = Completer();
