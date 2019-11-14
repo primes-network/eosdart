@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:eosdart/eosdart.dart';
 import 'package:test/test.dart';
