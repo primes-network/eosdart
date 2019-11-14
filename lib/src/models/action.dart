@@ -80,6 +80,31 @@ class Action {
   String toString() => this.toJson().toString();
 }
 
+@JsonSerializable(explicitToJson: true)
+class ActionArgs {
+  @JsonKey(name: 'from')
+  String fromAccount;
+
+  @JsonKey(name: 'to')
+  String toAccount;
+
+  @JsonKey(name: 'quantity')
+  String quantity;
+
+  @JsonKey(name: 'memo')
+  String memo;
+
+  ActionArgs();
+
+  factory ActionArgs.fromJson(Map<String, dynamic> json) =>
+      _$ActionArgsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ActionArgsToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
+}
+
 @JsonSerializable()
 class ActionReceipt with ConversionHelper {
   @JsonKey(name: 'receiver')

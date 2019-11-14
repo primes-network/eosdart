@@ -167,7 +167,7 @@ class TransactionProcessed with ConversionHelper {
   int blockNum;
 
   @JsonKey(name: 'block_time')
-  String blockTime;
+  DateTime blockTime;
 
   @JsonKey(name: 'producer_block_id', fromJson: ConversionHelper.getIntFromJson)
   int producerBlockId;
@@ -185,7 +185,7 @@ class TransactionProcessed with ConversionHelper {
   bool scheduled;
 
   @JsonKey(name: 'action_traces')
-  List<Object> actionTraces;
+  List<ActionWithReceipt> actionTraces;
 
   TransactionProcessed();
 
