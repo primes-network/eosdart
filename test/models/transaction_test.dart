@@ -49,5 +49,26 @@ void main() {
       expect(transaction.traces[0].producerBlockId,
           '02a07f3e8e112558b58e7027ae614336cf77b45980df9693219f77e7a2d0349e');
     });
+
+    test('Transaction Commited', () {
+      String transactionStr =
+          File('./test/models/transaction_test_data3.json').readAsStringSync();
+      Map<String, dynamic> transactionJson = json.decode(transactionStr);
+      TransactionCommitted transaction =
+          TransactionCommitted.fromJson(transactionJson);
+
+      expect(transaction.id,
+          '91b55122107079cb4eafb165511bac77b8a790c3d4008c5f7cd7cfa1236c0876');
+      expect(transaction.processed.blockNum, 729864);
+      expect(transaction.processed.blockTime, "2019-11-14T08:10:37.500");
+      expect(transaction.processed.producerBlockId, null);
+      expect(transaction.processed.receipt.status, "executed");
+      expect(transaction.processed.receipt.cpuUsageUs, 384);
+      expect(transaction.processed.receipt.netUsageWords, 16);
+      expect(transaction.processed.elapsed, 384);
+      expect(transaction.processed.netUsage, 128);
+      expect(transaction.processed.scheduled, false);
+      expect(transaction.processed.actionTraces.isNotEmpty, true);
+    });
   });
 }

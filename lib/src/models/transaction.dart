@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 
 import './action.dart';
@@ -136,4 +137,63 @@ class Transaction {
     transactionType.serialize(transactionType, buffer, this.toJson());
     return buffer.asUint8List();
   }
+}
+
+@JsonSerializable()
+class TransactionCommitted {
+  @JsonKey(name: 'transaction_id')
+  String id;
+
+  @JsonKey(name: 'processed')
+  TransactionProcessed processed;
+
+  TransactionCommitted();
+
+  factory TransactionCommitted.fromJson(Map<String, dynamic> json) =>
+      _$TransactionCommittedFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionCommittedToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
+}
+
+@JsonSerializable()
+class TransactionProcessed with ConversionHelper {
+  @JsonKey(name: 'id')
+  String id;
+
+  @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
+  int blockNum;
+
+  @JsonKey(name: 'block_time')
+  String blockTime;
+
+  @JsonKey(name: 'producer_block_id', fromJson: ConversionHelper.getIntFromJson)
+  int producerBlockId;
+
+  @JsonKey(name: 'receipt')
+  TransactionReceipt receipt;
+
+  @JsonKey(name: 'elapsed', fromJson: ConversionHelper.getIntFromJson)
+  int elapsed;
+
+  @JsonKey(name: 'net_usage', fromJson: ConversionHelper.getIntFromJson)
+  int netUsage;
+
+  @JsonKey(name: 'scheduled')
+  bool scheduled;
+
+  @JsonKey(name: 'action_traces')
+  List<Object> actionTraces;
+
+  TransactionProcessed();
+
+  factory TransactionProcessed.fromJson(Map<String, dynamic> json) =>
+      _$TransactionProcessedFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionProcessedToJson(this);
+
+  @override
+  String toString() => this.toJson().toString();
 }
