@@ -70,6 +70,22 @@ Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'data': instance.data
     };
 
+ActionArgs _$ActionArgsFromJson(Map<String, dynamic> json) {
+  return ActionArgs()
+    ..fromAccount = json['from'] as String
+    ..toAccount = json['to'] as String
+    ..quantity = json['quantity'] as String
+    ..memo = json['memo'] as String;
+}
+
+Map<String, dynamic> _$ActionArgsToJson(ActionArgs instance) =>
+    <String, dynamic>{
+      'from': instance.fromAccount,
+      'to': instance.toAccount,
+      'quantity': instance.quantity,
+      'memo': instance.memo
+    };
+
 ActionReceipt _$ActionReceiptFromJson(Map<String, dynamic> json) {
   return ActionReceipt()
     ..receiver = json['receiver'] as String

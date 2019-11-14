@@ -131,7 +131,9 @@ TransactionProcessed _$TransactionProcessedFromJson(Map<String, dynamic> json) {
     ..blockNum = json['block_num'] == null
         ? null
         : ConversionHelper.getIntFromJson(json['block_num'])
-    ..blockTime = json['block_time'] as String
+    ..blockTime = json['block_time'] == null
+        ? null
+        : DateTime.parse(json['block_time'] as String)
     ..producerBlockId = json['producer_block_id'] == null
         ? null
         : ConversionHelper.getIntFromJson(json['producer_block_id'])
@@ -145,7 +147,11 @@ TransactionProcessed _$TransactionProcessedFromJson(Map<String, dynamic> json) {
         ? null
         : ConversionHelper.getIntFromJson(json['net_usage'])
     ..scheduled = json['scheduled'] as bool
-    ..actionTraces = json['action_traces'] as List;
+    ..actionTraces = (json['action_traces'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ActionWithReceipt.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$TransactionProcessedToJson(
@@ -153,7 +159,7 @@ Map<String, dynamic> _$TransactionProcessedToJson(
     <String, dynamic>{
       'id': instance.id,
       'block_num': instance.blockNum,
-      'block_time': instance.blockTime,
+      'block_time': instance.blockTime?.toIso8601String(),
       'producer_block_id': instance.producerBlockId,
       'receipt': instance.receipt,
       'elapsed': instance.elapsed,

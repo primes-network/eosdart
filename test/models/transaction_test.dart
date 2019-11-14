@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:eosdart/eosdart.dart';
 import 'package:test/test.dart';
@@ -60,15 +60,21 @@ void main() {
       expect(transaction.id,
           '91b55122107079cb4eafb165511bac77b8a790c3d4008c5f7cd7cfa1236c0876');
       expect(transaction.processed.blockNum, 729864);
-      expect(transaction.processed.blockTime, "2019-11-14T08:10:37.500");
+      expect(transaction.processed.blockTime,
+          DateTime(2019, 11, 14, 8, 10, 37, 500));
       expect(transaction.processed.producerBlockId, null);
-      expect(transaction.processed.receipt.status, "executed");
+      expect(transaction.processed.receipt.status, 'executed');
       expect(transaction.processed.receipt.cpuUsageUs, 384);
       expect(transaction.processed.receipt.netUsageWords, 16);
       expect(transaction.processed.elapsed, 384);
       expect(transaction.processed.netUsage, 128);
       expect(transaction.processed.scheduled, false);
       expect(transaction.processed.actionTraces.isNotEmpty, true);
+      expect(transaction.processed.actionTraces.first.action.name, 'transfer');
+      expect(transaction.processed.actionTraces.first.action.data.toString(),
+          '{from: account1, to: account2, quantity: 1.00000000 EOS, memo: }');
+      expect(transaction.processed.actionTraces.first.action.account,
+          'eosio.token');
     });
   });
 }
