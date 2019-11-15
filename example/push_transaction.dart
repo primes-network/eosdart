@@ -4,7 +4,7 @@ main() {
   EOSClient client = EOSClient('http://127.0.0.1:8888', 'v1',
       privateKeys: ["5J9b3xMkbvcT6gYv2EpQ8FD4ZBjgypuNKwE1jxkd7Wd1DYzhk88"]);
 
-  //EOSClient client = EOSClient('http://127.0.0.1:8888', 'v1');
+  //privateKeys can also be set after client was constructed, as following
   //client.privateKeys = ["5J9b3xMkbvcT6gYv2EpQ8FD4ZBjgypuNKwE1jxkd7Wd1DYzhk88"];
 
   List<Authorization> auth = [
