@@ -1,3 +1,8 @@
+## 0.4.3
+
+- Add model for committed transaction
+- Reuse eos client instance with different private keys
+
 ## 0.4.2
 
 - Upgrade eosdart_ecc version to 0.4.0

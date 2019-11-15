@@ -1,6 +1,6 @@
 name: eosdart
 description: EOSIO-based blockchain RPC API client in Dart language
-version: 0.4.2
+version: 0.4.3
 homepage: https://github.com/primes-network/eosdart
 author: primes-network <primes.ntwk@gmail.com>
 
