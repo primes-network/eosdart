@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 
 import './conversion_helper.dart';
+import '../eosdart_base.dart';
+import '../jsons.dart';
 import '../numeric.dart';
 import '../serialize.dart' as ser;
-import '../jsons.dart';
-import '../eosdart_base.dart';
 
 part 'abi.g.dart';
 
@@ -63,6 +64,7 @@ class AbiResp with ConversionHelper {
       return Abi.fromJson(json.decode(json.encode(b)));
     } catch (e) {
       print(e.message);
+      return null;
     }
   }
 
