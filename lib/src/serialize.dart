@@ -212,24 +212,24 @@ class SerialBuffer {
   }
 
   // /** Append a `float32` */
-  // void pushFloat32(double v) {
-  //     pushArray(Uint8List.fromList(Float32List.fromList([v])));
-  // }
+  void pushFloat32(double v) {
+    pushArray(Float32List.fromList([v]).buffer.asUint8List());
+  }
 
   // /** Get a `float32` */
-  // double getFloat32() {
-  //     return Float32List(getUint8List(4).slice().buffer)[0];
-  // }
+  double getFloat32() {
+    return getUint8List(4).buffer.asFloat32List()[0];
+  }
 
   // /** Append a `float64` */
-  // void pushFloat64(int v) {
-  //     pushArray(Uint8List.fromList(Float64List.fromList([v])));
-  // }
+  void pushFloat64(double v) {
+    pushArray(Float64List.fromList([v]).buffer.asUint8List());
+  }
 
   // /** Get a `float64` */
-  // public getFloat64() {
-  //     return new Float64Array(getUint8List(8).slice().buffer)[0];
-  // }
+  double getFloat64() {
+    return getUint8List(8).buffer.asFloat64List()[0];
+  }
 
   /// Append a `name` */
   void pushName(String s) {
@@ -804,20 +804,28 @@ Map<String, Type> createInitialTypes() {
         return numeric.signedBinaryToDecimal(buffer.getUint8List(16));
       },
     ),
-    // "float32": createType(
-    //     name: 'float32',
-    //     serialize:(Type self,SerialBuffer buffer ,Object data,{SerializerState state,bool allowExtensions}) {
-    //       buffer.pushFloat32(data); },
-    //     deserialize:(Type self,SerialBuffer buffer,{SerializerState state,bool allowExtensions}) {
-    //       return buffer.getFloat32(); },
-    // ),
-    // "float64": createType(
-    //     name: 'float64',
-    //     serialize:(Type self,SerialBuffer buffer ,Object data,{SerializerState state,bool allowExtensions}) {
-    //       buffer.pushFloat64(data); },
-    //     deserialize:(Type self,SerialBuffer buffer,{SerializerState state,bool allowExtensions}) {
-    //       return buffer.getFloat64(); },
-    // ),
+    "float32": createType(
+      name: 'float32',
+      serialize: (Type self, SerialBuffer buffer, Object data,
+          {SerializerState state, bool allowExtensions}) {
+        buffer.pushFloat32(data);
+      },
+      deserialize: (Type self, SerialBuffer buffer,
+          {SerializerState state, bool allowExtensions}) {
+        return buffer.getFloat32();
+      },
+    ),
+    "float64": createType(
+      name: 'float64',
+      serialize: (Type self, SerialBuffer buffer, Object data,
+          {SerializerState state, bool allowExtensions}) {
+        buffer.pushFloat64(data);
+      },
+      deserialize: (Type self, SerialBuffer buffer,
+          {SerializerState state, bool allowExtensions}) {
+        return buffer.getFloat64();
+      },
+    ),
     "float128": createType(
       name: 'float128',
       serialize: (Type self, SerialBuffer buffer, Object data,
@@ -829,7 +837,6 @@ Map<String, Type> createInitialTypes() {
         return arrayToHex(buffer.getUint8List(16));
       },
     ),
-
     "bytes": createType(
       name: 'bytes',
       serialize: (Type self, SerialBuffer buffer, Object data,
