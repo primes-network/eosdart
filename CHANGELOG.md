@@ -1,3 +1,8 @@
+## 0.4.4
+
+- Support abi float32 and float64
+- Update dependencies
+
 ## 0.4.3
 
 - Add model for committed transaction
@@ -12,7 +17,6 @@
 support:
 
 - /v1/chain/get_table_rows
-
 
 ## 0.4.0
 
@@ -50,4 +54,3 @@ Supports the following APIs:
 ## 0.0.1
 
 - Initial version, created by Stagehand
-
