@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:json_annotation/json_annotation.dart';
 
 import './action.dart';
@@ -133,7 +132,6 @@ class Transaction {
 
   Uint8List toBinary(Type transactionType) {
     var buffer = ser.SerialBuffer(Uint8List(0));
-    Map<String, dynamic> aa = this.toJson();
     transactionType.serialize(transactionType, buffer, this.toJson());
     return buffer.asUint8List();
   }
