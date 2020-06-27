@@ -1,3 +1,7 @@
+## 0.4.5
+
+- Support adding timeout on http request
+
 ## 0.4.4
 
 - Support abi float32 and float64

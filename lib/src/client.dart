@@ -23,6 +23,7 @@ class EOSClient {
   final String _nodeURL;
   final String _version;
   int expirationInSec;
+  int httpTimeout;
   Map<String, ecc.EOSPrivateKey> keys = Map();
 
   /// Converts abi files between binary and structured form (`abi.abi.json`) */
@@ -30,8 +31,13 @@ class EOSClient {
   Map<String, Type> transactionTypes;
 
   /// Construct the EOS client from eos node URL
-  EOSClient(this._nodeURL, this._version,
-      {this.expirationInSec = 180, List<String> privateKeys = const []}) {
+  EOSClient(
+    this._nodeURL,
+    this._version, {
+    this.expirationInSec = 180,
+    List<String> privateKeys = const [],
+    this.httpTimeout = 10,
+  }) {
     _mapKeys(privateKeys);
 
     abiTypes = ser.getTypesFromAbi(
@@ -56,6 +62,7 @@ class EOSClient {
     http
         .post('${this._nodeURL}/${this._version}${path}',
             body: json.encode(body))
+        .timeout(Duration(seconds: this.httpTimeout))
         .then((http.Response response) {
       if (response.statusCode >= 300) {
         completer.completeError(response.body);

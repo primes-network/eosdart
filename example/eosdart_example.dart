@@ -2,7 +2,7 @@ import 'package:eosdart/eosdart.dart';
 
 main() {
   EOSClient client = EOSClient('https://eos.greymass.com', 'v1');
-//  EOSClient client = EOSClient('http://127.0.0.1:8888', 'v1');
+//  EOSClient client = EOSClient('http://127.0.0.1:8888', 'v1', httpTimeout: 15);
 
   // Get EOS Node Info
   client.getInfo().then((NodeInfo nodeInfo) {
