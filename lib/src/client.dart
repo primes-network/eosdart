@@ -377,7 +377,7 @@ class EOSClient {
   Future<PushTransactionArgs> _createTransactionArgs(String chainId,
       Type transactionType, Transaction transaction, ecc.EOSPrivateKey pKey) async {
     List<String> signatures = [];
-
+    transaction = await _serializeActions(transaction);
     Uint8List serializedTrx = transaction.toBinary(transactionType);
 
     Uint8List signBuf = Uint8List.fromList(List.from(ser.stringToHex(chainId))
