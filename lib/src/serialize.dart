@@ -614,6 +614,8 @@ void serializeStruct(Type self, SerialBuffer buffer, Object data,
     } else {
       if (allowExtensions && field.type.extensionOf != null) {
         state.skippedBinaryExtension = true;
+      } else if(field.type.optionalOf != null ) {
+        field.type.serialize(field.type, buffer, dy[field.name],state: state);
       } else {
         throw 'missing ' +
             self.name +
