@@ -13,3 +13,7 @@ export 'src/models/transaction.dart';
 export 'src/models/primary_wrapper.dart';
 export 'src/models/block_header_state.dart';
 export 'src/models/abi.dart';
+
+export 'src/serialize.dart';
+export 'src/eosdart_base.dart';
+export 'src/models/transaction.dart';
