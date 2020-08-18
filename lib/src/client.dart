@@ -351,21 +351,6 @@ class EOSClient {
 
     return PushTransactionArgs(signatures, serializedTrx);
   }
-
-  Future<AccountNames> getKeyAccountsState(String pubKey) async {
-    http.Response response = await http.post(
-        '${this._nodeURL}/${this._version}/state/get_key_accounts',
-        body: {"public_key": pubKey});
-
-    if (response.statusCode >= 300) {
-      throw response.body;
-    } else {
-      Map<String, dynamic> accountNames = json.decode(
-        response.body,
-      );
-      return AccountNames.fromJson(accountNames);
-    }
-  }
 }
 
 class PushTransactionArgs {
