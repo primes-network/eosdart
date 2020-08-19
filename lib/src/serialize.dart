@@ -598,9 +598,9 @@ void serializeStruct(Type self, SerialBuffer buffer, Object data,
     self.base.serialize(self.base, buffer, data,
         state: state, allowExtensions: allowExtensions);
   }
-  var dy = data as dynamic;
+  Map dy = data as dynamic;
   for (var field in self.fields) {
-    if (dy[field.name] != null) {
+    if (dy.containsKey(field.name)) {
       if (state.skippedBinaryExtension) {
         throw 'unexpected ' + self.name + '.' + field.name;
       }
