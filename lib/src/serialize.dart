@@ -551,10 +551,7 @@ String timePointToDate(int us) {
 
 /// Convert `time_point_sec` (seconds since epoch) to to date in ISO format */
 String timePointSecToDate(int sec) {
-  String s = DateTime.fromMillisecondsSinceEpoch(sec * 1000).toIso8601String();
-  print("DATE : ");
-  print(s);
-  return s;
+  return DateTime.fromMillisecondsSinceEpoch(sec * 1000).toIso8601String();
 }
 
 /// Convert date in ISO format to `block_timestamp_type` (half-seconds since a different epoch) */
@@ -601,9 +598,9 @@ void serializeStruct(Type self, SerialBuffer buffer, Object data,
     self.base.serialize(self.base, buffer, data,
         state: state, allowExtensions: allowExtensions);
   }
-  var dy = data as dynamic;
+  Map dy = data as dynamic;
   for (var field in self.fields) {
-    if (dy[field.name] != null) {
+    if (dy.containsKey(field.name)) {
       if (state.skippedBinaryExtension) {
         throw 'unexpected ' + self.name + '.' + field.name;
       }
