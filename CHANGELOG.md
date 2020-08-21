@@ -1,3 +1,7 @@
+## 0.4.6
+
+- More exports
+
 ## 0.4.5
 
 - Support adding timeout on http request
