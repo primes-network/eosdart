@@ -87,7 +87,7 @@ Uint8List signedDecimalToBinary(int size, String s) {
 /// Convert `bignum` to an unsigned decimal number
 /// @param minDigits 0-pad result to this many digits
 String binaryToDecimal(Uint8List bignum, {minDigits = 1}) {
-  var result = List.filled(minDigits, '0'.codeUnitAt(0));
+  var result = List.filled(minDigits, '0'.codeUnitAt(0), growable: true);
   for (var i = bignum.length - 1; i >= 0; --i) {
     var carry = bignum[i];
     for (var j = 0; j < result.length; ++j) {
