@@ -1,3 +1,7 @@
+## 0.4.7
+
+- Handle any amount
+
 ## 0.4.6
 
 - More exports
