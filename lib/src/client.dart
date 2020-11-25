@@ -162,27 +162,51 @@ class EOSClient {
 
   /// Get EOS abi from account name
   Future<AbiResp> getAbi(String accountName) async {
+    var cacheKey = accountName+"_abi";
+    var cached = abiCache[cacheKey];
+    if (cached != null) {
+      return cached;
+    }
     return this
         ._post('/chain/get_abi', {'account_name': accountName}).then((abi) {
-      return AbiResp.fromJson(abi);
+      var res = AbiResp.fromJson(abi);
+      abiCache[cacheKey] = res;
+      return res;
     });
   }
 
   /// Get EOS raw abi from account name
   Future<AbiResp> getRawAbi(String accountName) async {
+    var cacheKey = accountName+"_raw";
+    var cached = abiCache[cacheKey];
+    if (cached != null) {
+      return cached;
+    }
     return this
         ._post('/chain/get_raw_abi', {'account_name': accountName}).then((abi) {
-      return AbiResp.fromJson(abi);
+      var res = AbiResp.fromJson(abi);
+      abiCache[cacheKey] = res;
+      return res;
     });
   }
 
   /// Get EOS raw code and abi from account name
   Future<AbiResp> getRawCodeAndAbi(String accountName) async {
+    var cacheKey = accountName+"_rawCode";
+    var cached = abiCache[cacheKey];
+    if (cached != null) {
+      return cached;
+    }
+
     return this._post('/chain/get_raw_code_and_abi',
         {'account_name': accountName}).then((abi) {
-      return AbiResp.fromJson(abi);
+      var res = AbiResp.fromJson(abi);
+      abiCache[cacheKey] = res;
+      return res;
     });
   }
+
+  Map<String, AbiResp> abiCache = Map();
 
   /// Get EOS account info form the given account name
   Future<Account> getAccount(String accountName) async {
@@ -248,18 +272,20 @@ class EOSClient {
   }
 
   /// Push transaction to EOS chain
-  Future<dynamic> pushTransaction(Transaction transaction,
+  Future<dynamic> pushTransactionX(Transaction transaction,
       {bool broadcast = true,
       bool sign = true,
       int blocksBehind = 3,
-      int expireSecond = 180}) async {
+      int expireSecond = 180,
+      List<ecc.EOSPrivateKey> keys = null,
+      }) async {
     NodeInfo info = await this.getInfo();
     Block refBlock =
         await getBlock((info.headBlockNum - blocksBehind).toString());
 
     Transaction trx = await _fullFill(transaction, refBlock);
     PushTransactionArgs pushTransactionArgs = await _pushTransactionArgs(
-        info.chainId, transactionTypes['transaction'], trx, sign);
+        info.chainId, transactionTypes['transaction'], trx, sign, keys: keys);
 
     if (broadcast) {
       return this._post('/chain/push_transaction', {
@@ -337,11 +363,9 @@ class EOSClient {
 //  }
 
   Future<PushTransactionArgs> _pushTransactionArgs(String chainId,
-      Type transactionType, Transaction transaction, bool sign) async {
+      Type transactionType, Transaction transaction, bool sign,
+      { List<ecc.EOSPrivateKey> keys = null }) async {
     List<String> signatures = [];
-
-    RequiredKeys requiredKeys =
-        await getRequiredKeys(transaction, this.keys.keys.toList());
 
     Uint8List serializedTrx = transaction.toBinary(transactionType);
 
@@ -350,8 +374,15 @@ class EOSClient {
         ..addAll(serializedTrx)
         ..addAll(Uint8List(32)));
 
-      for (String publicKey in requiredKeys.requiredKeys) {
-        ecc.EOSPrivateKey pKey = this.keys[publicKey];
+      List<ecc.EOSPrivateKey> privateKeys = keys;
+
+      if (privateKeys == null) {
+        RequiredKeys requiredKeys =
+            await getRequiredKeys(transaction, this.keys.keys.toList());
+        privateKeys = requiredKeys.requiredKeys.map((key) => this.keys[key]);
+      }
+
+      for (ecc.EOSPrivateKey pKey in privateKeys) {
         signatures.add(pKey.sign(signBuf).toString());
       }
     }
