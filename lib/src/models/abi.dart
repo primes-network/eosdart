@@ -14,44 +14,42 @@ part 'abi.g.dart';
 @JsonSerializable()
 class AbiResp with ConversionHelper {
   @JsonKey(name: 'account_name')
-  String accountName;
+  String? accountName;
 
   @JsonKey(name: 'code_hash')
-  String codeHash;
+  String? codeHash;
 
   @JsonKey(name: 'abi_hash')
-  String abiHash;
+  String? abiHash;
 
   @JsonKey(name: 'wasm')
-  String wasm;
+  String? wasm;
 
   @JsonKey(name: 'abi', fromJson: _decodeAbi)
-  Abi abi;
+  Abi? abi;
 
   AbiResp();
 
-  factory AbiResp.fromJson(Map<String, dynamic> json) =>
-      _$AbiRespFromJson(json);
+  factory AbiResp.fromJson(Map<String, dynamic> json) => _$AbiRespFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiRespToJson(this);
 
-  static Abi _decodeAbi(Object abi) {
+  static Abi? _decodeAbi(dynamic abi) {
     if (abi is String) {
       return _base64ToAbi(abi);
     }
     return Abi.fromJson(abi);
   }
 
-  static Abi _base64ToAbi(String base64String) {
+  static Abi? _base64ToAbi(String base64String) {
     Uint8List abiBuffer = base64ToBinary(base64String);
 
     return _rawAbiToJson(abiBuffer);
   }
 
   /// Decodes an abi as Uint8List into json. */
-  static Abi _rawAbiToJson(Uint8List rawAbi) {
-    Map<String, Type> abiTypes = ser.getTypesFromAbi(
-        ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
+  static Abi? _rawAbiToJson(Uint8List rawAbi) {
+    Map<String, Type> abiTypes = ser.getTypesFromAbi(ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
     try {
       var buffer = ser.SerialBuffer(rawAbi);
       var str = buffer.getString();
@@ -60,10 +58,10 @@ class AbiResp with ConversionHelper {
       }
       buffer.restartRead();
       var t = abiTypes['abi_def'];
-      var b = t.deserialize(t, buffer);
+      var b = t?.deserialize?.call(t, buffer);
       return Abi.fromJson(json.decode(json.encode(b)));
     } catch (e) {
-      print(e.message);
+      print(e.toString());
       return null;
     }
   }
@@ -82,8 +80,7 @@ class AbiType {
 
   AbiType(this.new_type_name, this.type);
 
-  factory AbiType.fromJson(Map<String, dynamic> json) =>
-      _$AbiTypeFromJson(json);
+  factory AbiType.fromJson(Map<String, dynamic> json) => _$AbiTypeFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiTypeToJson(this);
 
@@ -101,8 +98,7 @@ class AbiStructField {
 
   AbiStructField(this.name, this.type);
 
-  factory AbiStructField.fromJson(Map<String, dynamic> json) =>
-      _$AbiStructFieldFromJson(json);
+  factory AbiStructField.fromJson(Map<String, dynamic> json) => _$AbiStructFieldFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiStructFieldToJson(this);
 
@@ -113,18 +109,21 @@ class AbiStructField {
 @JsonSerializable()
 class AbiStruct {
   @JsonKey(name: 'name')
-  String name;
+  String? name;
 
   @JsonKey(name: 'base')
-  String base;
+  String? base;
 
   @JsonKey(name: 'fields')
-  List<AbiStructField> fields;
+  List<AbiStructField>? fields;
 
-  AbiStruct(this.name, this.base, this.fields);
+  AbiStruct(
+    this.name,
+    this.base,
+    this.fields,
+  );
 
-  factory AbiStruct.fromJson(Map<String, dynamic> json) =>
-      _$AbiStructFromJson(json);
+  factory AbiStruct.fromJson(Map<String, dynamic> json) => _$AbiStructFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiStructToJson(this);
 
@@ -145,8 +144,7 @@ class AbiAction {
 
   AbiAction(this.name, this.type, this.ricardian_contract);
 
-  factory AbiAction.fromJson(Map<String, dynamic> json) =>
-      _$AbiActionFromJson(json);
+  factory AbiAction.fromJson(Map<String, dynamic> json) => _$AbiActionFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiActionToJson(this);
 
@@ -171,11 +169,9 @@ class AbiTable {
   @JsonKey(name: 'key_types')
   List<String> key_types; //key_types
 
-  AbiTable(
-      this.name, this.type, this.index_type, this.key_names, this.key_types);
+  AbiTable(this.name, this.type, this.index_type, this.key_names, this.key_types);
 
-  factory AbiTable.fromJson(Map<String, dynamic> json) =>
-      _$AbiTableFromJson(json);
+  factory AbiTable.fromJson(Map<String, dynamic> json) => _$AbiTableFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiTableToJson(this);
 
@@ -193,8 +189,7 @@ class AbiRicardianClauses {
 
   AbiRicardianClauses(this.id, this.body);
 
-  factory AbiRicardianClauses.fromJson(Map<String, dynamic> json) =>
-      _$AbiRicardianClausesFromJson(json);
+  factory AbiRicardianClauses.fromJson(Map<String, dynamic> json) => _$AbiRicardianClausesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiRicardianClausesToJson(this);
 
@@ -212,8 +207,7 @@ class AbiErrorMessages {
 
   AbiErrorMessages(this.error_code, this.error_msg);
 
-  factory AbiErrorMessages.fromJson(Map<String, dynamic> json) =>
-      _$AbiErrorMessagesFromJson(json);
+  factory AbiErrorMessages.fromJson(Map<String, dynamic> json) => _$AbiErrorMessagesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiErrorMessagesToJson(this);
 
@@ -231,8 +225,7 @@ class AbiExtensions {
 
   AbiExtensions(this.tag, this.value);
 
-  factory AbiExtensions.fromJson(Map<String, dynamic> json) =>
-      _$AbiExtensionsFromJson(json);
+  factory AbiExtensions.fromJson(Map<String, dynamic> json) => _$AbiExtensionsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiExtensionsToJson(this);
 
@@ -243,15 +236,17 @@ class AbiExtensions {
 @JsonSerializable()
 class AbiVariants {
   @JsonKey(name: 'name')
-  String name;
+  String? name;
 
   @JsonKey(name: 'types')
-  List<String> types;
+  List<String>? types;
 
-  AbiVariants(this.name, this.types);
+  AbiVariants(
+    this.name,
+    this.types,
+  );
 
-  factory AbiVariants.fromJson(Map<String, dynamic> json) =>
-      _$AbiVariantsFromJson(json);
+  factory AbiVariants.fromJson(Map<String, dynamic> json) => _$AbiVariantsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiVariantsToJson(this);
 
@@ -263,42 +258,43 @@ class AbiVariants {
 @JsonSerializable()
 class Abi {
   @JsonKey(name: 'version')
-  String version;
+  String? version;
 
   @JsonKey(name: 'types')
-  List<AbiType> types;
+  List<AbiType>? types;
 
   @JsonKey(name: 'structs')
-  List<AbiStruct> structs;
+  List<AbiStruct>? structs;
 
   @JsonKey(name: 'actions')
-  List<AbiAction> actions;
+  List<AbiAction>? actions;
 
   @JsonKey(name: 'tables')
-  List<AbiTable> tables;
+  List<AbiTable>? tables;
 
   @JsonKey(name: 'ricardian_clauses')
-  List<AbiRicardianClauses> ricardian_clauses;
+  List<AbiRicardianClauses>? ricardian_clauses;
 
   @JsonKey(name: 'error_messages')
-  List<AbiErrorMessages> error_messages;
+  List<AbiErrorMessages>? error_messages;
 
   @JsonKey(name: 'abi_extensions')
-  List<AbiExtensions> abi_extensions;
+  List<AbiExtensions>? abi_extensions;
 
   @JsonKey(name: 'variants')
-  List<AbiVariants> variants;
+  List<AbiVariants>? variants;
 
-  Abi(
-      {this.abi_extensions,
-      this.actions,
-      this.error_messages,
-      this.ricardian_clauses,
-      this.structs,
-      this.tables,
-      this.types,
-      this.variants,
-      this.version});
+  Abi({
+    this.abi_extensions,
+    this.actions,
+    this.error_messages,
+    this.ricardian_clauses,
+    this.structs,
+    this.tables,
+    this.types,
+    this.variants,
+    this.version,
+  });
 
   factory Abi.fromJson(Map<String, dynamic> json) => _$AbiFromJson(json);
 

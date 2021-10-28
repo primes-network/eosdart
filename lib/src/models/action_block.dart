@@ -8,7 +8,7 @@ part 'action_block.g.dart';
 @JsonSerializable()
 class Actions {
   @JsonKey(name: 'actions')
-  List<ActionBlock> actions;
+  List<ActionBlock>? actions;
 
   Actions();
 
@@ -24,20 +24,20 @@ class Actions {
 @JsonSerializable()
 class ActionBlock with ConversionHelper {
   @JsonKey(name: 'global_action_seq', fromJson: ConversionHelper.getIntFromJson)
-  int globalActionSeq;
+  int? globalActionSeq;
 
   @JsonKey(
       name: 'account_action_seq', fromJson: ConversionHelper.getIntFromJson)
-  int accountActionSeq;
+  int? accountActionSeq;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  int blockNum;
+  int? blockNum;
 
   @JsonKey(name: 'block_time')
-  DateTime blockTime;
+  DateTime? blockTime;
 
   @JsonKey(name: 'action_trace')
-  ActionWithReceipt actionTrace;
+  ActionWithReceipt? actionTrace;
 
   ActionBlock();
 

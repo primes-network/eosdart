@@ -4,16 +4,16 @@ version: 0.4.7
 homepage: https://github.com/primes-network/eosdart
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  http: ^0.12.0+4
-  json_annotation: ^3.0.1
-  pointycastle: ^1.0.2
-  eosdart_ecc: ^0.4.3
+  http: ^0.13.4
+  json_annotation: ^4.3.0
+  pointycastle: ^3.3.5
+  eosdart_ecc: ^0.4.4
 #  path: ^1.4.1
 
 dev_dependencies:
-  test: ^1.0.0
-  build_runner: ^1.7.4
-  json_serializable: ^3.2.3
+  test: ^1.19.2
+  build_runner: ^2.1.4
+  json_serializable: ^6.0.1

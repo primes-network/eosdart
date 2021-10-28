@@ -11,24 +11,24 @@ part 'transaction.g.dart';
 @JsonSerializable()
 class TransactionBlock with ConversionHelper {
   @JsonKey(name: 'id')
-  String id;
+  String? id;
 
   @JsonKey(name: 'trx')
-  TransactionWithReceipt trx;
+  TransactionWithReceipt? trx;
 
   @JsonKey(name: 'block_time')
-  DateTime blockTime;
+  DateTime? blockTime;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  int blockNum;
+  int? blockNum;
 
   @JsonKey(
       name: 'last_irreversible_block',
       fromJson: ConversionHelper.getIntFromJson)
-  int lastIrreversibleBlock;
+  int? lastIrreversibleBlock;
 
   @JsonKey(name: 'traces')
-  List<ActionWithReceipt> traces;
+  List<ActionWithReceipt>? traces;
 
   TransactionBlock();
 
@@ -44,10 +44,10 @@ class TransactionBlock with ConversionHelper {
 @JsonSerializable()
 class TransactionWithReceipt {
   @JsonKey(name: 'receipt')
-  TransactionReceipt receipt;
+  TransactionReceipt? receipt;
 
   @JsonKey(name: 'trx')
-  Transaction transaction;
+  Transaction? transaction;
 
   TransactionWithReceipt();
 
@@ -63,16 +63,16 @@ class TransactionWithReceipt {
 @JsonSerializable()
 class TransactionReceipt with ConversionHelper {
   @JsonKey(name: 'status')
-  String status;
+  String? status;
 
   @JsonKey(name: 'cpu_usage_us', fromJson: ConversionHelper.getIntFromJson)
-  int cpuUsageUs;
+  int? cpuUsageUs;
 
   @JsonKey(name: 'net_usage_words', fromJson: ConversionHelper.getIntFromJson)
-  int netUsageWords;
+  int? netUsageWords;
 
   @JsonKey(name: 'trx')
-  Object trx;
+  Object? trx;
 
   TransactionReceipt();
 
@@ -88,37 +88,37 @@ class TransactionReceipt with ConversionHelper {
 @JsonSerializable(explicitToJson: true)
 class Transaction {
   @JsonKey(name: 'expiration')
-  DateTime expiration;
+  DateTime? expiration;
 
   @JsonKey(name: 'ref_block_num')
-  int refBlockNum;
+  int? refBlockNum;
 
   @JsonKey(name: 'ref_block_prefix')
-  int refBlockPrefix;
+  int? refBlockPrefix;
 
   @JsonKey(name: 'max_net_usage_words')
-  int maxNetUsageWords = 0;
+  int? maxNetUsageWords = 0;
 
   @JsonKey(name: 'max_cpu_usage_ms')
-  int maxCpuUsageMs = 0;
+  int? maxCpuUsageMs = 0;
 
   @JsonKey(name: 'delay_sec')
-  int delaySec = 0;
+  int? delaySec = 0;
 
   @JsonKey(name: 'context_free_actions')
-  List<Object> contextFreeActions = [];
+  List<Object>? contextFreeActions = [];
 
   @JsonKey(name: 'actions')
-  List<Action> actions = [];
+  List<Action>? actions = [];
 
   @JsonKey(name: 'transaction_extensions')
-  List<Object> transactionExtensions = [];
+  List<Object>? transactionExtensions = [];
 
   @JsonKey(name: 'signatures')
-  List<String> signatures = [];
+  List<String>? signatures = [];
 
   @JsonKey(name: 'context_free_data')
-  List<Object> contextFreeData = [];
+  List<Object>? contextFreeData = [];
 
   Transaction();
 
@@ -132,7 +132,7 @@ class Transaction {
 
   Uint8List toBinary(Type transactionType) {
     var buffer = ser.SerialBuffer(Uint8List(0));
-    transactionType.serialize(transactionType, buffer, this.toJson());
+    transactionType.serialize?.call(transactionType, buffer, this.toJson());
     return buffer.asUint8List();
   }
 }
@@ -140,10 +140,10 @@ class Transaction {
 @JsonSerializable()
 class TransactionCommitted {
   @JsonKey(name: 'transaction_id')
-  String id;
+  String? id;
 
   @JsonKey(name: 'processed')
-  TransactionProcessed processed;
+  TransactionProcessed? processed;
 
   TransactionCommitted();
 
@@ -159,31 +159,31 @@ class TransactionCommitted {
 @JsonSerializable()
 class TransactionProcessed with ConversionHelper {
   @JsonKey(name: 'id')
-  String id;
+  String? id;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  int blockNum;
+  int? blockNum;
 
   @JsonKey(name: 'block_time')
-  DateTime blockTime;
+  DateTime? blockTime;
 
   @JsonKey(name: 'producer_block_id', fromJson: ConversionHelper.getIntFromJson)
-  int producerBlockId;
+  int? producerBlockId;
 
   @JsonKey(name: 'receipt')
-  TransactionReceipt receipt;
+  TransactionReceipt? receipt;
 
   @JsonKey(name: 'elapsed', fromJson: ConversionHelper.getIntFromJson)
-  int elapsed;
+  int? elapsed;
 
   @JsonKey(name: 'net_usage', fromJson: ConversionHelper.getIntFromJson)
-  int netUsage;
+  int? netUsage;
 
   @JsonKey(name: 'scheduled')
-  bool scheduled;
+  bool? scheduled;
 
   @JsonKey(name: 'action_traces')
-  List<ActionWithReceipt> actionTraces;
+  List<ActionWithReceipt>? actionTraces;
 
   TransactionProcessed();
 

@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('EOS Model', () {
-    String actionStr;
+    late String actionStr;
 
     setUp(() {
       actionStr =
@@ -19,11 +19,11 @@ void main() {
 
       expect(action.globalActionSeq, 4587073327);
       expect(action.accountActionSeq, 165);
-      expect(action.actionTrace.receipt.receiveSequence, 159);
-      expect(action.actionTrace.action.account, 'zosdiscounts');
-      expect(action.actionTrace.action.authorization[0].actor, 'airdropsdac3');
-      expect(action.actionTrace.contextFree, false);
-      expect(action.actionTrace.blockNum, 40066073);
+      expect(action.actionTrace!.receipt!.receiveSequence, 159);
+      expect(action.actionTrace!.action!.account, 'zosdiscounts');
+      expect(action.actionTrace!.action!.authorization![0].actor, 'airdropsdac3');
+      expect(action.actionTrace!.contextFree, false);
+      expect(action.actionTrace!.blockNum, 40066073);
     });
   });
 }

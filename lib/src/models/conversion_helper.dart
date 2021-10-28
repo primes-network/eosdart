@@ -15,7 +15,7 @@ mixin ConversionHelper {
   }
 
   static Uint8List base64ToBuffer(String base64String) {
-    return utf8.encode(base64String);
+    return Uint8List.fromList(utf8.encode(base64String));
   }
 
   static String bufferToBase64(Uint8List buffer) {

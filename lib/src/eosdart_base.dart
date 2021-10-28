@@ -7,9 +7,13 @@ class Field {
   String typeName;
 
   /// Type of the field */
-  Type type;
+  Type? type;
 
-  Field({this.name, this.type, this.typeName});
+  Field({
+    required this.name,
+    this.type,
+    required this.typeName,
+  });
 }
 
 class Type {
@@ -17,35 +21,36 @@ class Type {
 
   String aliasOfName;
 
-  Type arrayOf;
+  Type? arrayOf;
 
-  Type optionalOf;
+  Type? optionalOf;
 
-  Type extensionOf;
+  Type? extensionOf;
 
   String baseName;
 
-  Type base;
+  Type? base;
 
   List<Field> fields;
 
-  Function serialize;
+  Function? serialize;
 
 //  void Function(Type self,SerialBuffer buffer, Object data, {SerializerState state,bool allowExtensions}) serialize;
 
-  Function deserialize;
+  Function? deserialize;
 
-  Type(
-      {this.name,
-      this.aliasOfName,
-      this.arrayOf,
-      this.optionalOf,
-      this.extensionOf,
-      this.baseName,
-      this.base,
-      this.fields,
-      this.serialize,
-      this.deserialize});
+  Type({
+    required this.name,
+    required this.aliasOfName,
+    this.arrayOf,
+    this.optionalOf,
+    this.extensionOf,
+    required this.baseName,
+    this.base,
+    required this.fields,
+    this.serialize,
+    this.deserialize,
+  });
 }
 
 class Contract {
@@ -64,5 +69,8 @@ class Symbol {
   /// Number of digits after the decimal point */
   final int precision;
 
-  Symbol({this.name, this.precision});
+  Symbol({
+    required this.name,
+    required this.precision,
+  });
 }

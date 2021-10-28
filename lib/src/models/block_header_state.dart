@@ -7,60 +7,60 @@ part 'block_header_state.g.dart';
 @JsonSerializable()
 class BlockHeaderState with ConversionHelper {
   @JsonKey(name: 'id')
-  String id;
+  String? id;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  int blockNum;
+  int? blockNum;
 
   @JsonKey(name: 'header')
-  Header header;
+  Header? header;
 
   @JsonKey(
       name: 'dpos_proposed_irreversible_blocknum',
       fromJson: ConversionHelper.getIntFromJson)
-  int dposProposedIrreversibleBlocknum;
+  int? dposProposedIrreversibleBlocknum;
 
   @JsonKey(
       name: 'dpos_irreversible_blocknum',
       fromJson: ConversionHelper.getIntFromJson)
-  int dposIrreversibleBlocknum;
+  int? dposIrreversibleBlocknum;
 
   @JsonKey(
       name: 'bft_irreversible_blocknum',
       fromJson: ConversionHelper.getIntFromJson)
-  int bftIrreversibleBlocknum;
+  int? bftIrreversibleBlocknum;
 
   @JsonKey(
       name: 'pending_schedule_lib_num',
       fromJson: ConversionHelper.getIntFromJson)
-  int pendingScheduleLibNum;
+  int? pendingScheduleLibNum;
 
   @JsonKey(name: 'pending_schedule_hash')
-  String pendingScheduleHash;
+  String? pendingScheduleHash;
 
   @JsonKey(name: 'pending_schedule')
-  Schedule pendingSchedule;
+  Schedule? pendingSchedule;
 
   @JsonKey(name: 'active_schedule')
-  Schedule activeSchedule;
+  Schedule? activeSchedule;
 
   @JsonKey(name: 'blockroot_merkle')
-  BlockRootMerkle blockrootMerkle;
+  BlockRootMerkle? blockrootMerkle;
 
   @JsonKey(name: 'producer_to_last_produced')
-  List<List<Object>> producerToLastProduced;
+  List<List<Object>>? producerToLastProduced;
 
   @JsonKey(name: 'producer_to_last_implied_irb')
-  List<List<Object>> producerToLastImpliedIrb;
+  List<List<Object>>? producerToLastImpliedIrb;
 
   @JsonKey(name: 'block_signing_key')
-  String blockSigningKey;
+  String? blockSigningKey;
 
   @JsonKey(name: 'confirm_count')
-  List<int> confirmCount;
+  List<int>? confirmCount;
 
   @JsonKey(name: 'confirmations')
-  List<Object> confirmations;
+  List<Object>? confirmations;
 
   BlockHeaderState();
 
@@ -76,31 +76,31 @@ class BlockHeaderState with ConversionHelper {
 @JsonSerializable()
 class Header {
   @JsonKey(name: 'timestamp')
-  DateTime timestamp;
+  DateTime? timestamp;
 
   @JsonKey(name: 'producer')
-  String producer;
+  String? producer;
 
   @JsonKey(name: 'confirmed')
-  int confirmed;
+  int? confirmed;
 
   @JsonKey(name: 'previous')
-  String previous;
+  String? previous;
 
   @JsonKey(name: 'transaction_mroot')
-  String transactionMRoot;
+  String? transactionMRoot;
 
   @JsonKey(name: 'action_mroot')
-  String actionMRoot;
+  String? actionMRoot;
 
   @JsonKey(name: 'schedule_version')
-  int scheduleVersion;
+  int? scheduleVersion;
 
   @JsonKey(name: 'header_extensions')
-  List<Object> headerExtensions;
+  List<Object>? headerExtensions;
 
   @JsonKey(name: 'producer_signature')
-  String producerSignature;
+  String? producerSignature;
 
   Header();
 
@@ -115,10 +115,10 @@ class Header {
 @JsonSerializable()
 class Schedule {
   @JsonKey(name: 'version')
-  int version;
+  int? version;
 
   @JsonKey(name: 'producers')
-  List<Producer> producers;
+  List<Producer>? producers;
 
   Schedule();
 
@@ -134,10 +134,10 @@ class Schedule {
 @JsonSerializable()
 class Producer {
   @JsonKey(name: 'producer_name')
-  String producerName;
+  String? producerName;
 
   @JsonKey(name: 'block_signing_key')
-  String blockSigningKey;
+  String? blockSigningKey;
 
   Producer();
 
@@ -153,10 +153,10 @@ class Producer {
 @JsonSerializable()
 class BlockRootMerkle {
   @JsonKey(name: '_active_nodes')
-  List<String> activeNodes;
+  List<String>? activeNodes;
 
   @JsonKey(name: '_node_count')
-  int nodeCount;
+  int? nodeCount;
 
   BlockRootMerkle();
 
