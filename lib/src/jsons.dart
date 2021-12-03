@@ -135,6 +135,20 @@ String abiJson = '''
             ]
         },
         {
+            "name": "sellram",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "bytes",
+                    "type": "int64"
+                }
+            ]
+        },
+        {
             "name": "delegatebw",
             "base": "",
             "fields": [
@@ -157,6 +171,102 @@ String abiJson = '''
                 {
                     "name": "transfer",
                     "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "undelegatebw",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "receiver",
+                    "type": "name"
+                },
+                {
+                    "name": "unstake_net_quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "unstake_cpu_quantity",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "rentcpu",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "receiver",
+                    "type": "name"
+                },
+                {
+                    "name": "loan_payment",
+                    "type": "asset"
+                },
+                {
+                    "name": "loan_fund",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "rentnet",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "receiver",
+                    "type": "name"
+                },
+                {
+                    "name": "loan_payment",
+                    "type": "asset"
+                },
+                {
+                    "name": "loan_fund",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "powerup",
+            "base": "",
+            "fields": [
+                {
+                    "name": "payer",
+                    "type": "name"
+                },
+                {
+                    "name": "receiver",
+                    "type": "name"
+                },
+                {
+                    "name": "days",
+                    "type": "uint32"
+                },
+                {
+                    "name": "net_frac",
+                    "type": "int64"
+                },
+                {
+                    "name": "cpu_frac",
+                    "type": "int64"
+                },
+                {
+                    "name": "max_payment",
+                    "type": "asset"
                 }
             ]
         },
