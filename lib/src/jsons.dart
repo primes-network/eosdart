@@ -271,6 +271,24 @@ String abiJson = '''
             ]
         },
         {
+            "name": "voteproducer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "voter",
+                    "type": "name"
+                },
+                {
+                    "name": "proxy",
+                    "type": "name"
+                },
+                {
+                    "name": "producers",
+                    "type": "name[]"
+                }
+            ]
+        },
+        {
             "name": "type_def",
             "base": "",
             "fields": [
