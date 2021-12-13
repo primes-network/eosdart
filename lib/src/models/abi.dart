@@ -30,7 +30,8 @@ class AbiResp with ConversionHelper {
 
   AbiResp();
 
-  factory AbiResp.fromJson(Map<String, dynamic> json) => _$AbiRespFromJson(json);
+  factory AbiResp.fromJson(Map<String, dynamic> json) =>
+      _$AbiRespFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiRespToJson(this);
 
@@ -49,7 +50,8 @@ class AbiResp with ConversionHelper {
 
   /// Decodes an abi as Uint8List into json. */
   static Abi? _rawAbiToJson(Uint8List rawAbi) {
-    Map<String, Type> abiTypes = ser.getTypesFromAbi(ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
+    Map<String, Type> abiTypes = ser.getTypesFromAbi(
+        ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
     try {
       var buffer = ser.SerialBuffer(rawAbi);
       var str = buffer.getString();
@@ -80,7 +82,8 @@ class AbiType {
 
   AbiType(this.new_type_name, this.type);
 
-  factory AbiType.fromJson(Map<String, dynamic> json) => _$AbiTypeFromJson(json);
+  factory AbiType.fromJson(Map<String, dynamic> json) =>
+      _$AbiTypeFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiTypeToJson(this);
 
@@ -98,7 +101,8 @@ class AbiStructField {
 
   AbiStructField(this.name, this.type);
 
-  factory AbiStructField.fromJson(Map<String, dynamic> json) => _$AbiStructFieldFromJson(json);
+  factory AbiStructField.fromJson(Map<String, dynamic> json) =>
+      _$AbiStructFieldFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiStructFieldToJson(this);
 
@@ -123,7 +127,8 @@ class AbiStruct {
     this.fields,
   );
 
-  factory AbiStruct.fromJson(Map<String, dynamic> json) => _$AbiStructFromJson(json);
+  factory AbiStruct.fromJson(Map<String, dynamic> json) =>
+      _$AbiStructFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiStructToJson(this);
 
@@ -144,7 +149,8 @@ class AbiAction {
 
   AbiAction(this.name, this.type, this.ricardian_contract);
 
-  factory AbiAction.fromJson(Map<String, dynamic> json) => _$AbiActionFromJson(json);
+  factory AbiAction.fromJson(Map<String, dynamic> json) =>
+      _$AbiActionFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiActionToJson(this);
 
@@ -169,9 +175,11 @@ class AbiTable {
   @JsonKey(name: 'key_types')
   List<String> key_types; //key_types
 
-  AbiTable(this.name, this.type, this.index_type, this.key_names, this.key_types);
+  AbiTable(
+      this.name, this.type, this.index_type, this.key_names, this.key_types);
 
-  factory AbiTable.fromJson(Map<String, dynamic> json) => _$AbiTableFromJson(json);
+  factory AbiTable.fromJson(Map<String, dynamic> json) =>
+      _$AbiTableFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiTableToJson(this);
 
@@ -189,7 +197,8 @@ class AbiRicardianClauses {
 
   AbiRicardianClauses(this.id, this.body);
 
-  factory AbiRicardianClauses.fromJson(Map<String, dynamic> json) => _$AbiRicardianClausesFromJson(json);
+  factory AbiRicardianClauses.fromJson(Map<String, dynamic> json) =>
+      _$AbiRicardianClausesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiRicardianClausesToJson(this);
 
@@ -207,7 +216,8 @@ class AbiErrorMessages {
 
   AbiErrorMessages(this.error_code, this.error_msg);
 
-  factory AbiErrorMessages.fromJson(Map<String, dynamic> json) => _$AbiErrorMessagesFromJson(json);
+  factory AbiErrorMessages.fromJson(Map<String, dynamic> json) =>
+      _$AbiErrorMessagesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiErrorMessagesToJson(this);
 
@@ -225,7 +235,8 @@ class AbiExtensions {
 
   AbiExtensions(this.tag, this.value);
 
-  factory AbiExtensions.fromJson(Map<String, dynamic> json) => _$AbiExtensionsFromJson(json);
+  factory AbiExtensions.fromJson(Map<String, dynamic> json) =>
+      _$AbiExtensionsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiExtensionsToJson(this);
 
@@ -246,7 +257,8 @@ class AbiVariants {
     this.types,
   );
 
-  factory AbiVariants.fromJson(Map<String, dynamic> json) => _$AbiVariantsFromJson(json);
+  factory AbiVariants.fromJson(Map<String, dynamic> json) =>
+      _$AbiVariantsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbiVariantsToJson(this);
 

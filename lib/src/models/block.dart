@@ -11,7 +11,7 @@ class Block with ConversionHelper {
   final String id;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  final int blockNum;
+  final int? blockNum;
 
   @JsonKey(name: 'timestamp')
   DateTime? timestamp;

@@ -36,8 +36,8 @@ void main() {
       expect(headerState.pendingSchedule!.version, 703);
       expect(headerState.activeSchedule!.version, 703);
       expect(headerState.activeSchedule!.producers!.length > 10, isTrue);
-      expect(
-          headerState.activeSchedule!.producers![0].producerName, 'atticlabeosb');
+      expect(headerState.activeSchedule!.producers![0].producerName,
+          'atticlabeosb');
       expect(headerState.activeSchedule!.producers![0].blockSigningKey,
           'EOS7PfA3A4UdfMu2wKbuXdbHn8EWAxbMnFoFWui4X2zsr2oPwdQJP');
       expect(headerState.blockrootMerkle!.activeNodes!.length > 10, isTrue);

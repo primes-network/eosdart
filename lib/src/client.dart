@@ -221,7 +221,8 @@ class EOSClient {
   }
 
   /// Get EOS account actions
-  Future<Actions> getActions(String accountName, {int pos = -1, int offset = -1}) async {
+  Future<Actions> getActions(String accountName,
+      {int pos = -1, int offset = -1}) async {
     return this._post('/history/get_actions', {
       'account_name': accountName,
       'pot': pos,
@@ -232,7 +233,8 @@ class EOSClient {
   }
 
   /// Get EOS transaction
-  Future<TransactionBlock> getTransaction(String id, {int? blockNumHint}) async {
+  Future<TransactionBlock> getTransaction(String id,
+      {int? blockNumHint}) async {
     return this._post('/history/get_transaction',
         {'id': id, 'block_num_hint': blockNumHint}).then((transaction) {
       return TransactionBlock.fromJson(transaction);
@@ -292,7 +294,7 @@ class EOSClient {
   Future<Transaction> _fullFill(Transaction transaction, Block refBlock) async {
     transaction.expiration =
         refBlock.timestamp!.add(Duration(seconds: expirationInSec));
-    transaction.refBlockNum = refBlock.blockNum & 0xffff;
+    transaction.refBlockNum = refBlock.blockNum! & 0xffff;
     transaction.refBlockPrefix = refBlock.refBlockPrefix;
 
     return transaction;

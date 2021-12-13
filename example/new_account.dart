@@ -1,7 +1,8 @@
 import 'package:eosdart/eosdart.dart';
 
 main() {
-  EOSClient client = EOSClient('https://jungle3.cryptolions.io', 'v1', privateKeys: ["5J9b3xMkbvcT6gYv2EpQ8FD4ZBjgypuNKwE1jxkd7Wd1DYzhk88"]);
+  EOSClient client = EOSClient('https://jungle3.cryptolions.io', 'v1',
+      privateKeys: ["5J9b3xMkbvcT6gYv2EpQ8FD4ZBjgypuNKwE1jxkd7Wd1DYzhk88"]);
 
   //privateKeys can also be set after client was constructed, as following
   //client.privateKeys = ["5J9b3xMkbvcT6gYv2EpQ8FD4ZBjgypuNKwE1jxkd7Wd1DYzhk88"];

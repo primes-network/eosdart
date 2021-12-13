@@ -70,7 +70,8 @@ void main() {
       expect(transaction.processed!.netUsage, 128);
       expect(transaction.processed!.scheduled, false);
       expect(transaction.processed!.actionTraces!.isNotEmpty, true);
-      expect(transaction.processed!.actionTraces!.first.action!.name, 'transfer');
+      expect(
+          transaction.processed!.actionTraces!.first.action!.name, 'transfer');
       expect(transaction.processed!.actionTraces!.first.action!.data.toString(),
           '{from: account1, to: account2, quantity: 1.00000000 EOS, memo: }');
       expect(transaction.processed!.actionTraces!.first.action!.account,

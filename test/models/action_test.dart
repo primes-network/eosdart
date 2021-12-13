@@ -21,7 +21,8 @@ void main() {
       expect(action.accountActionSeq, 165);
       expect(action.actionTrace!.receipt!.receiveSequence, 159);
       expect(action.actionTrace!.action!.account, 'zosdiscounts');
-      expect(action.actionTrace!.action!.authorization![0].actor, 'airdropsdac3');
+      expect(
+          action.actionTrace!.action!.authorization![0].actor, 'airdropsdac3');
       expect(action.actionTrace!.contextFree, false);
       expect(action.actionTrace!.blockNum, 40066073);
     });

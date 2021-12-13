@@ -42,7 +42,7 @@ void main() {
 
     test('Get Block', () {
       client.getBlock('43743575').then((Block block) {
-        expect(block.blockNum > 0, isTrue);
+        expect(block.blockNum! > 0, isTrue);
         expect(block.producer, 'zbeosbp11111');
         expect(block.confirmed, 0);
         expect(block.transactionMRoot,
