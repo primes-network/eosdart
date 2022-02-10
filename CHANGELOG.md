@@ -1,3 +1,7 @@
+## 0.4.8
+
+- Migrates to null safety
+
 ## 0.4.7
 
 - Handle any amount
