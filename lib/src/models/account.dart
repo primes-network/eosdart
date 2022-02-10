@@ -14,52 +14,52 @@ class Account with ConversionHelper {
   final int headBlockNum;
 
   @JsonKey(name: 'head_block_time')
-  DateTime headBlockTime;
+  DateTime? headBlockTime;
 
   @JsonKey(name: 'privileged')
-  bool privileged;
+  bool? privileged;
 
   @JsonKey(name: 'last_code_update')
-  DateTime lastCodeUpdate;
+  DateTime? lastCodeUpdate;
 
   @JsonKey(name: 'created')
-  DateTime created;
+  DateTime? created;
 
   @JsonKey(name: 'core_liquid_balance')
-  Holding coreLiquidBalance;
+  Holding? coreLiquidBalance;
 
   @JsonKey(name: 'ram_quota', fromJson: ConversionHelper.getIntFromJson)
-  int ramQuota;
+  int? ramQuota;
 
   @JsonKey(name: 'net_weight', fromJson: ConversionHelper.getIntFromJson)
-  int netWeight;
+  int? netWeight;
 
   @JsonKey(name: 'cpu_weight', fromJson: ConversionHelper.getIntFromJson)
-  int cpuWeight;
+  int? cpuWeight;
 
   @JsonKey(name: 'net_limit')
-  Limit netLimit;
+  Limit? netLimit;
 
   @JsonKey(name: 'cpu_limit')
-  Limit cpuLimit;
+  Limit? cpuLimit;
 
   @JsonKey(name: 'ram_usage', fromJson: ConversionHelper.getIntFromJson)
-  int ramUsage;
+  int? ramUsage;
 
   @JsonKey(name: 'total_resources')
-  TotalResources totalResources;
+  TotalResources? totalResources;
 
   @JsonKey(name: 'permissions')
-  List<Permission> permissions;
+  List<Permission>? permissions;
 
   @JsonKey(name: 'self_delegated_bandwidth')
-  SelfDelegatedBandwidth selfDelegatedBandwidth;
+  SelfDelegatedBandwidth? selfDelegatedBandwidth;
 
   @JsonKey(name: 'refund_request')
-  RefundRequest refundRequest;
+  RefundRequest? refundRequest;
 
   @JsonKey(name: 'voter_info')
-  VoterInfo voterInfo;
+  VoterInfo? voterInfo;
 
   Account(this.accountName, this.headBlockNum);
 
@@ -75,13 +75,13 @@ class Account with ConversionHelper {
 @JsonSerializable()
 class Limit with ConversionHelper {
   @JsonKey(name: 'used', fromJson: ConversionHelper.getIntFromJson)
-  int used;
+  int? used;
 
   @JsonKey(name: 'available', fromJson: ConversionHelper.getIntFromJson)
-  int available;
+  int? available;
 
   @JsonKey(name: 'max', fromJson: ConversionHelper.getIntFromJson)
-  int max;
+  int? max;
 
   Limit();
 
@@ -98,8 +98,8 @@ class Limit with ConversionHelper {
 /// Structure for the JSON string format e.g. '1.0000 EOS', it splits that by
 /// 'amount' and 'currency'
 class Holding {
-  double amount;
-  String currency;
+  double? amount;
+  String? currency;
 
   Holding.fromJson(String json) {
     List<String> segments = json.split(" ");
@@ -119,13 +119,13 @@ class Holding {
 @JsonSerializable()
 class Permission {
   @JsonKey(name: 'perm_name')
-  String permName;
+  String? permName;
 
   @JsonKey(name: 'parent')
-  String parent;
+  String? parent;
 
   @JsonKey(name: 'required_auth')
-  RequiredAuth requiredAuth;
+  RequiredAuth? requiredAuth;
 
   Permission();
 
@@ -141,16 +141,16 @@ class Permission {
 @JsonSerializable()
 class RequiredAuth {
   @JsonKey(name: 'threshold')
-  int threshold;
+  int? threshold;
 
   @JsonKey(name: 'keys')
-  List<AuthKey> keys;
+  List<AuthKey>? keys;
 
   @JsonKey(name: 'accounts')
-  List<Object> accounts;
+  List<Object>? accounts;
 
   @JsonKey(name: 'waits')
-  List<Object> waits;
+  List<Object>? waits;
 
   RequiredAuth();
 
@@ -166,10 +166,10 @@ class RequiredAuth {
 @JsonSerializable()
 class AuthKey {
   @JsonKey(name: 'key')
-  String key;
+  String? key;
 
   @JsonKey(name: 'weight')
-  int weight;
+  int? weight;
 
   AuthKey();
 
@@ -185,16 +185,16 @@ class AuthKey {
 @JsonSerializable()
 class TotalResources with ConversionHelper {
   @JsonKey(name: 'owner')
-  String owner;
+  String? owner;
 
   @JsonKey(name: 'net_weight')
-  Holding netWeight;
+  Holding? netWeight;
 
   @JsonKey(name: 'cpu_weight')
-  Holding cpuWeight;
+  Holding? cpuWeight;
 
   @JsonKey(name: 'ram_bytes', fromJson: ConversionHelper.getIntFromJson)
-  int ramBytes;
+  int? ramBytes;
 
   TotalResources();
 
@@ -210,16 +210,16 @@ class TotalResources with ConversionHelper {
 @JsonSerializable()
 class SelfDelegatedBandwidth {
   @JsonKey(name: 'from')
-  String from;
+  String? from;
 
   @JsonKey(name: 'to')
-  String to;
+  String? to;
 
   @JsonKey(name: 'net_weight')
-  Holding netWeight;
+  Holding? netWeight;
 
   @JsonKey(name: 'cpu_weight')
-  Holding cpuWeight;
+  Holding? cpuWeight;
 
   SelfDelegatedBandwidth();
 
@@ -235,16 +235,16 @@ class SelfDelegatedBandwidth {
 @JsonSerializable()
 class RefundRequest {
   @JsonKey(name: 'owner')
-  String owner;
+  String? owner;
 
   @JsonKey(name: 'request_time')
-  DateTime requestTime;
+  DateTime? requestTime;
 
   @JsonKey(name: 'net_amount')
-  Holding netAmount;
+  Holding? netAmount;
 
   @JsonKey(name: 'cpu_amount')
-  Holding cpuAmount;
+  Holding? cpuAmount;
 
   RefundRequest();
 
@@ -260,25 +260,25 @@ class RefundRequest {
 @JsonSerializable()
 class VoterInfo with ConversionHelper {
   @JsonKey(name: 'owner')
-  String owner;
+  String? owner;
 
   @JsonKey(name: 'proxy')
-  String proxy;
+  String? proxy;
 
   @JsonKey(name: 'producers')
-  Object producers;
+  Object? producers;
 
   @JsonKey(name: 'staked', fromJson: ConversionHelper.getIntFromJson)
-  int staked;
+  int? staked;
 
   @JsonKey(name: 'last_vote_weight')
-  String lastVoteWeight;
+  String? lastVoteWeight;
 
   @JsonKey(name: 'proxied_vote_weight')
-  String proxiedVoteWeight;
+  String? proxiedVoteWeight;
 
   @JsonKey(name: 'is_proxy')
-  int isProxy;
+  int? isProxy;
 
   VoterInfo();
 

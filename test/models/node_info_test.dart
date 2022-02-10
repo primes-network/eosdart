@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('EOS Model', () {
-    String nodeInfoStr;
+    late String nodeInfoStr;
 
     setUp(() {
       nodeInfoStr =

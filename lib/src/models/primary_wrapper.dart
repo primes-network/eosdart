@@ -5,7 +5,7 @@ part 'primary_wrapper.g.dart';
 @JsonSerializable()
 class AccountNames {
   @JsonKey(name: 'account_names')
-  List<String> accountNames;
+  List<String>? accountNames;
 
   AccountNames();
 
@@ -21,7 +21,7 @@ class AccountNames {
 @JsonSerializable()
 class RequiredKeys {
   @JsonKey(name: 'required_keys')
-  List<String> requiredKeys;
+  List<String>? requiredKeys;
 
   RequiredKeys();
 

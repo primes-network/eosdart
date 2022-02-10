@@ -1,5 +1,5 @@
 language: dart
 dart_task:
-  - dartfmt: sdk
+  - dart format: sdk
   - test
-  - dartanalyzer
+  - dart analyze

@@ -11,46 +11,46 @@ class Block with ConversionHelper {
   final String id;
 
   @JsonKey(name: 'block_num', fromJson: ConversionHelper.getIntFromJson)
-  final int blockNum;
+  final int? blockNum;
 
   @JsonKey(name: 'timestamp')
-  DateTime timestamp;
+  DateTime? timestamp;
 
   @JsonKey(name: 'producer')
-  String producer;
+  String? producer;
 
   @JsonKey(name: 'confirmed')
-  int confirmed;
+  int? confirmed;
 
   @JsonKey(name: 'previous')
-  String previous;
+  String? previous;
 
   @JsonKey(name: 'transaction_mroot')
-  String transactionMRoot;
+  String? transactionMRoot;
 
   @JsonKey(name: 'action_mroot')
-  String actionMRoot;
+  String? actionMRoot;
 
   @JsonKey(name: 'schedule_version')
-  int scheduleVersion;
+  int? scheduleVersion;
 
   @JsonKey(name: 'new_producers')
-  Object newProducers;
+  Object? newProducers;
 
   @JsonKey(name: 'header_extensions')
-  List<Object> headerExtensions;
+  List<Object>? headerExtensions;
 
   @JsonKey(name: 'producer_signature')
-  String producerSignature;
+  String? producerSignature;
 
   @JsonKey(name: 'transactions')
-  List<TransactionReceipt> transactions;
+  List<TransactionReceipt>? transactions;
 
   @JsonKey(name: 'block_extensions')
-  List<Object> blockExtensions;
+  List<Object>? blockExtensions;
 
   @JsonKey(name: 'ref_block_prefix')
-  int refBlockPrefix;
+  int? refBlockPrefix;
 
   Block(this.id, this.blockNum);
 

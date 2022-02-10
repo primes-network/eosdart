@@ -14,19 +14,19 @@ part 'abi.g.dart';
 @JsonSerializable()
 class AbiResp with ConversionHelper {
   @JsonKey(name: 'account_name')
-  String accountName;
+  String? accountName;
 
   @JsonKey(name: 'code_hash')
-  String codeHash;
+  String? codeHash;
 
   @JsonKey(name: 'abi_hash')
-  String abiHash;
+  String? abiHash;
 
   @JsonKey(name: 'wasm')
-  String wasm;
+  String? wasm;
 
   @JsonKey(name: 'abi', fromJson: _decodeAbi)
-  Abi abi;
+  Abi? abi;
 
   AbiResp();
 
@@ -35,21 +35,21 @@ class AbiResp with ConversionHelper {
 
   Map<String, dynamic> toJson() => _$AbiRespToJson(this);
 
-  static Abi _decodeAbi(Object abi) {
+  static Abi? _decodeAbi(dynamic abi) {
     if (abi is String) {
       return _base64ToAbi(abi);
     }
     return Abi.fromJson(abi);
   }
 
-  static Abi _base64ToAbi(String base64String) {
+  static Abi? _base64ToAbi(String base64String) {
     Uint8List abiBuffer = base64ToBinary(base64String);
 
     return _rawAbiToJson(abiBuffer);
   }
 
   /// Decodes an abi as Uint8List into json. */
-  static Abi _rawAbiToJson(Uint8List rawAbi) {
+  static Abi? _rawAbiToJson(Uint8List rawAbi) {
     Map<String, Type> abiTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
     try {
@@ -60,10 +60,10 @@ class AbiResp with ConversionHelper {
       }
       buffer.restartRead();
       var t = abiTypes['abi_def'];
-      var b = t.deserialize(t, buffer);
+      var b = t?.deserialize?.call(t, buffer);
       return Abi.fromJson(json.decode(json.encode(b)));
     } catch (e) {
-      print(e.message);
+      print(e.toString());
       return null;
     }
   }
@@ -113,15 +113,19 @@ class AbiStructField {
 @JsonSerializable()
 class AbiStruct {
   @JsonKey(name: 'name')
-  String name;
+  String? name;
 
   @JsonKey(name: 'base')
-  String base;
+  String? base;
 
   @JsonKey(name: 'fields')
-  List<AbiStructField> fields;
+  List<AbiStructField>? fields;
 
-  AbiStruct(this.name, this.base, this.fields);
+  AbiStruct(
+    this.name,
+    this.base,
+    this.fields,
+  );
 
   factory AbiStruct.fromJson(Map<String, dynamic> json) =>
       _$AbiStructFromJson(json);
@@ -243,12 +247,15 @@ class AbiExtensions {
 @JsonSerializable()
 class AbiVariants {
   @JsonKey(name: 'name')
-  String name;
+  String? name;
 
   @JsonKey(name: 'types')
-  List<String> types;
+  List<String>? types;
 
-  AbiVariants(this.name, this.types);
+  AbiVariants(
+    this.name,
+    this.types,
+  );
 
   factory AbiVariants.fromJson(Map<String, dynamic> json) =>
       _$AbiVariantsFromJson(json);
@@ -263,42 +270,43 @@ class AbiVariants {
 @JsonSerializable()
 class Abi {
   @JsonKey(name: 'version')
-  String version;
+  String? version;
 
   @JsonKey(name: 'types')
-  List<AbiType> types;
+  List<AbiType>? types;
 
   @JsonKey(name: 'structs')
-  List<AbiStruct> structs;
+  List<AbiStruct>? structs;
 
   @JsonKey(name: 'actions')
-  List<AbiAction> actions;
+  List<AbiAction>? actions;
 
   @JsonKey(name: 'tables')
-  List<AbiTable> tables;
+  List<AbiTable>? tables;
 
   @JsonKey(name: 'ricardian_clauses')
-  List<AbiRicardianClauses> ricardian_clauses;
+  List<AbiRicardianClauses>? ricardian_clauses;
 
   @JsonKey(name: 'error_messages')
-  List<AbiErrorMessages> error_messages;
+  List<AbiErrorMessages>? error_messages;
 
   @JsonKey(name: 'abi_extensions')
-  List<AbiExtensions> abi_extensions;
+  List<AbiExtensions>? abi_extensions;
 
   @JsonKey(name: 'variants')
-  List<AbiVariants> variants;
+  List<AbiVariants>? variants;
 
-  Abi(
-      {this.abi_extensions,
-      this.actions,
-      this.error_messages,
-      this.ricardian_clauses,
-      this.structs,
-      this.tables,
-      this.types,
-      this.variants,
-      this.version});
+  Abi({
+    this.abi_extensions,
+    this.actions,
+    this.error_messages,
+    this.ricardian_clauses,
+    this.structs,
+    this.tables,
+    this.types,
+    this.variants,
+    this.version,
+  });
 
   factory Abi.fromJson(Map<String, dynamic> json) => _$AbiFromJson(json);
 
