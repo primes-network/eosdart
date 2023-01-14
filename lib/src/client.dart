@@ -279,6 +279,21 @@ class EOSClient {
     return pushTransactionArgs;
   }
 
+  Future<dynamic> createTransaction(Transaction transaction,
+      { dynamic key,
+        int blocksBehind = 3,
+        int expireSecond = 180}) async {
+    NodeInfo info = await this.getInfo();
+    Block refBlock = await getBlock((info.headBlockNum - blocksBehind).toString());
+    final pKey = key ?? this.keys.values.toList()[0];
+
+    Transaction trx = await _fullFill(transaction, refBlock);
+    PushTransactionArgs pushTransactionArgs = await _createTransactionArgs(
+        info.chainId, transactionTypes['transaction'], trx, pKey);
+
+    return pushTransactionArgs;
+  }
+
   /// Get data needed to serialize actions in a contract */
   Future<Contract> _getContract(String accountName,
       {bool reload = false}) async {
@@ -359,6 +374,21 @@ class EOSClient {
         signatures.add(pKey.sign(signBuf).toString());
       }
     }
+
+    return PushTransactionArgs(signatures, serializedTrx);
+  }
+
+  Future<PushTransactionArgs> _createTransactionArgs(String chainId,
+      Type transactionType, Transaction transaction, ecc.EOSPrivateKey pKey) async {
+    List<String> signatures = [];
+    transaction = await _serializeActions(transaction);
+    Uint8List serializedTrx = transaction.toBinary(transactionType);
+
+    Uint8List signBuf = Uint8List.fromList(List.from(ser.stringToHex(chainId))
+      ..addAll(serializedTrx)
+      ..addAll(Uint8List(32)));
+
+    signatures.add(pKey.sign(signBuf).toString());
 
     return PushTransactionArgs(signatures, serializedTrx);
   }

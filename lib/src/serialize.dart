@@ -587,7 +587,7 @@ Symbol stringToSymbol(String s) {
   if (!exp.hasMatch(s)) {
     throw 'Invalid symbol';
   }
-  return Symbol(name: m[2].toString(), precision: int.parse([1].toString()));
+  return Symbol(name: m[0].group(2), precision: int.parse(m[0].group(1).toString()));
 }
 
 /// Convert `Symbol` to `string`. format: `precision,NAME`. */
@@ -621,6 +621,8 @@ void serializeStruct(Type self, SerialBuffer buffer, dynamic data,
     } else {
       if (allowExtensions && field.type!.extensionOf != null) {
         state.skippedBinaryExtension = true;
+      } else if(field.type.optionalOf != null ) {
+        field.type.serialize(field.type, buffer, dy[field.name],state: state);
       } else {
         throw 'missing ' +
             self.name +
