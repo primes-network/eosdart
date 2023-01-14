@@ -69,6 +69,8 @@ class EOSClient {
       } else {
         completer.complete(json.decode(response.body));
       }
+    }).catchError((e, s) {
+      completer.completeError(e, s);
     });
     return completer.future;
   }
