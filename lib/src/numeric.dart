@@ -1,12 +1,14 @@
+// ignore_for_file: parameter_assignments, prefer_final_locals, prefer_interpolation_to_compose_strings
 import 'dart:typed_data';
 import 'package:pointycastle/pointycastle.dart';
 
 /// @module Numeric
 
-var base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-var base64Chars =
+String base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+String base64Chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
+// ignore: non_constant_identifier_names
 List<int> create_base58_map() {
   var base58M = List.filled(256, -1);
   for (var i = 0; i < base58Chars.length; ++i) {
@@ -17,6 +19,7 @@ List<int> create_base58_map() {
 
 final base58Map = create_base58_map();
 
+// ignore: non_constant_identifier_names
 List<int> create_base64_map() {
   var base64M = List.filled(256, -1);
   for (var i = 0; i < base64Chars.length; ++i) {
@@ -86,7 +89,7 @@ Uint8List signedDecimalToBinary(int size, String s) {
 
 /// Convert `bignum` to an unsigned decimal number
 /// @param minDigits 0-pad result to this many digits
-String binaryToDecimal(Uint8List bignum, {minDigits = 1}) {
+String binaryToDecimal(Uint8List bignum, {int minDigits = 1}) {
   var result = List.filled(minDigits, '0'.codeUnitAt(0), growable: true);
   for (var i = bignum.length - 1; i >= 0; --i) {
     var carry = bignum[i];
@@ -117,7 +120,7 @@ String signedBinaryToDecimal(Uint8List bignum, {int minDigits = 1}) {
 /// Convert an unsigned base-58 number in `s` to a bignum
 /// @param size bignum size (bytes)
 Uint8List base58ToBinary(int size, String s) {
-  var result = new Uint8List(size);
+  var result = Uint8List(size);
   for (var i = 0; i < s.length; ++i) {
     var carry = base58Map[s.codeUnitAt(i)];
     if (carry < 0) {
@@ -137,9 +140,9 @@ Uint8List base58ToBinary(int size, String s) {
 
 /// Convert `bignum` to a base-58 number
 /// @param minDigits 0-pad result to this many digits
-String binaryToBase58(Uint8List bignum, {minDigits = 1}) {
+String binaryToBase58(Uint8List bignum, {int minDigits = 1}) {
   var result = <int>[];
-  for (var byte in bignum) {
+  for (final byte in bignum) {
     var carry = byte;
     for (var j = 0; j < result.length; ++j) {
       var x = (base58Map[result[j]] << 8) + carry;
@@ -151,7 +154,7 @@ String binaryToBase58(Uint8List bignum, {minDigits = 1}) {
       carry = (carry ~/ 58) | 0;
     }
   }
-  for (var byte in bignum) {
+  for (final byte in bignum) {
     if (byte != 0) {
       break;
     } else {
@@ -179,7 +182,7 @@ Uint8List base64ToBinary(String s) {
       bytes -= 1;
     }
   }
-  var result = new Uint8List(bytes);
+  var result = Uint8List(bytes);
 
   for (var group = 0; group < groups; ++group) {
     var digit0 = base64Map[s.codeUnitAt(group * 4 + 0)];
@@ -204,13 +207,13 @@ enum KeyType {
 }
 
 /// Public key data size, excluding type field
-var publicKeyDataSize = 33;
+int publicKeyDataSize = 33;
 
 /// Private key data size, excluding type field
-var privateKeyDataSize = 32;
+int privateKeyDataSize = 32;
 
 /// Signature data size, excluding type field
-var signatureDataSize = 65;
+int signatureDataSize = 65;
 
 /// Public key, private key, or signature in binary form
 class IKey {
@@ -221,7 +224,7 @@ class IKey {
 }
 
 Uint8List digestSuffixRipemd160(Uint8List data, String suffix) {
-  var d = new Uint8List(data.length + suffix.length);
+  var d = Uint8List(data.length + suffix.length);
   for (var i = 0; i < data.length; ++i) {
     d[i] = data[i];
   }
@@ -241,20 +244,20 @@ Uint8List digestSha256X2(Uint8List data) {
 
 IKey stringToKey(String s, KeyType type, int size, String suffix) {
   var whole = base58ToBinary(size + 4, s);
-  var result;
-  var digest;
+  IKey result;
+  Uint8List digest;
   if (suffix == '') {
     result = IKey(type, whole.sublist(1,size));
     digest = digestSha256X2(whole.sublist(0,size));
   } else {
     result = IKey(type, whole.sublist(0,size));
-    digest = digestSuffixRipemd160(result.data, suffix).toList();
+    digest = digestSuffixRipemd160(result.data, suffix);
   }
   if (digest[0] != whole[size + 0] ||
       digest[1] != whole[size + 1] ||
       digest[2] != whole[size + 2] ||
       digest[3] != whole[size + 3]) {
-    throw 'checksum doesn\'t match';
+    throw "checksum doesn't match";
   }
   return result;
 }
@@ -275,7 +278,7 @@ String keyToString(IKey key, String suffix, String prefix) {
 IKey stringToPublicKey(String s) {
   if (s.substring(0, 3) == 'EOS') {
     var whole = base58ToBinary(publicKeyDataSize + 4, s.substring(3));
-    var key = IKey(KeyType.k1, new Uint8List(publicKeyDataSize));
+    var key = IKey(KeyType.k1, Uint8List(publicKeyDataSize));
     for (var i = 0; i < publicKeyDataSize; ++i) {
       key.data[i] = whole[i];
     }
@@ -285,7 +288,7 @@ IKey stringToPublicKey(String s) {
         digest[1] != whole[34] ||
         digest[2] != whole[35] ||
         digest[3] != whole[36]) {
-      throw 'checksum doesn\'t match';
+      throw "checksum doesn't match";
     }
     return key;
   } else if (s.substring(0, 7) == 'PUB_K1_') {
@@ -298,7 +301,7 @@ IKey stringToPublicKey(String s) {
 }
 
 /// Convert `key` to string (base-58) form
-publicKeyToString(IKey key) {
+String publicKeyToString(IKey key) {
   if (key.type == KeyType.k1 && key.data.length == publicKeyDataSize) {
     return keyToString(key, 'K1', 'PUB_K1_');
   } else if (key.type == KeyType.r1 && key.data.length == publicKeyDataSize) {

@@ -1,8 +1,9 @@
-import 'dart:typed_data';
+// ignore_for_file: parameter_assignments, prefer_final_locals, prefer_interpolation_to_compose_strings, prefer_if_elements_to_conditional_expressions
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'numeric.dart' as numeric;
 import 'eosdart_base.dart';
+import 'numeric.dart' as numeric;
 import './models/abi.dart';
 
 /// Options for serialize() and deserialize() */
@@ -42,7 +43,7 @@ class SerialBuffer {
 
   SerialBuffer(this.array) {
     // array = array || new Uint8List(1024);
-    length = array != null ? array.length : 0;
+    length = array.length;
     // textEncoder = textEncoder || new TextEncoder();
     // textDecoder = textDecoder || new TextDecoder('utf-8', { fatal: true });
   }
@@ -156,7 +157,7 @@ class SerialBuffer {
   /// Append a `uint64`. *Caution*: `number` only has 53 bits of precision */
   void pushNumberAsUint64(int v) {
     pushUint32(v >> 0);
-    pushUint32(((v ~/ 0x10000) >> 0).floor());
+    pushUint32((v ~/ 0x10000) >> 0);
   }
 
   /// Get a `uint64` as a `number`. *Caution*: `number` only has 53 bits of precision; some values will change.
@@ -233,7 +234,7 @@ class SerialBuffer {
 
   /// Append a `name` */
   void pushName(String s) {
-    charToSymbol(int c) {
+    int charToSymbol(int c) {
       if (c >= 'a'.codeUnitAt(0) && c <= 'z'.codeUnitAt(0)) {
         return (c - 'a'.codeUnitAt(0)) + 6;
       }
@@ -243,7 +244,7 @@ class SerialBuffer {
       return 0;
     }
 
-    var a = new Uint8List(8);
+    var a = Uint8List(8);
     var bit = 63;
     for (var i = 0; i < s.length; ++i) {
       var c = charToSymbol(s.codeUnitAt(i));
@@ -350,7 +351,7 @@ class SerialBuffer {
         break;
       }
     }
-    var name = utf8.decode(new Uint8List.view(a.buffer, a.offsetInBytes, len));
+    var name = utf8.decode(Uint8List.view(a.buffer, a.offsetInBytes, len));
     return Symbol(name: name, precision: precision);
   }
 
@@ -454,8 +455,8 @@ Type createType(
     void Function(Type self, SerialBuffer buffer, Object data, {SerializerState state, bool allowExtensions})?
         serialize,
     Object? Function(Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions})? deserialize,
-    String? baseName: "",
-    List<Field>? fields: const [],
+    String? baseName = "",
+    List<Field>? fields = const [],
     Type? extensionOf}) {
   var t = Type(
       aliasOfName: aliasOfName,
@@ -463,6 +464,7 @@ Type createType(
       arrayOf: arrayOf,
       optionalOf: optionalOf,
       extensionOf: extensionOf,
+      // ignore: avoid_redundant_argument_values
       base: null,
       baseName: baseName,
       fields: fields,
@@ -473,7 +475,7 @@ Type createType(
 }
 
 int checkRange(int orig, int converted) {
-  if (orig.isNaN || converted.isNaN || (!(orig is int) && !(orig is String))) {
+  if (orig.isNaN || converted.isNaN ) {
     throw 'Expected number';
   }
   if (orig != converted) {
@@ -496,16 +498,13 @@ int dateToTimePointSec(String date) {
 
 /// Convert hex to binary data */
 Uint8List hexToUint8List(String hex) {
-  if (!(hex is String)) {
-    throw 'Expected string containing hex digits';
-  }
   if (hex.length % 2 != 0) {
     throw 'Odd number of hex digits';
   }
   var l = hex.length ~/ 2;
-  var result = new Uint8List(l);
+  var result = Uint8List(l);
   for (var i = 0; i < l; ++i) {
-    var x = int.parse(hex.substring(i * 2, (2 * (i + 1))), radix: 16);
+    var x = int.parse(hex.substring(2 * i, 2 * (i + 1)), radix: 16);
     if (x.isNaN) {
       throw 'Expected hex string';
     }
@@ -517,8 +516,8 @@ Uint8List hexToUint8List(String hex) {
 /// Convert binary data to hex */
 String arrayToHex(Uint8List data) {
   var result = '';
-  for (var x in data) {
-    var str = ('00' + x.toRadixString(16));
+  for (final x in data) {
+    var str = '00' + x.toRadixString(16);
     result += str.substring(str.length - 2, str.length);
   }
   return result.toUpperCase();
@@ -535,7 +534,7 @@ List<int> stringToHex(String str) {
 
 /// Convert date in ISO format to `time_point` (miliseconds since epoch) */
 int dateToTimePoint(String date) {
-  return (checkDateParse(date + 'Z').millisecondsSinceEpoch * 1000).round();
+  return checkDateParse(date + 'Z').millisecondsSinceEpoch * 1000;
 }
 
 /// Convert `time_point` (miliseconds since epoch) to date in ISO format */
@@ -552,7 +551,7 @@ String timePointSecToDate(int sec) {
 /// Convert date in ISO format to `block_timestamp_type` (half-seconds since a different epoch) */
 int dateToBlockTimestamp(String date) {
   return ((checkDateParse(date + 'Z')
-                  .subtract(Duration(milliseconds: 946684800000)))
+                  .subtract(const Duration(milliseconds: 946684800000)))
               .millisecondsSinceEpoch /
           500)
       .round();
@@ -560,14 +559,14 @@ int dateToBlockTimestamp(String date) {
 
 /// Convert `block_timestamp_type` (half-seconds since a different epoch) to to date in ISO format */
 String blockTimestampToDate(int slot) {
-  var s = (DateTime.fromMillisecondsSinceEpoch(slot * 500 + 946684800000))
+  var s = DateTime.fromMillisecondsSinceEpoch(slot * 500 + 946684800000)
       .toIso8601String();
   return s.substring(0, s.length - 1);
 }
 
 /// Convert `string` to `Symbol`. format: `precision,NAME`. */
 Symbol stringToSymbol(String s) {
-  RegExp exp = new RegExp(r"^([0-9]+),([A-Z]+)$");
+  RegExp exp = RegExp(r"^([0-9]+),([A-Z]+)$");
   var m = exp.allMatches(s).toList();
   if (!exp.hasMatch(s)) {
     throw 'Invalid symbol';
@@ -585,15 +584,15 @@ bool supportedAbiVersion(String version) {
   return version.startsWith('eosio::abi/1.');
 }
 
-void serializeStruct(Type self, SerialBuffer buffer, Object data, {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeStruct(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool allowExtensions = true}) {
+  state ??= SerializerState();
   // try {
   if (self.base != null) {
     self.base!.serialize?.call(self.base, buffer, data,
         state: state, allowExtensions: allowExtensions);
   }
   Map dy = data as dynamic;
-  for (var field in self.fields!) {
+  for (final field in self.fields!) {
     if (dy.containsKey(field.name)) {
       if (state.skippedBinaryExtension) {
         throw 'unexpected ' + self.name! + '.' + field.name!;
@@ -617,18 +616,18 @@ void serializeStruct(Type self, SerialBuffer buffer, Object data, {SerializerSta
   // }
 }
 
-Object deserializeStruct(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeStruct(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   try {
-    var result;
+    dynamic result;
     if (self.base != null) {
       result = self.base!.deserialize!(self.base, buffer, state: state, allowExtensions: allowExtensions);
     } else {
       result = {};
     }
-    for (var field in self.fields!) {
-      if (allowExtensions && field.type!.extensionOf != null && !buffer.haveReadData()) {
+    for (final field in self.fields!) {
+      if ((allowExtensions ?? false) && field.type!.extensionOf != null && !buffer.haveReadData()) {
         state.skippedBinaryExtension = true;
       } else {
         result[field.name] =
@@ -637,7 +636,7 @@ Object deserializeStruct(Type self, SerialBuffer buffer,
     }
     return result;
   } catch (e) {
-    throw e;
+    rethrow;
   }
 }
 
@@ -648,7 +647,10 @@ Map<String, Type> createInitialTypes() {
       name: 'bool',
       serialize: (Type self, SerialBuffer buffer, Object data,
            {SerializerState? state, bool? allowExtensions}) {
-        buffer.push([data == true ? 1 : 0]);
+        if(data is! bool) {
+          throw "expected bool";
+        }
+        buffer.push([data ? 1 : 0]);
       },
       deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.get()!=0;
@@ -667,7 +669,7 @@ Map<String, Type> createInitialTypes() {
     "int8": createType(
       name: 'int8',
       serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
-        buffer.push([checkRange((data as int), data << 24 >> 24)]);
+        buffer.push([checkRange(data as int, data << 24 >> 24)]);
       },
       deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.get() << 24 >> 24;
@@ -740,7 +742,7 @@ Map<String, Type> createInitialTypes() {
     "varint32": createType(
       name: 'varint32',
       serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
-        buffer.pushVarint32(checkRange(data as int, data == null ? 0 : data));
+        buffer.pushVarint32(checkRange(data as int, data));
       },
       deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getVarint32();
@@ -939,6 +941,7 @@ Map<String, Type> createInitialTypes() {
 
   result['extended_asset'] = createType(
     name: 'extended_asset',
+    // ignore: avoid_redundant_argument_values
     baseName: '',
     fields: [
       Field(name: 'quantity', typeName: 'asset', type: result['asset']),
@@ -952,25 +955,25 @@ Map<String, Type> createInitialTypes() {
 } // createInitialTypes()
 
 
-serializeVariant(Type self, SerialBuffer buffer, Object data, {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
-  if (!(data is List) || data.length != 2 || !(data[0] is String)) {
+void serializeVariant(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
+  if (data is! List || data.length != 2 || data[0] is! String) {
     throw 'expected variant: ["type", value]';
   }
-  var a = ((data as List)[0]) as String;
-  var b = ((data as List)[1]) as Object;
+  var a = data[0] as String;
+  var b = data[1] as Object;
   var i = self.fields!.indexWhere((field) => field.name == a);
   if (i < 0) {
     throw 'type "$b" is not valid for variant';
   }
   buffer.pushVaruint32(i);
-  self.fields[i].type!.serialize?.call(self.fields[i].type, buffer, b,
+  self.fields![i].type!.serialize?.call(self.fields![i].type, buffer, b,
       state: state, allowExtensions: allowExtensions);
 }
 
-deserializeVariant(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeVariant(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   var i = buffer.getVaruint32();
   if (i >= self.fields!.length) {
     throw 'type index $i is not valid for variant';
@@ -979,17 +982,17 @@ deserializeVariant(Type self, SerialBuffer buffer,
     return [field.name, field.type!.deserialize!(field.type, buffer, state: state, allowExtensions: allowExtensions)];
 }
 
-serializeArray(Type self, SerialBuffer buffer, Object data, {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeArray(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   buffer.pushVaruint32((data as List).length);
-  for (var item in data) {
+  for (final item in data) {
     self.arrayOf!.serialize!(self.arrayOf, buffer, item, state: state, allowExtensions: false);
   }
 }
 
-deserializeArray(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+List deserializeArray(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   var len = buffer.getVaruint32();
   var result = [];
   for (var i = 0; i < len; ++i) {
@@ -998,8 +1001,8 @@ deserializeArray(Type self, SerialBuffer buffer,
   return result;
 }
 
-serializeOptional(Type self, SerialBuffer buffer, Object data, {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeOptional(Type self, SerialBuffer buffer, Object? data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   if (data == null) {
     buffer.push([0]);
   } else {
@@ -1008,9 +1011,9 @@ serializeOptional(Type self, SerialBuffer buffer, Object data, {SerializerState?
   }
 }
 
-deserializeOptional(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeOptional(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   if (buffer.get() != 0) {
     return self.optionalOf!.deserialize!(self.optionalOf, buffer, state: state, allowExtensions: allowExtensions);
   } else {
@@ -1018,14 +1021,14 @@ deserializeOptional(Type self, SerialBuffer buffer,
   }
 }
 
-serializeExtension(Type self, SerialBuffer buffer, Object data, {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeExtension(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   self.extensionOf!.serialize!(self.extensionOf, buffer, data, state: state, allowExtensions: allowExtensions);
 }
 
-deserializeExtension(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeExtension(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   return self.extensionOf!.deserialize!(self.extensionOf, buffer, state: state, allowExtensions: allowExtensions);
 }
 
@@ -1054,7 +1057,7 @@ Type getType(Map<String?, Type> types, String? name) {
       deserialize: deserializeOptional,
     );
   }
-  if (name.endsWith("\$")) {
+  if (name.endsWith(r"$")) {
     return createType(
       name: name,
       extensionOf: getType(types, name.substring(0, name.length - 1)),
@@ -1072,24 +1075,26 @@ Type getType(Map<String?, Type> types, String? name) {
 Map<String?, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
   var types = Map.from(initialTypes).cast<String?, Type>();
   if (abi.types != null) {
-    for (var item in abi.types!) {
+    for (final item in abi.types!) {
       types[item?.new_type_name] = createType(name: item?.new_type_name, aliasOfName: item?.type);
     }
   }
   if (abi.structs != null) {
-    for (var str in abi.structs!) {
+    for (final str in abi.structs!) {
       types[str!.name] = createType(
           name: str.name,
           baseName: str.base,
+          // ignore: avoid_redundant_argument_values
           fields: str.fields?.map((item) => Field(name: item!.name, typeName: item.type, type: null)).toList(),
           serialize: serializeStruct,
           deserialize: deserializeStruct);
     }
   }
   if (abi.variants != null) {
-    for (var v in abi.variants!) {
+    for (final v in abi.variants!) {
       types[v!.name] = createType(
         name: v.name,
+        // ignore: avoid_redundant_argument_values
         fields: v.types?.map((s) => Field(name: s, typeName: s, type: null)).toList(),
         serialize: serializeVariant,
         deserialize: deserializeVariant,
@@ -1100,7 +1105,7 @@ Map<String?, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
     if (type.baseName!.isNotEmpty) {
       type.base = getType(types, type.baseName);
     }
-    for (var field in type.fields!) {
+    for (final field in type.fields!) {
       field.type = getType(types, field.typeName);
     }
   });
