@@ -27,8 +27,8 @@ class EOSClient {
   Map<String, ecc.EOSPrivateKey> keys = Map();
 
   /// Converts abi files between binary and structured form (`abi.abi.json`) */
-  late Map<String, Type> abiTypes;
-  late Map<String, Type> transactionTypes;
+  late Map<String?, Type> abiTypes;
+  late Map<String?, Type> transactionTypes;
 
   /// Construct the EOS client from eos node URL
   EOSClient(
@@ -284,7 +284,7 @@ class EOSClient {
       {bool reload = false}) async {
     var abi = await getRawAbi(accountName);
     var types = ser.getTypesFromAbi(ser.createInitialTypes(), abi.abi!);
-    var actions = new Map<String, Type>();
+    var actions = new Map<String?, Type>();
     for (var act in abi.abi!.actions!) {
       actions[act.name] = ser.getType(types, act.type);
     }

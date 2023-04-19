@@ -459,15 +459,15 @@ Type createType(
     List<Field>? fields = const [],
     Type? extensionOf}) {
   var t = Type(
-      aliasOfName: aliasOfName,
-      name: name,
+      aliasOfName: aliasOfName!,
+      name: name!,
       arrayOf: arrayOf,
       optionalOf: optionalOf,
       extensionOf: extensionOf,
       // ignore: avoid_redundant_argument_values
       base: null,
-      baseName: baseName,
-      fields: fields,
+      baseName: baseName!,
+      fields: fields!,
       serialize: serialize,
       deserialize: deserialize);
 
