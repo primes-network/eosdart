@@ -1,3 +1,7 @@
+## 0.4.9
+
+- Key serialization
+
 ## 0.4.8
 
 - Migrates to null safety
