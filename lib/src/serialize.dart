@@ -1085,7 +1085,7 @@ Map<String?, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
           name: str.name,
           baseName: str.base,
           // ignore: avoid_redundant_argument_values
-          fields: str.fields?.map((item) => Field(name: item!.name, typeName: item.type, type: null)).toList(),
+          fields: str.fields?.map((item) => Field(name: item!.name!, typeName: item.type!, type: null)).toList(),
           serialize: serializeStruct,
           deserialize: deserializeStruct);
     }
