@@ -54,9 +54,9 @@ class Type {
 }
 
 class Contract {
-  Map<String, Type> actions;
+  Map<String?, Type> actions;
 
-  Map<String, Type> types;
+  Map<String?, Type> types;
 
   Contract(this.types, this.actions);
 }

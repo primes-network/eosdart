@@ -1,8 +1,9 @@
-import 'dart:typed_data';
+// ignore_for_file: parameter_assignments, prefer_final_locals, prefer_interpolation_to_compose_strings, prefer_if_elements_to_conditional_expressions
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'numeric.dart' as numeric;
 import 'eosdart_base.dart';
+import 'numeric.dart' as numeric;
 import './models/abi.dart';
 
 /// Options for serialize() and deserialize() */
@@ -27,10 +28,10 @@ class SerializerState {
 /// Serialize and deserialize data */
 class SerialBuffer {
   /// Amount of valid data in `array` */
-  late int length;
+  int length = 0;
 
   /// Data in serialized (binary) form */
-  Uint8List? array;
+  Uint8List array;
 
   /// Current position while reading (deserializing) */
   int readPos = 0;
@@ -42,21 +43,21 @@ class SerialBuffer {
 
   SerialBuffer(this.array) {
     // array = array || new Uint8List(1024);
-    length = array != null ? array!.length : 0;
+    length = array.length;
     // textEncoder = textEncoder || new TextEncoder();
     // textDecoder = textDecoder || new TextDecoder('utf-8', { fatal: true });
   }
 
   /// Resize `array` if needed to have at least `size` bytes free */
   void reserve(int size) {
-    if (length + size <= array!.length) {
+    if (length + size <= array.length) {
       return;
     }
-    var l = array!.length;
+    var l = array.length;
     while (length + size > l) {
       l = (l * 1.5).ceil();
     }
-    var newArray = Uint8List.fromList(array!);
+    var newArray = Uint8List.fromList(array);
     array = newArray;
   }
 
@@ -72,7 +73,7 @@ class SerialBuffer {
 
   /// Return data with excess storage trimmed away */
   Uint8List asUint8List() {
-    return Uint8List.view(array!.buffer, array!.offsetInBytes, length);
+    return Uint8List.view(array.buffer, array.offsetInBytes, length);
   }
 
   /// Append bytes */
@@ -81,7 +82,7 @@ class SerialBuffer {
     // var t = Uint8List.view(array.buffer,0,array.length + v.length);
     // t.replaceRange(array.length, array.length + v.length - 1, v);
     // array = t;
-    var t = array!.toList();
+    var t = array.toList();
     t.addAll(v);
     array = Uint8List.fromList(t);
     length += v.length;
@@ -95,7 +96,7 @@ class SerialBuffer {
   /// Get a single byte */
   int get() {
     if (readPos < length) {
-      return array![readPos++];
+      return array[readPos++];
     }
     throw 'Read past end of buffer';
   }
@@ -114,7 +115,7 @@ class SerialBuffer {
       throw 'Read past end of buffer';
     }
     var result =
-        Uint8List.view(array!.buffer, array!.offsetInBytes + readPos, len);
+        Uint8List.view(array.buffer, array.offsetInBytes + readPos, len);
     readPos += len;
     return result;
   }
@@ -156,7 +157,7 @@ class SerialBuffer {
   /// Append a `uint64`. *Caution*: `number` only has 53 bits of precision */
   void pushNumberAsUint64(int v) {
     pushUint32(v >> 0);
-    pushUint32(((v ~/ 0x10000) >> 0).floor());
+    pushUint32((v ~/ 0x10000) >> 0);
   }
 
   /// Get a `uint64` as a `number`. *Caution*: `number` only has 53 bits of precision; some values will change.
@@ -233,7 +234,7 @@ class SerialBuffer {
 
   /// Append a `name` */
   void pushName(String s) {
-    charToSymbol(int c) {
+    int charToSymbol(int c) {
       if (c >= 'a'.codeUnitAt(0) && c <= 'z'.codeUnitAt(0)) {
         return (c - 'a'.codeUnitAt(0)) + 6;
       }
@@ -243,7 +244,7 @@ class SerialBuffer {
       return 0;
     }
 
-    var a = new Uint8List(8);
+    var a = Uint8List(8);
     var bit = 63;
     for (var i = 0; i < s.length; ++i) {
       var c = charToSymbol(s.codeUnitAt(i));
@@ -309,10 +310,11 @@ class SerialBuffer {
 
   /// Append a `symbol_code`. Unlike `symbol`, `symbol_code` doesn't include a precision. */
   void pushSymbolCode(String name) {
-    Uint8List a = Uint8List.fromList(utf8.encode(name));
-    while (a.length < 8) {
-      a.add(0);
+    final l = List<int>.from(utf8.encode(name));
+    while(l.length <8) {
+      l.add(0);
     }
+    Uint8List a = Uint8List.fromList(l);
     pushArray(a.sublist(0, 8));
   }
 
@@ -331,8 +333,8 @@ class SerialBuffer {
 
   /// Append a `symbol` */
   void pushSymbol(Symbol symbol) {
-    var a = [symbol.precision & 0xff];
-    a.addAll(utf8.encode(symbol.name));
+    var a = [symbol.precision! & 0xff];
+    a.addAll(utf8.encode(symbol.name!));
     while (a.length < 8) {
       a.add(0);
     }
@@ -349,7 +351,7 @@ class SerialBuffer {
         break;
       }
     }
-    var name = utf8.decode(new Uint8List.view(a.buffer, a.offsetInBytes, len));
+    var name = utf8.decode(Uint8List.view(a.buffer, a.offsetInBytes, len));
     return Symbol(name: name, precision: precision);
   }
 
@@ -393,13 +395,13 @@ class SerialBuffer {
   String getAsset() {
     var amount = getUint8List(8);
     var sym = getSymbol();
-    var s = numeric.signedBinaryToDecimal(amount, minDigits: sym.precision + 1);
+    var s = numeric.signedBinaryToDecimal(amount, minDigits: sym.precision! + 1);
     if (sym.precision != 0) {
-      s = s.substring(0, s.length - sym.precision) +
+      s = s.substring(0, s.length - sym.precision!) +
           '.' +
-          s.substring(s.length - sym.precision);
+          s.substring(s.length - sym.precision!);
     }
-    return s + ' ' + sym.name;
+    return s + ' ' + sym.name!;
   }
 
   /// Append a public key */
@@ -413,8 +415,7 @@ class SerialBuffer {
   String getPublicKey() {
     var type = get();
     var data = getUint8List(numeric.publicKeyDataSize);
-    return numeric
-        .publicKeyToString(numeric.IKey(type as numeric.KeyType, data));
+    return numeric.publicKeyToString(numeric.IKey(numeric.KeyType.values[type], data));
   }
 
   /// Append a private key */
@@ -428,8 +429,7 @@ class SerialBuffer {
   String getPrivateKey() {
     var type = get();
     var data = getUint8List(numeric.privateKeyDataSize);
-    return numeric
-        .privateKeyToString(numeric.IKey(type as numeric.KeyType, data));
+    return numeric.privateKeyToString(numeric.IKey(numeric.KeyType.values[type], data));
   }
 
   /// Append a signature */
@@ -443,44 +443,31 @@ class SerialBuffer {
   String getSignature() {
     var type = get();
     var data = getUint8List(numeric.signatureDataSize);
-    return numeric
-        .signatureToString(numeric.IKey(type as numeric.KeyType, data));
+    return numeric.signatureToString(numeric.IKey(numeric.KeyType.values[type], data));
   }
 } // SerialBuffer
 
-Type createType({
-  String name = '<missing name>',
-  String aliasOfName = "",
-  Type? arrayOf,
-  Type? optionalOf,
-  void Function(
-    Type self,
-    SerialBuffer buffer,
-    dynamic data, {
-    SerializerState? state,
-    required bool allowExtensions,
-  })?
-      serialize,
-  dynamic Function(
-    Type self,
-    SerialBuffer buffer, {
-    SerializerState? state,
-    required bool allowExtensions,
-  })?
-      deserialize,
-  String baseName: "",
-  List<Field> fields: const [],
-  Type? extensionOf,
-}) {
+Type createType(
+    {String? name = '<missing name>',
+    String? aliasOfName = "",
+    Type? arrayOf,
+    Type? optionalOf,
+    void Function(Type self, SerialBuffer buffer, Object data, {SerializerState state, bool allowExtensions})?
+        serialize,
+    Object? Function(Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions})? deserialize,
+    String? baseName = "",
+    List<Field>? fields = const [],
+    Type? extensionOf}) {
   var t = Type(
-      aliasOfName: aliasOfName,
-      name: name,
+      aliasOfName: aliasOfName!,
+      name: name!,
       arrayOf: arrayOf,
       optionalOf: optionalOf,
       extensionOf: extensionOf,
+      // ignore: avoid_redundant_argument_values
       base: null,
-      baseName: baseName,
-      fields: fields,
+      baseName: baseName!,
+      fields: fields!,
       serialize: serialize,
       deserialize: deserialize);
 
@@ -488,7 +475,7 @@ Type createType({
 }
 
 int checkRange(int orig, int converted) {
-  if (orig.isNaN || converted.isNaN || (!(orig is int) && !(orig is String))) {
+  if (orig.isNaN || converted.isNaN ) {
     throw 'Expected number';
   }
   if (orig != converted) {
@@ -511,16 +498,13 @@ int dateToTimePointSec(String date) {
 
 /// Convert hex to binary data */
 Uint8List hexToUint8List(String hex) {
-  if (!(hex is String)) {
-    throw 'Expected string containing hex digits';
-  }
   if (hex.length % 2 != 0) {
     throw 'Odd number of hex digits';
   }
   var l = hex.length ~/ 2;
-  var result = new Uint8List(l);
+  var result = Uint8List(l);
   for (var i = 0; i < l; ++i) {
-    var x = int.parse(hex.substring(i * 2, (2 * (i + 1))), radix: 16);
+    var x = int.parse(hex.substring(2 * i, 2 * (i + 1)), radix: 16);
     if (x.isNaN) {
       throw 'Expected hex string';
     }
@@ -532,8 +516,8 @@ Uint8List hexToUint8List(String hex) {
 /// Convert binary data to hex */
 String arrayToHex(Uint8List data) {
   var result = '';
-  for (var x in data) {
-    var str = ('00' + x.toRadixString(16));
+  for (final x in data) {
+    var str = '00' + x.toRadixString(16);
     result += str.substring(str.length - 2, str.length);
   }
   return result.toUpperCase();
@@ -550,7 +534,7 @@ List<int> stringToHex(String str) {
 
 /// Convert date in ISO format to `time_point` (miliseconds since epoch) */
 int dateToTimePoint(String date) {
-  return (checkDateParse(date + 'Z').millisecondsSinceEpoch * 1000).round();
+  return checkDateParse(date + 'Z').millisecondsSinceEpoch * 1000;
 }
 
 /// Convert `time_point` (miliseconds since epoch) to date in ISO format */
@@ -567,7 +551,7 @@ String timePointSecToDate(int sec) {
 /// Convert date in ISO format to `block_timestamp_type` (half-seconds since a different epoch) */
 int dateToBlockTimestamp(String date) {
   return ((checkDateParse(date + 'Z')
-                  .subtract(Duration(milliseconds: 946684800000)))
+                  .subtract(const Duration(milliseconds: 946684800000)))
               .millisecondsSinceEpoch /
           500)
       .round();
@@ -575,14 +559,14 @@ int dateToBlockTimestamp(String date) {
 
 /// Convert `block_timestamp_type` (half-seconds since a different epoch) to to date in ISO format */
 String blockTimestampToDate(int slot) {
-  var s = (DateTime.fromMillisecondsSinceEpoch(slot * 500 + 946684800000))
+  var s = DateTime.fromMillisecondsSinceEpoch(slot * 500 + 946684800000)
       .toIso8601String();
   return s.substring(0, s.length - 1);
 }
 
 /// Convert `string` to `Symbol`. format: `precision,NAME`. */
 Symbol stringToSymbol(String s) {
-  RegExp exp = new RegExp(r"^([0-9]+),([A-Z]+)$");
+  RegExp exp = RegExp(r"^([0-9]+),([A-Z]+)$");
   var m = exp.allMatches(s).toList();
   if (!exp.hasMatch(s)) {
     throw 'Invalid symbol';
@@ -592,7 +576,7 @@ Symbol stringToSymbol(String s) {
 
 /// Convert `Symbol` to `string`. format: `precision,NAME`. */
 Future<String> symbolToString(Symbol s) async {
-  return s.precision.toString() + ',' + s.name;
+  return s.precision.toString() + ',' + s.name!;
 }
 
 /// Is this a supported ABI version? */
@@ -600,35 +584,30 @@ bool supportedAbiVersion(String version) {
   return version.startsWith('eosio::abi/1.');
 }
 
-void serializeStruct(Type self, SerialBuffer buffer, dynamic data,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeStruct(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool allowExtensions = true}) {
+  state ??= SerializerState();
   // try {
   if (self.base != null) {
     self.base!.serialize?.call(self.base, buffer, data,
         state: state, allowExtensions: allowExtensions);
   }
   Map dy = data as dynamic;
-  for (var field in self.fields) {
+  for (final field in self.fields!) {
     if (dy.containsKey(field.name)) {
       if (state.skippedBinaryExtension) {
-        throw 'unexpected ' + self.name + '.' + field.name;
+        throw 'unexpected ' + self.name! + '.' + field.name!;
       }
-      field.type!.serialize?.call(field.type, buffer, dy[field.name],
+      field.type!.serialize!.call(field.type, buffer, dy[field.name],
           state: state,
           allowExtensions:
-              allowExtensions && field == self.fields[self.fields.length - 1]);
+              allowExtensions && field == self.fields![self.fields!.length - 1]);
     } else {
       if (allowExtensions && field.type!.extensionOf != null) {
         state.skippedBinaryExtension = true;
+      } else if (field.type!.extensionOf != null) {
+        field.type!.serialize!(field.type, buffer, dy[field.name], state: state);
       } else {
-        throw 'missing ' +
-            self.name +
-            '.' +
-            field.name +
-            ' (type=' +
-            field.type!.name +
-            ')';
+        throw 'missing ' + self.name! + '.' + field.name! + ' (type=' + field.type!.name! + ')';
       }
     }
   }
@@ -637,30 +616,27 @@ void serializeStruct(Type self, SerialBuffer buffer, dynamic data,
   // }
 }
 
-Object deserializeStruct(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeStruct(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   try {
-    var result;
+    dynamic result;
     if (self.base != null) {
-      result = self.base!.deserialize?.call(self.base, buffer,
-          state: state, allowExtensions: allowExtensions);
+      result = self.base!.deserialize!(self.base, buffer, state: state, allowExtensions: allowExtensions);
     } else {
       result = {};
     }
-    for (var field in self.fields) {
-      if (allowExtensions &&
-          field.type!.extensionOf != null &&
-          !buffer.haveReadData()) {
+    for (final field in self.fields!) {
+      if ((allowExtensions ?? false) && field.type!.extensionOf != null && !buffer.haveReadData()) {
         state.skippedBinaryExtension = true;
       } else {
-        result[field.name] = field.type!.deserialize?.call(field.type, buffer,
-            state: state, allowExtensions: allowExtensions);
+        result[field.name] =
+            field.type!.deserialize!(field.type, buffer, state: state, allowExtensions: allowExtensions);
       }
     }
     return result;
   } catch (e) {
-    throw e;
+    rethrow;
   }
 }
 
@@ -669,347 +645,164 @@ Map<String, Type> createInitialTypes() {
   var result = {
     "bool": createType(
       name: 'bool',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      serialize: (Type self, SerialBuffer buffer, Object data,
+           {SerializerState? state, bool? allowExtensions}) {
+        if(data is! bool) {
+          throw "expected bool";
+        }
         buffer.push([data ? 1 : 0]);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        return buffer.get();
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
+        return buffer.get()!=0;
       },
     ),
     "uint8": createType(
       name: 'uint8',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.push([checkRange(data, (data as int) & 0xff)]);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.push([checkRange(data as int, data & 0xff)]);
+
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.get();
       },
     ),
     "int8": createType(
       name: 'int8',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.push([checkRange(data, (data as int) << 24 >> 24)]);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.push([checkRange(data as int, data << 24 >> 24)]);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.get() << 24 >> 24;
       },
     ),
     "uint16": createType(
       name: 'uint16',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint16(checkRange(data, (data as int) & 0xffff));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint16(checkRange(data as int, data & 0xffff));
+
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getUint16();
       },
     ),
     "int16": createType(
       name: 'int16',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint16(checkRange(data, (data as int) << 16 >> 16));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint16(checkRange(data as int, data << 16 >> 16));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getUint16() << 16 >> 16;
       },
     ),
     "uint32": createType(
       name: 'uint32',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint32(checkRange(data, (data as int) >> 0));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint32(checkRange(data as int, data >> 0));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getUint32();
       },
     ),
     "uint64": createType(
       name: 'uint64',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushArray(numeric.decimalToBinary(8, '' + data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushArray(numeric.decimalToBinary(8, '' + data.toString()));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return numeric.binaryToDecimal(buffer.getUint8List(8));
       },
     ),
     "int64": createType(
       name: 'int64',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushArray(numeric.signedDecimalToBinary(8, '' + data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushArray(numeric.signedDecimalToBinary(8, '' + data.toString()));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return numeric.signedBinaryToDecimal(buffer.getUint8List(8));
       },
     ),
     "int32": createType(
       name: 'int32',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
         buffer.pushUint32(checkRange(data as int, data | 0));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getUint32() | 0;
       },
     ),
     "varuint32": createType(
       name: 'varuint32',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushVaruint32(checkRange(data, (data as int) >> 0));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushVaruint32(checkRange(data as int, data >> 0));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getVaruint32();
       },
     ),
     "varint32": createType(
       name: 'varint32',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushVarint32(checkRange(data, data == null ? 0 : data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushVarint32(checkRange(data as int, data));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getVarint32();
       },
     ),
     "uint128": createType(
       name: 'uint128',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushArray(numeric.decimalToBinary(16, '' + data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushArray(numeric.decimalToBinary(16, '' + (data as String)));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return numeric.binaryToDecimal(buffer.getUint8List(16));
       },
     ),
     "int128": createType(
       name: 'int128',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushArray(numeric.signedDecimalToBinary(16, '' + data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushArray(numeric.signedDecimalToBinary(16, '' + (data as String)));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return numeric.signedBinaryToDecimal(buffer.getUint8List(16));
       },
     ),
     "float32": createType(
       name: 'float32',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushFloat32(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushFloat32(data as double);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getFloat32();
       },
     ),
     "float64": createType(
       name: 'float64',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushFloat64(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushFloat64(data as double);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getFloat64();
       },
     ),
     "float128": createType(
       name: 'float128',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint8ListChecked(hexToUint8List(data), 16);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint8ListChecked(hexToUint8List(data as String), 16);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return arrayToHex(buffer.getUint8List(16));
       },
     ),
     "bytes": createType(
       name: 'bytes',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        if (data is Uint8List) {
-          buffer.pushBytes(data.toList());
-        } else if (data is List) {
-          buffer.pushBytes(data.cast<int>());
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        if (data is Uint8List || data is List) {
+          buffer.pushBytes(data as List<int>);
         } else {
-          buffer.pushBytes(hexToUint8List(data));
+          buffer.pushBytes(hexToUint8List(data as String));
         }
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         if (state != null && state.options.bytesAsUint8List) {
           return buffer.getBytes();
         } else {
@@ -1019,282 +812,128 @@ Map<String, Type> createInitialTypes() {
     ),
     "string": createType(
       name: 'string',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushString(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushString(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getString();
       },
     ),
     "name": createType(
       name: 'name',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushName(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushName(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getName();
       },
     ),
     "time_point": createType(
       name: 'time_point',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushNumberAsUint64(dateToTimePoint(data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushNumberAsUint64(dateToTimePoint(data as String));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return timePointToDate(buffer.getUint64AsNumber());
       },
     ),
     "time_point_sec": createType(
       name: 'time_point_sec',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        var date = dateToTimePointSec(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        var date = dateToTimePointSec(data as String);
         buffer.pushUint32(date);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return timePointSecToDate(buffer.getUint32());
       },
     ),
     "block_timestamp_type": createType(
       name: 'block_timestamp_type',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint32(dateToBlockTimestamp(data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint32(dateToBlockTimestamp(data as String));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return blockTimestampToDate(buffer.getUint32());
       },
     ),
     "symbol_code": createType(
       name: 'symbol_code',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushSymbolCode(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushSymbolCode(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getSymbolCode();
       },
     ),
     "symbol": createType(
       name: 'symbol',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushSymbol(stringToSymbol(data));
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushSymbol(stringToSymbol(data as String));
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return symbolToString(buffer.getSymbol());
       },
     ),
     "asset": createType(
       name: 'asset',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushAsset(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushAsset(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getAsset();
       },
     ),
     "checksum160": createType(
       name: 'checksum160',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint8ListChecked(hexToUint8List(data), 20);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint8ListChecked(hexToUint8List(data as String), 20);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return arrayToHex(buffer.getUint8List(20));
       },
     ),
     "checksum256": createType(
       name: 'checksum256',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint8ListChecked(hexToUint8List(data), 32);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint8ListChecked(hexToUint8List(data as String), 32);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return arrayToHex(buffer.getUint8List(32));
       },
     ),
     "checksum512": createType(
       name: 'checksum512',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushUint8ListChecked(hexToUint8List(data), 64);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushUint8ListChecked(hexToUint8List(data as String), 64);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return arrayToHex(buffer.getUint8List(64));
       },
     ),
     "public_key": createType(
       name: 'public_key',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushPublicKey(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushPublicKey(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getPublicKey();
       },
     ),
     "private_key": createType(
       name: 'private_key',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushPrivateKey(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushPrivateKey(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getPrivateKey();
       },
     ),
     "signature": createType(
       name: 'signature',
-      serialize: (
-        Type self,
-        SerialBuffer buffer,
-        dynamic data, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
-        buffer.pushSignature(data);
+      serialize: (Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions}) {
+        buffer.pushSignature(data as String);
       },
-      deserialize: (
-        Type self,
-        SerialBuffer buffer, {
-        SerializerState? state,
-        required bool allowExtensions,
-      }) {
+      deserialize: (Type self, SerialBuffer buffer, {SerializerState? state, bool? allowExtensions}) {
         return buffer.getSignature();
       },
     ),
@@ -1302,6 +941,7 @@ Map<String, Type> createInitialTypes() {
 
   result['extended_asset'] = createType(
     name: 'extended_asset',
+    // ignore: avoid_redundant_argument_values
     baseName: '',
     fields: [
       Field(name: 'quantity', typeName: 'asset', type: result['asset']),
@@ -1314,107 +954,94 @@ Map<String, Type> createInitialTypes() {
   return result;
 } // createInitialTypes()
 
-serializeVariant(Type self, SerialBuffer buffer, dynamic data,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
-  if (!(data is List) || data.length != 2 || !(data[0] is String)) {
+
+void serializeVariant(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
+  if (data is! List || data.length != 2 || data[0] is! String) {
     throw 'expected variant: ["type", value]';
   }
-  var a = (data[0]) as String;
-  var b = (data[1]) as Object;
-  var i = self.fields.indexWhere((field) => field.name == a);
+  var a = data[0] as String;
+  var b = data[1] as Object;
+  var i = self.fields!.indexWhere((field) => field.name == a);
   if (i < 0) {
     throw 'type "$b" is not valid for variant';
   }
   buffer.pushVaruint32(i);
-  self.fields[i].type!.serialize?.call(self.fields[i].type, buffer, b,
+  self.fields![i].type!.serialize?.call(self.fields![i].type, buffer, b,
       state: state, allowExtensions: allowExtensions);
 }
 
-deserializeVariant(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeVariant(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   var i = buffer.getVaruint32();
-  if (i >= self.fields.length) {
+  if (i >= self.fields!.length) {
     throw 'type index $i is not valid for variant';
   }
-  var field = self.fields[i];
-  return [
-    field.name,
-    field.type!.deserialize?.call(field.type, buffer,
-        state: state, allowExtensions: allowExtensions)
-  ];
+  var field = self.fields![i];
+    return [field.name, field.type!.deserialize!(field.type, buffer, state: state, allowExtensions: allowExtensions)];
 }
 
-serializeArray(Type self, SerialBuffer buffer, dynamic data,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeArray(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   buffer.pushVaruint32((data as List).length);
-  for (var item in data) {
-    self.arrayOf!.serialize?.call(self.arrayOf, buffer, item,
-        state: state, allowExtensions: false);
+  for (final item in data) {
+    self.arrayOf!.serialize!(self.arrayOf, buffer, item, state: state, allowExtensions: false);
   }
 }
 
-deserializeArray(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+List deserializeArray(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   var len = buffer.getVaruint32();
   var result = [];
   for (var i = 0; i < len; ++i) {
-    result.add(self.arrayOf!.deserialize
-        ?.call(self.arrayOf, buffer, state: state, allowExtensions: false));
+    result.add(self.arrayOf!.deserialize!(self.arrayOf, buffer, state: state, allowExtensions: false));
   }
   return result;
 }
 
-serializeOptional(Type self, SerialBuffer buffer, dynamic data,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+void serializeOptional(Type self, SerialBuffer buffer, Object? data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   if (data == null) {
     buffer.push([0]);
   } else {
     buffer.push([1]);
-    self.optionalOf!.serialize?.call(self.optionalOf, buffer, data,
-        state: state, allowExtensions: allowExtensions);
+    self.optionalOf!.serialize!(self.optionalOf, buffer, data, state: state, allowExtensions: allowExtensions);
   }
 }
 
-deserializeOptional(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
+Object? deserializeOptional(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
   if (buffer.get() != 0) {
-    return self.optionalOf!.deserialize?.call(self.optionalOf, buffer,
-        state: state, allowExtensions: allowExtensions);
+    return self.optionalOf!.deserialize!(self.optionalOf, buffer, state: state, allowExtensions: allowExtensions);
   } else {
     return null;
   }
 }
 
-serializeExtension(Type self, SerialBuffer buffer, dynamic data,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
-  self.extensionOf!.serialize?.call(self.extensionOf, buffer, data,
-      state: state, allowExtensions: allowExtensions);
+void serializeExtension(Type self, SerialBuffer buffer, Object data, {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
+  self.extensionOf!.serialize!(self.extensionOf, buffer, data, state: state, allowExtensions: allowExtensions);
 }
 
-deserializeExtension(Type self, SerialBuffer buffer,
-    {SerializerState? state, allowExtensions = true}) {
-  if (state == null) state = SerializerState();
-  return self.extensionOf!.deserialize?.call(self.extensionOf, buffer,
-      state: state, allowExtensions: allowExtensions);
+Object? deserializeExtension(Type self, SerialBuffer buffer,
+    {SerializerState? state, bool? allowExtensions = true}) {
+  state ??= SerializerState();
+  return self.extensionOf!.deserialize!(self.extensionOf, buffer, state: state, allowExtensions: allowExtensions);
 }
 
 /// Get type from `types` */
-Type getType(Map<String, Type> types, String name) {
+Type getType(Map<String?, Type> types, String? name) {
   var type = types[name];
-  if (type != null && type.aliasOfName.isNotEmpty) {
+  if (type != null && type.aliasOfName!.isNotEmpty) {
     return getType(types, type.aliasOfName);
   }
   if (type != null) {
     return type;
   }
-  if (name.endsWith('[]')) {
+  if (name!.endsWith('[]')) {
     return createType(
       name: name,
       arrayOf: getType(types, name.substring(0, name.length - 2)),
@@ -1430,7 +1057,7 @@ Type getType(Map<String, Type> types, String name) {
       deserialize: deserializeOptional,
     );
   }
-  if (name.endsWith("\$")) {
+  if (name.endsWith(r"$")) {
     return createType(
       name: name,
       extensionOf: getType(types, name.substring(0, name.length - 1)),
@@ -1445,46 +1072,40 @@ Type getType(Map<String, Type> types, String name) {
 /// @param initialTypes Set of types to build on.
 ///     In most cases, it's best to fill this from a fresh call to `getTypesFromAbi()`.
 
-Map<String, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
-  var types = Map.from(initialTypes).cast<String, Type>();
+Map<String?, Type> getTypesFromAbi(Map<String, Type> initialTypes, Abi abi) {
+  var types = Map.from(initialTypes).cast<String?, Type>();
   if (abi.types != null) {
-    for (var item in abi.types!) {
-      types[item.new_type_name] =
-          createType(name: item.new_type_name, aliasOfName: item.type);
+    for (final item in abi.types!) {
+      types[item?.new_type_name] = createType(name: item?.new_type_name, aliasOfName: item?.type);
     }
   }
   if (abi.structs != null) {
-    for (var str in abi.structs!) {
-      types[str.name!] = createType(
-          name: str.name!,
-          baseName: str.base ?? '',
-          fields: str.fields
-                  ?.map((item) =>
-                      Field(name: item.name, typeName: item.type, type: null))
-                  .toList() ??
-              [],
+    for (final str in abi.structs!) {
+      types[str!.name] = createType(
+          name: str.name,
+          baseName: str.base,
+          // ignore: avoid_redundant_argument_values
+          fields: str.fields?.map((item) => Field(name: item!.name!, typeName: item.type!, type: null)).toList(),
           serialize: serializeStruct,
           deserialize: deserializeStruct);
     }
   }
   if (abi.variants != null) {
-    for (var v in abi.variants!) {
-      types[v.name!] = createType(
-        name: v.name!,
-        fields: v.types
-                ?.map((s) => Field(name: s, typeName: s, type: null))
-                .toList() ??
-            [],
+    for (final v in abi.variants!) {
+      types[v!.name] = createType(
+        name: v.name,
+        // ignore: avoid_redundant_argument_values
+        fields: v.types?.map((s) => Field(name: s, typeName: s, type: null)).toList(),
         serialize: serializeVariant,
         deserialize: deserializeVariant,
       );
     }
   }
   types.forEach((name, type) {
-    if (type.baseName.isNotEmpty) {
+    if (type.baseName!.isNotEmpty) {
       type.base = getType(types, type.baseName);
     }
-    for (var field in type.fields) {
+    for (final field in type.fields!) {
       field.type = getType(types, field.typeName);
     }
   });
