@@ -50,7 +50,7 @@ class AbiResp with ConversionHelper {
 
   /// Decodes an abi as Uint8List into json. */
   static Abi? _rawAbiToJson(Uint8List rawAbi) {
-    Map<String, Type> abiTypes = ser.getTypesFromAbi(
+    Map<String?, Type> abiTypes = ser.getTypesFromAbi(
         ser.createInitialTypes(), Abi.fromJson(json.decode(abiJson)));
     try {
       var buffer = ser.SerialBuffer(rawAbi);
