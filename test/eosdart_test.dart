@@ -4,6 +4,35 @@ import 'package:test/test.dart';
 
 void main() {
   const verbose = false; 
+  group('float32 & float64 serdes', () {
+    final double floatval = 3.141590118408203; // an exact float32
+    final sb = new SerialBuffer(new Uint8List(0));
+    test('serialize', ()  {
+      sb.push([15]); // misalign by pushing 1 arbitrary byte
+      sb.pushFloat32(floatval);
+      sb.pushFloat64(floatval);
+      final serialized = sb.asUint8List();
+
+      if(verbose) {
+        print("floatval: $floatval");
+        print("serialized: $serialized\n"+"   ${arrayToHex(serialized)}");
+      }
+      expect(serialized,
+          [15, 208, 15, 73, 64, 0, 0, 0, 0, 250, 33, 9, 64]);
+    });
+    test('deserialize', ()  {
+      sb.restartRead();
+      sb.get();
+      final v32 = sb.getFloat32();
+      final v64 = sb.getFloat64();
+      if(verbose) {
+        print("floatval32: $v32, floatval64: $v64");
+      }
+      expect([v32, v64],
+          [floatval, floatval]);
+    });
+  });
+  
   group('public keys', () {
     test('serialize k1 old style', ()  {
       final keystring = 'EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV';
