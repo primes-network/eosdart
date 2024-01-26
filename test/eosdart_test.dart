@@ -160,8 +160,6 @@ void main() {
       final testnumber = '-123456789';
       final serialized = signedDecimalToBinary(testnumber.length, testnumber);
       print("serialized: $serialized\n"+"   ${arrayToHex(serialized)}");
-      final sb = new SerialBuffer(serialized);
-
       final number = signedBinaryToDecimal(serialized);
       expect(number, testnumber);
     });
